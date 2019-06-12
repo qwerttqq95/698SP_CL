@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>670</width>
+    <height>509</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>698 Special</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>6</number>
+    </property>
+    <property name="leftMargin">
+     <number>9</number>
+    </property>
+    <property name="topMargin">
+     <number>9</number>
+    </property>
+    <property name="rightMargin">
+     <number>9</number>
+    </property>
+    <property name="bottomMargin">
+     <number>9</number>
+    </property>
+    <item>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>15</horstretch>
+        <verstretch>22</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>13</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>18</width>
+        <height>42</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>信息:</string>
+      </property>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>141</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>终端地址:</string>
+          </property>
+          <property name="buddy">
+           <cstring>lineEdit</cstring>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="text">
+           <string>111111111111</string>
+          </property>
+          <property name="maxLength">
+           <number>12</number>
+          </property>
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinAndMaxSize</enum>
+      </property>
+      <item>
+       <widget class="QTextEdit" name="textEdit_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="MinimumExpanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="overwriteMode">
+         <bool>false</bool>
+        </property>
+        <property name="cursorWidth">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>670</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuOpen">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actionSd"/>
+    <addaction name="action"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="actionA"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>测试</string>
+    </property>
+    <widget class="QMenu" name="menu_8">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>默认测试方案</string>
+     </property>
+     <addaction name="actionSh"/>
+     <addaction name="actionRi"/>
+     <addaction name="actionQu"/>
+    </widget>
+    <widget class="QMenu" name="menu_6">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="title">
+      <string>浙江</string>
+     </property>
+     <widget class="QMenu" name="menu_7">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>实时数据</string>
+      </property>
+      <addaction name="action0200_3"/>
+      <addaction name="action0201_2"/>
+     </widget>
+     <widget class="QMenu" name="menu_3">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="title">
+       <string>冻结曲线数据</string>
+      </property>
+      <addaction name="action0020l"/>
+      <addaction name="action0201l"/>
+     </widget>
+     <addaction name="menu_7"/>
+     <addaction name="actionRi_2"/>
+     <addaction name="menu_3"/>
+    </widget>
+    <addaction name="menu_8"/>
+    <addaction name="menu_6"/>
+    <addaction name="actionSichuan"/>
+    <addaction name="separator"/>
+    <addaction name="actionSdf"/>
+   </widget>
+   <widget class="QMenu" name="menu_4">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>工具</string>
+    </property>
+    <addaction name="actionC"/>
+    <addaction name="actionDf"/>
+    <addaction name="actionAPDUzu"/>
+   </widget>
+   <widget class="QMenu" name="menu_5">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>复位</string>
+    </property>
+    <addaction name="actionShuju"/>
+    <addaction name="actionCanshu"/>
+   </widget>
+   <widget class="QMenu" name="menu_10">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>控制(脉冲)</string>
+    </property>
+    <widget class="QMenu" name="menu_11">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>遥控</string>
+     </property>
+     <addaction name="action_15"/>
+     <addaction name="action_16"/>
+     <addaction name="separator"/>
+     <addaction name="action_24"/>
+     <addaction name="action_23"/>
+     <addaction name="separator"/>
+     <addaction name="actionZ"/>
+    </widget>
+    <addaction name="menu_11"/>
+    <addaction name="separator"/>
+    <addaction name="actionS"/>
+    <addaction name="action_a"/>
+    <addaction name="separator"/>
+    <addaction name="action_22"/>
+    <addaction name="action_2"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+    <addaction name="action_4"/>
+    <addaction name="separator"/>
+    <addaction name="action_5"/>
+    <addaction name="action_6"/>
+    <addaction name="separator"/>
+    <addaction name="action_7"/>
+    <addaction name="action_8"/>
+    <addaction name="separator"/>
+    <addaction name="action_9"/>
+    <addaction name="action_10"/>
+    <addaction name="separator"/>
+    <addaction name="action_11"/>
+    <addaction name="action_12"/>
+    <addaction name="separator"/>
+    <addaction name="action_13"/>
+    <addaction name="action_14"/>
+    <addaction name="separator"/>
+    <addaction name="action_17"/>
+    <addaction name="action_18"/>
+   </widget>
+   <widget class="QMenu" name="menu_9">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="title">
+     <string>线上</string>
+    </property>
+    <addaction name="actiononline"/>
+   </widget>
+   <addaction name="menuOpen"/>
+   <addaction name="menu_4"/>
+   <addaction name="menu_10"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_9"/>
+   <addaction name="menu_5"/>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="action">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">Exit</string>
+   </property>
+  </action>
+  <action name="actionSd">
+   <property name="text">
+    <string>通讯配置</string>
+   </property>
+   <property name="iconText">
+    <string notr="true">通讯配置</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionA">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="actionX">
+   <property name="text">
+    <string>自定义参数配置</string>
+   </property>
+  </action>
+  <action name="actionSdf">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>自定义测试</string>
+   </property>
+  </action>
+  <action name="actionC">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>报文解析</string>
+   </property>
+  </action>
+  <action name="actionG">
+   <property name="text">
+    <string>广播读地址</string>
+   </property>
+  </action>
+  <action name="actionMore">
+   <property name="text">
+    <string>默认方案</string>
+   </property>
+  </action>
+  <action name="action0200">
+   <property name="text">
+    <string>0200</string>
+   </property>
+  </action>
+  <action name="action0200_2">
+   <property name="text">
+    <string>0200类</string>
+   </property>
+  </action>
+  <action name="action0201">
+   <property name="text">
+    <string>0201类</string>
+   </property>
+  </action>
+  <action name="action0200_3">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>0200类</string>
+   </property>
+  </action>
+  <action name="action0201_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>0201类</string>
+   </property>
+  </action>
+  <action name="actionSh">
+   <property name="text">
+    <string>实时数据(多项)</string>
+   </property>
+  </action>
+  <action name="actionRi">
+   <property name="text">
+    <string>日冻结数据</string>
+   </property>
+  </action>
+  <action name="actionQu">
+   <property name="text">
+    <string>冻结曲线数据</string>
+   </property>
+  </action>
+  <action name="actionRi_2">
+   <property name="text">
+    <string>日冻结数据</string>
+   </property>
+  </action>
+  <action name="action0020l">
+   <property name="text">
+    <string>0200类</string>
+   </property>
+  </action>
+  <action name="action0201l">
+   <property name="text">
+    <string>0201类</string>
+   </property>
+  </action>
+  <action name="actionS">
+   <property name="text">
+    <string>时段功控投入</string>
+   </property>
+  </action>
+  <action name="action_a">
+   <property name="text">
+    <string>时段功控解除</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>厂休功控投入</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>厂休功控解除</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>营业报停功控投入</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>营业报停功控解除</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>月电控投入</string>
+   </property>
+  </action>
+  <action name="action_8">
+   <property name="text">
+    <string>月电控解除</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>购电控投入</string>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="text">
+    <string>购电控解除</string>
+   </property>
+  </action>
+  <action name="action_11">
+   <property name="text">
+    <string>催费告警投入</string>
+   </property>
+  </action>
+  <action name="action_12">
+   <property name="text">
+    <string>催费告警解除</string>
+   </property>
+  </action>
+  <action name="action_13">
+   <property name="text">
+    <string>保电投入</string>
+   </property>
+  </action>
+  <action name="action_14">
+   <property name="text">
+    <string>保电解除</string>
+   </property>
+  </action>
+  <action name="action_15">
+   <property name="text">
+    <string>单地址跳闸(第1轮)</string>
+   </property>
+   <property name="toolTip">
+    <string>单地址跳闸</string>
+   </property>
+  </action>
+  <action name="action_16">
+   <property name="text">
+    <string>单地址合闸(第1轮)</string>
+   </property>
+  </action>
+  <action name="action_17">
+   <property name="text">
+    <string>剔除投入</string>
+   </property>
+  </action>
+  <action name="action_18">
+   <property name="text">
+    <string>剔除解除</string>
+   </property>
+  </action>
+  <action name="actionZ">
+   <property name="text">
+    <string>组地址跳闸(第2轮)</string>
+   </property>
+  </action>
+  <action name="actionD">
+   <property name="text">
+    <string>组地址合闸</string>
+   </property>
+  </action>
+  <action name="actionShuju">
+   <property name="text">
+    <string>数据初始化</string>
+   </property>
+  </action>
+  <action name="actionCanshu">
+   <property name="text">
+    <string>参数初始化</string>
+   </property>
+  </action>
+  <action name="actionDf">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>字符转换</string>
+   </property>
+  </action>
+  <action name="action_dongjie">
+   <property name="text">
+    <string>自定义冻结数据</string>
+   </property>
+  </action>
+  <action name="actionX_2">
+   <property name="text">
+    <string>自定义数据读取</string>
+   </property>
+  </action>
+  <action name="action_20">
+   <property name="text">
+    <string>曲线数据</string>
+   </property>
+  </action>
+  <action name="action_19">
+   <property name="text">
+    <string>默认实时数据</string>
+   </property>
+  </action>
+  <action name="action_21">
+   <property name="text">
+    <string>默认日冻结数据</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>当前功率下浮控解除</string>
+   </property>
+  </action>
+  <action name="action_22">
+   <property name="text">
+    <string>当前功率下浮控投入</string>
+   </property>
+  </action>
+  <action name="actionAPDUzu">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>自定义报文发送</string>
+   </property>
+  </action>
+  <action name="action_23">
+   <property name="text">
+    <string>单地址合闸(第2轮)</string>
+   </property>
+  </action>
+  <action name="actionSichuan">
+   <property name="text">
+    <string>四川专变默认参数</string>
+   </property>
+  </action>
+  <action name="action_24">
+   <property name="text">
+    <string>单地址跳闸(第2轮)</string>
+   </property>
+  </action>
+  <action name="actiononline">
+   <property name="text">
+    <string>测试</string>
+   </property>
+  </action>
+  <action name="action_25">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>停止下发</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
