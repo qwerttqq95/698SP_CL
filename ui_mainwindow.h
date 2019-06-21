@@ -70,7 +70,7 @@ public:
     QAction *actionD;
     QAction *actionShuju;
     QAction *actionCanshu;
-    QAction *actionDf;
+    QAction *action_26;
     QAction *action_dongjie;
     QAction *actionX_2;
     QAction *action_20;
@@ -127,10 +127,10 @@ public:
         actionX->setObjectName(QStringLiteral("actionX"));
         actionSdf = new QAction(MainWindow);
         actionSdf->setObjectName(QStringLiteral("actionSdf"));
-        actionSdf->setEnabled(false);
+        actionSdf->setEnabled(true);
         actionC = new QAction(MainWindow);
         actionC->setObjectName(QStringLiteral("actionC"));
-        actionC->setEnabled(true);
+        actionC->setEnabled(false);
         actionG = new QAction(MainWindow);
         actionG->setObjectName(QStringLiteral("actionG"));
         actionMore = new QAction(MainWindow);
@@ -203,9 +203,9 @@ public:
         actionShuju->setObjectName(QStringLiteral("actionShuju"));
         actionCanshu = new QAction(MainWindow);
         actionCanshu->setObjectName(QStringLiteral("actionCanshu"));
-        actionDf = new QAction(MainWindow);
-        actionDf->setObjectName(QStringLiteral("actionDf"));
-        actionDf->setEnabled(false);
+        action_26 = new QAction(MainWindow);
+        action_26->setObjectName(QStringLiteral("action_26"));
+        action_26->setEnabled(false);
         action_dongjie = new QAction(MainWindow);
         action_dongjie->setObjectName(QStringLiteral("action_dongjie"));
         actionX_2 = new QAction(MainWindow);
@@ -267,7 +267,7 @@ public:
         lineEdit = new QLineEdit(layoutWidget);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setMaxLength(12);
-        lineEdit->setReadOnly(true);
+        lineEdit->setReadOnly(false);
 
         horizontalLayout_2->addWidget(lineEdit);
 
@@ -367,7 +367,6 @@ public:
         menu_3->addAction(action0020l);
         menu_3->addAction(action0201l);
         menu_4->addAction(actionC);
-        menu_4->addAction(actionDf);
         menu_4->addAction(actionAPDUzu);
         menu_5->addAction(actionShuju);
         menu_5->addAction(actionCanshu);
@@ -416,7 +415,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "698 Special", nullptr));
-        action->setText(QApplication::translate("MainWindow", "Exit", nullptr));
+        action->setText(QApplication::translate("MainWindow", "\345\271\277\346\222\255\350\257\273\345\234\260\345\235\200", nullptr));
         actionSd->setText(QApplication::translate("MainWindow", "\351\200\232\350\256\257\351\205\215\347\275\256", nullptr));
         actionA->setText(QApplication::translate("MainWindow", "\345\205\263\344\272\216", nullptr));
         actionX->setText(QApplication::translate("MainWindow", "\350\207\252\345\256\232\344\271\211\345\217\202\346\225\260\351\205\215\347\275\256", nullptr));
@@ -460,7 +459,7 @@ public:
         actionD->setText(QApplication::translate("MainWindow", "\347\273\204\345\234\260\345\235\200\345\220\210\351\227\270", nullptr));
         actionShuju->setText(QApplication::translate("MainWindow", "\346\225\260\346\215\256\345\210\235\345\247\213\345\214\226", nullptr));
         actionCanshu->setText(QApplication::translate("MainWindow", "\345\217\202\346\225\260\345\210\235\345\247\213\345\214\226", nullptr));
-        actionDf->setText(QApplication::translate("MainWindow", "\345\255\227\347\254\246\350\275\254\346\215\242", nullptr));
+        action_26->setText(QApplication::translate("MainWindow", "\345\255\227\347\254\246\350\275\254\346\215\242", nullptr));
         action_dongjie->setText(QApplication::translate("MainWindow", "\350\207\252\345\256\232\344\271\211\345\206\273\347\273\223\346\225\260\346\215\256", nullptr));
         actionX_2->setText(QApplication::translate("MainWindow", "\350\207\252\345\256\232\344\271\211\346\225\260\346\215\256\350\257\273\345\217\226", nullptr));
         action_20->setText(QApplication::translate("MainWindow", "\346\233\262\347\272\277\346\225\260\346\215\256", nullptr));

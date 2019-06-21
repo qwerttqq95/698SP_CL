@@ -85,7 +85,7 @@
            <number>12</number>
           </property>
           <property name="readOnly">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -212,7 +212,6 @@
      <string>工具</string>
     </property>
     <addaction name="actionC"/>
-    <addaction name="actionDf"/>
     <addaction name="actionAPDUzu"/>
    </widget>
    <widget class="QMenu" name="menu_5">
@@ -296,7 +295,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="action">
    <property name="text">
-    <string>Exit</string>
+    <string>广播读地址</string>
    </property>
    <property name="iconText">
     <string notr="true">Exit</string>
@@ -325,7 +324,7 @@
   </action>
   <action name="actionSdf">
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
     <string>自定义测试</string>
@@ -333,7 +332,7 @@
   </action>
   <action name="actionC">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>报文解析</string>
@@ -523,7 +522,7 @@
     <string>参数初始化</string>
    </property>
   </action>
-  <action name="actionDf">
+  <action name="action_26">
    <property name="enabled">
     <bool>false</bool>
    </property>

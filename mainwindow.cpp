@@ -3,6 +3,8 @@
 #include "QMessageBox"
 #include "serial.h"
 #include "ui_serial.h"
+#include <iostream>
+using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("698SP V1.0");
     connect(ui->actionA,SIGNAL(triggered()),this,SLOT(about()));
     connect(ui->actionSd,SIGNAL(triggered()),this,SLOT(serial_config()));
+
 }
 
 MainWindow::~MainWindow()
