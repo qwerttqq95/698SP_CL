@@ -24,15 +24,22 @@ Serial::Serial(QWidget *parent) :
     setWindowFlags(Qt::WindowStaysOnTopHint);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(creat_process()));
     QList<QString> PortList;
-    getEnableCommPort(PortList);
+    PortList = getEnableCommPort(PortList);
+    for (int i = 0; i<PortList.size(); i++) {
+        ui->comboBox->addItem(PortList[i]);
+    }
 }
 
 void Serial::creat_process() {
     if (ui->radioButton->isChecked()) {
         if (ui->pushButton->text() == "打开") {
-
             ui->pushButton->setText("关闭");
-            std::thread t1(open_serial);
+            QString  str = ui->comboBox->currentText();
+            char*  ch;
+            QByteArray ba = str.toLatin1(); // must
+            ch=ba.data();
+            std::basic_string<TCHAR> s1 = ch;
+            std::thread t1(open_serial,this,s1);
             t1.detach();
 
         } else {
@@ -48,10 +55,13 @@ void Serial::creat_process() {
     }
 }
 
-bool Serial::open_serial() {
-    HANDLE hCom;  //全局变量，串口句柄
-    LPCTSTR com_num = "\\\\.\\COM13";
-    hCom = CreateFile(com_num,
+bool Serial::open_serial(std::basic_string<TCHAR> s1) {
+    HANDLE hCom;
+//    std::basic_string<TCHAR> s1 = "COM13";
+    std::basic_string<TCHAR> s2 = "\\\\.\\";
+    std::basic_string<TCHAR> s3 = s2 + s1;
+    LPCTSTR a3 = s3.c_str();
+    hCom = CreateFile(a3,
                       GENERIC_READ | GENERIC_WRITE, //允许读和写
                       0, //独占方式
                       NULL,
@@ -85,24 +95,25 @@ bool Serial::open_serial() {
     char str[400] = {0};
     DWORD wCount;//读取的字节数
     BOOL bReadStat;
-    while (true) {
-        BYTE Apdu[400] = {0};
-        DWORD nApduLen = 0;
-        string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-        transform(add.begin(), add.end(), add.begin(), ::tolower);
-        String2Hex(add, Apdu, &nApduLen, sizeof(Apdu));
-        COMSTAT ComStat;
-        DWORD dwErrorFlags;
-        BOOL bWriteStat;
-        ClearCommError(hCom, &dwErrorFlags, &ComStat);
-        DWORD dwBytesWrite = nApduLen;
-        cout << "Send: " << StringAddSpace(add) << endl;
-        bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
-        if (!bWriteStat) {
-            cout << "Write data fail!!" << endl;
-        } else {
+
+    BYTE Apdu[400] = {0};
+    DWORD nApduLen = 0;
+    string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
+    transform(add.begin(), add.end(), add.begin(), ::tolower);
+    String2Hex(add, Apdu, &nApduLen, sizeof(Apdu));
+    COMSTAT ComStat;
+    DWORD dwErrorFlags;
+    BOOL bWriteStat;
+    ClearCommError(hCom, &dwErrorFlags, &ComStat);
+    DWORD dwBytesWrite = nApduLen;
+    cout << "Send: " << StringAddSpace(add) << endl;
+    bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
+    if (!bWriteStat) {
+        cout << "Write data fail!!" << endl;
+    } else {
 //            cout << "send success" << endl;
-        }
+    }
+    while (true) {
         PurgeComm(hCom, PURGE_TXABORT |
                         PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
         bReadStat = ReadFile(hCom, str, 200, &wCount, nullptr);
@@ -119,7 +130,7 @@ bool Serial::open_serial() {
             cout << "Receive: " << output << endl;
         }
     }
-    return true;
+//    return true;
 }
 
 
@@ -131,7 +142,7 @@ BOOL Serial::CloseSerial() {
     CloseHandle(hCom);
 }
 
-QStringList Serial::getEnableCommPort(QList<QString> PortList) {
+QStringList Serial::getEnableCommPort(QList<QString> &PortList) {
     PortList.clear();
     HKEY hkey;
     LONG lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, _T("HARDWARE\\DEVICEMAP\\SERIALCOMM"), 0,
@@ -149,16 +160,17 @@ QStringList Serial::getEnableCommPort(QList<QString> PortList) {
                 if ((dwVCount > 0) && (dwCount > 0)) {
                     QString str;
                     str = tchValue;
-                    qDebug() << "Date:" <<str;
                     PortList.append(str);
                 }
             }
         }
     }
     RegCloseKey(hkey);
+    qDebug() << "Date:" << PortList;
+    return PortList;
 }
 
 
-Serial::~Serial() = default;
-
-
+Serial::~Serial() {
+    cout << "out";
+};

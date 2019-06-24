@@ -56,7 +56,7 @@
     <rect>
      <x>50</x>
      <y>10</y>
-     <width>271</width>
+     <width>284</width>
      <height>71</height>
     </rect>
    </property>
@@ -94,7 +94,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>COM:</string>
+         <string>串口号:</string>
         </property>
         <property name="buddy">
          <cstring>comboBox</cstring>
@@ -197,6 +197,9 @@
       </item>
       <item>
        <widget class="QLineEdit" name="lineEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -235,8 +238,8 @@
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>188</x>
-     <y>65</y>
+     <x>256</x>
+     <y>101</y>
     </hint>
     <hint type="destinationlabel">
      <x>227</x>

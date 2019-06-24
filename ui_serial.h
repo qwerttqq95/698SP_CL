@@ -75,7 +75,7 @@ public:
 
         layoutWidget1 = new QWidget(Dialog);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(50, 10, 271, 71));
+        layoutWidget1->setGeometry(QRect(50, 10, 284, 71));
         verticalLayout = new QVBoxLayout(layoutWidget1);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -137,6 +137,7 @@ public:
         horizontalLayout_2->setContentsMargins(0, -1, 0, -1);
         radioButton_2 = new QRadioButton(layoutWidget1);
         radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+        radioButton_2->setEnabled(false);
         sizePolicy1.setHeightForWidth(radioButton_2->sizePolicy().hasHeightForWidth());
         radioButton_2->setSizePolicy(sizePolicy1);
 
@@ -144,6 +145,7 @@ public:
 
         lineEdit = new QLineEdit(layoutWidget1);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
+        lineEdit->setEnabled(false);
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -179,7 +181,7 @@ public:
         pushButton->setText(QApplication::translate("Dialog", "\346\211\223\345\274\200", nullptr));
         pushButton_2->setText(QApplication::translate("Dialog", "\345\217\226\346\266\210", nullptr));
         radioButton->setText(QApplication::translate("Dialog", "\344\270\262\345\217\243", nullptr));
-        label->setText(QApplication::translate("Dialog", "COM:", nullptr));
+        label->setText(QApplication::translate("Dialog", "\344\270\262\345\217\243\345\217\267:", nullptr));
         label_2->setText(QApplication::translate("Dialog", "\346\263\242\347\211\271\347\216\207:", nullptr));
         comboBox_2->setItemText(0, QApplication::translate("Dialog", "2400", nullptr));
         comboBox_2->setItemText(1, QApplication::translate("Dialog", "9600", nullptr));

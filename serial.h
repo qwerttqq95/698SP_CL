@@ -14,6 +14,7 @@
 #include <Windows.h>
 
 
+
 namespace Ui {
     class Dialog;
 }
@@ -23,8 +24,8 @@ public:
     explicit Serial(QWidget *parent = nullptr);
 
     ~Serial() override;
-    static bool open_serial();
-    QStringList getEnableCommPort(QList<QString> PortList);
+     bool open_serial(std::basic_string<TCHAR>);
+    QStringList getEnableCommPort(QList<QString>& PortList);
     BOOL CloseSerial();
     static bool build_net();
     HANDLE hCom;
@@ -35,14 +36,9 @@ private:
 
 
 public slots:
-
     void creat_process();
 
-
-
-//    bool RunFlag;
 };
-
 
 #endif //INC_698SP_CL_SERIAL_H
 

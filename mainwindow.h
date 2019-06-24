@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 #include <QMainWindow>
 #include "serial.h"
+#include <QList>
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
