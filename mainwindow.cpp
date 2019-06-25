@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("698SP V1.0");
     connect(ui->actionA,SIGNAL(triggered()),this,SLOT(about()));
     connect(ui->actionSd,SIGNAL(triggered()),this,SLOT(serial_config()));
+    serial = new Serial();
 }
 
 MainWindow::~MainWindow()
@@ -26,8 +27,6 @@ void MainWindow::about(){
 }
 
 void MainWindow::serial_config(){
-    serial = new Serial();
     serial->show();
-
 }
 

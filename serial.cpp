@@ -25,7 +25,7 @@ Serial::Serial(QWidget *parent) :
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(creat_process()));
     QList<QString> PortList;
     PortList = getEnableCommPort(PortList);
-    for (int i = 0; i<PortList.size(); i++) {
+    for (int i = 0; i < PortList.size(); i++) {
         ui->comboBox->addItem(PortList[i]);
     }
 }
@@ -34,12 +34,12 @@ void Serial::creat_process() {
     if (ui->radioButton->isChecked()) {
         if (ui->pushButton->text() == "打开") {
             ui->pushButton->setText("关闭");
-            QString  str = ui->comboBox->currentText();
-            char*  ch;
+            QString str = ui->comboBox->currentText();
+            char *ch;
             QByteArray ba = str.toLatin1(); // must
-            ch=ba.data();
+            ch = ba.data();
             std::basic_string<TCHAR> s1 = ch;
-            std::thread t1(open_serial,this,s1);
+            std::thread t1(open_serial, this, s1);
             t1.detach();
 
         } else {
@@ -47,7 +47,6 @@ void Serial::creat_process() {
             CloseSerial();
 
         }
-
 
     } else {
         std::thread t2(build_net);
@@ -57,7 +56,6 @@ void Serial::creat_process() {
 
 bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     HANDLE hCom;
-//    std::basic_string<TCHAR> s1 = "COM13";
     std::basic_string<TCHAR> s2 = "\\\\.\\";
     std::basic_string<TCHAR> s3 = s2 + s1;
     LPCTSTR a3 = s3.c_str();
@@ -75,11 +73,11 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     }
     COMMTIMEOUTS TimeOuts;
 //设定读超时
-    TimeOuts.ReadIntervalTimeout = 1000;
-    TimeOuts.ReadTotalTimeoutMultiplier = 500;
-    TimeOuts.ReadTotalTimeoutConstant = 5000;
+    TimeOuts.ReadIntervalTimeout = 0;
+    TimeOuts.ReadTotalTimeoutMultiplier = 0;
+    TimeOuts.ReadTotalTimeoutConstant = 1000;
 //设定写超时
-    TimeOuts.WriteTotalTimeoutMultiplier = 500;
+    TimeOuts.WriteTotalTimeoutMultiplier = 50;
     TimeOuts.WriteTotalTimeoutConstant = 2000;
     SetCommTimeouts(hCom, &TimeOuts); //设置超时
 
@@ -113,10 +111,13 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     } else {
 //            cout << "send success" << endl;
     }
-    while (true) {
+    run_flag = true;
+    while (run_flag) {
+
         PurgeComm(hCom, PURGE_TXABORT |
                         PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
         bReadStat = ReadFile(hCom, str, 200, &wCount, nullptr);
+        cout << "run_flag: " << run_flag << endl;
         if (!bReadStat) {
             cout << "Read data fail!";
             return FALSE;
@@ -130,7 +131,9 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
             cout << "Receive: " << output << endl;
         }
     }
-//    return true;
+    cout << "quit cir\n";
+    auto re = CloseHandle(hCom);
+    return 0;
 }
 
 
@@ -139,7 +142,8 @@ bool Serial::build_net() { //#todo
 }
 
 BOOL Serial::CloseSerial() {
-    CloseHandle(hCom);
+    run_flag = false;
+
 }
 
 QStringList Serial::getEnableCommPort(QList<QString> &PortList) {
