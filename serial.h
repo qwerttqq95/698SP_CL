@@ -21,6 +21,8 @@ class Serial : public QDialog {
 Q_OBJECT
 public:
     bool run_flag;
+
+
     explicit Serial(QWidget *parent = nullptr);
 
     ~Serial() override;
@@ -43,6 +45,11 @@ private:
 public slots:
 
     void creat_process();
+
+    void warming();
+
+signals:
+    void qwe();
 
 };
 

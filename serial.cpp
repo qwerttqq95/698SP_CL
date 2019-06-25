@@ -23,6 +23,7 @@ Serial::Serial(QWidget *parent) :
     setWindowTitle("通讯配置");
     setWindowFlags(Qt::WindowStaysOnTopHint);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(creat_process()));
+    connect(this,SIGNAL(qwe()),this,SLOT(warming()));
     QList<QString> PortList;
     PortList = getEnableCommPort(PortList);
     for (int i = 0; i < PortList.size(); i++) {
@@ -34,6 +35,7 @@ void Serial::creat_process() {
     if (ui->radioButton->isChecked()) {
         if (ui->pushButton->text() == "打开") {
             ui->pushButton->setText("关闭");
+            ui->comboBox->setDisabled(1);
             QString str = ui->comboBox->currentText();
             char *ch;
             QByteArray ba = str.toLatin1(); // must
@@ -44,6 +46,7 @@ void Serial::creat_process() {
 
         } else {
             ui->pushButton->setText("打开");
+            ui->comboBox->setDisabled(0);
             CloseSerial();
 
         }
@@ -53,6 +56,7 @@ void Serial::creat_process() {
         t2.detach();
     }
 }
+
 
 bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     HANDLE hCom;
@@ -69,8 +73,10 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     SetupComm(hCom, 1024, 1024); //输入缓冲区和输出缓冲区的大小都是1024
     if (hCom == (HANDLE) -1) {
         cout << "open com fail!";
+        emit qwe();
         return FALSE;
     }
+    run_flag = true;
     COMMTIMEOUTS TimeOuts;
 //设定读超时
     TimeOuts.ReadIntervalTimeout = 0;
@@ -111,7 +117,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     } else {
 //            cout << "send success" << endl;
     }
-    run_flag = true;
+
     while (run_flag) {
 
         PurgeComm(hCom, PURGE_TXABORT |
@@ -176,5 +182,14 @@ QStringList Serial::getEnableCommPort(QList<QString> &PortList) {
 
 
 Serial::~Serial() {
-    cout << "out";
-};
+}
+
+void Serial::warming() {
+    QMessageBox::warning(this, "ERROR", "串口打开失败!", QMessageBox::Ok);
+    ui->pushButton->setText("打开");
+    ui->comboBox->setDisabled(0);
+}
+//
+//void Serial::qwe() {
+//    return;
+//};
