@@ -4,11 +4,11 @@
 #include <string>
 #include <iostream>
 #include <iomanip>
-#include <pthread.h>
-#include <c++/thread>
+#include <thread>
 #include <QtWidgets/QMessageBox>
 #include <QList>
 #include <QDebug>
+
 
 using namespace std;
 
@@ -21,9 +21,10 @@ Serial::Serial(QWidget *parent) :
         ui(new Ui::Dialog) {
     ui->setupUi(this);
     setWindowTitle("通讯配置");
-    setWindowFlags(Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::MSWindowsFixedSizeDialogHint);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(creat_process()));
-    connect(this, SIGNAL(qwe()), this, SLOT(warming()));
+    connect(this, SIGNAL(open_fail_message()), this, SLOT(warming()));
+    connect(this, SIGNAL(send_write(QString)), this, SLOT(write(QString)));
     QList<QString> PortList;
     PortList = getEnableCommPort(PortList);
     for (int i = 0; i < PortList.size(); i++) {
@@ -39,10 +40,10 @@ void Serial::creat_process() {
             ui->comboBox_2->setDisabled(1);
             QString str = ui->comboBox->currentText();
             char *ch;
-            QByteArray ba = str.toLatin1(); // must
+            QByteArray ba = str.toLatin1();
             ch = ba.data();
             std::basic_string<TCHAR> s1 = ch;
-            std::thread t1(open_serial, this, s1);
+            std::thread t1(&Serial::open_serial, this, s1);
             t1.detach();
 
         } else {
@@ -50,7 +51,6 @@ void Serial::creat_process() {
             ui->comboBox->setDisabled(0);
             ui->comboBox_2->setDisabled(0);
             CloseSerial();
-
         }
 
     } else {
@@ -61,7 +61,6 @@ void Serial::creat_process() {
 
 
 bool Serial::open_serial(std::basic_string<TCHAR> s1) {
-
     char str[400] = {0};
     DWORD wCount;//读取的字节数
     BOOL bReadStat;
@@ -78,7 +77,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     SetupComm(hCom, 1024, 1024); //输入缓冲区和输出缓冲区的大小都是1024
     if (hCom == (HANDLE) -1) {
         cout << "open com fail!";
-        emit qwe();
+        emit open_fail_message();
         return FALSE;
     }
     run_flag = true;
@@ -93,19 +92,20 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     SetCommTimeouts(hCom, &TimeOuts); //设置超时
     DCB dcb;
     GetCommState(hCom, &dcb);
-    dcb.BaudRate = 9600;
+    dcb.BaudRate = (unsigned) ui->comboBox_2->currentText().toLong(nullptr);
     dcb.ByteSize = 8;
     dcb.Parity = EVENPARITY;
     dcb.StopBits = ONESTOPBIT;
     SetCommState(hCom, &dcb);
     PurgeComm(hCom, PURGE_TXCLEAR | PURGE_RXCLEAR);//清空缓冲区
-    string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    write(add);
+    QString add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
+    emit send_message(add);
+    emit send_write(add);
     while (run_flag) {
         PurgeComm(hCom, PURGE_TXABORT |
                         PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
         bReadStat = ReadFile(hCom, str, 200, &wCount, nullptr);
-        cout << "run_flag: " << run_flag << endl;
+//        cout << "run_flag: " << run_flag << endl;
         if (!bReadStat) {
             cout << "Read data fail!";
             return FALSE;
@@ -116,25 +116,37 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
                 sprintf(temp, "%02X ", (BYTE) str[i]);
                 output = output + temp;
             }
+            if (output == "") {
+                continue;
+            }
             cout << "Receive: " << output << endl;
         }
     }
     cout << "quit cir\n";
-    auto re = CloseHandle(hCom);
+    CloseHandle(hCom);
     return 0;
 }
-bool Serial::write(std::string add) {
+
+bool Serial::write(QString add) {
+    std::thread t3(&Serial::write_, this, add);
+    t3.detach();
+
+}
+
+bool Serial::write_(QString add) {
     BYTE Apdu[400] = {0};
     DWORD nApduLen = 0;
+    string new_add = add.toStdString();
 //    string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    transform(add.begin(), add.end(), add.begin(), ::tolower);
-    String2Hex(add, Apdu, &nApduLen, sizeof(Apdu));
+    transform(new_add.begin(), new_add.end(), new_add.begin(), ::tolower);
+    String2Hex(new_add, Apdu, &nApduLen, sizeof(Apdu));
     COMSTAT ComStat;
     DWORD dwErrorFlags;
     BOOL bWriteStat;
     ClearCommError(hCom, &dwErrorFlags, &ComStat);
     DWORD dwBytesWrite = nApduLen;
-    cout << "Send: " << StringAddSpace(add) << endl;
+    cout << "Send: " << StringAddSpace(new_add) << endl;
+    emit
     bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
     if (!bWriteStat) {
         cout << "Write data fail!!" << endl;
@@ -142,14 +154,12 @@ bool Serial::write(std::string add) {
     return true;
 }
 
-
 bool Serial::build_net() { //#todo
     return false;
 }
 
 BOOL Serial::CloseSerial() {
     run_flag = false;
-
 }
 
 QStringList Serial::getEnableCommPort(QList<QString> &PortList) {

@@ -12,7 +12,7 @@
 #include <iterator>
 #include <cctype>
 #include <Windows.h>
-
+#include <QString>
 
 namespace Ui {
     class Dialog;
@@ -21,7 +21,6 @@ class Serial : public QDialog {
 Q_OBJECT
 public:
     bool run_flag;
-
 
     explicit Serial(QWidget *parent = nullptr);
 
@@ -35,7 +34,7 @@ public:
 
     static bool build_net();
 
-    bool write(std::string);
+    bool write_(QString);
 
     HANDLE hCom;
 
@@ -46,12 +45,20 @@ private:
 
 public slots:
 
+    bool write(QString);
+
     void creat_process();
+
 
     void warming();
 
 signals:
-    void qwe();
+
+    void send_message(QString);
+
+    void open_fail_message();
+
+    void send_write(QString);
 
 };
 
