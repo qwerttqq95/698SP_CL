@@ -23,7 +23,7 @@ Serial::Serial(QWidget *parent) :
     setWindowTitle("通讯配置");
     setWindowFlags(Qt::WindowStaysOnTopHint);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(creat_process()));
-    connect(this,SIGNAL(qwe()),this,SLOT(warming()));
+    connect(this, SIGNAL(qwe()), this, SLOT(warming()));
     QList<QString> PortList;
     PortList = getEnableCommPort(PortList);
     for (int i = 0; i < PortList.size(); i++) {
@@ -36,6 +36,7 @@ void Serial::creat_process() {
         if (ui->pushButton->text() == "打开") {
             ui->pushButton->setText("关闭");
             ui->comboBox->setDisabled(1);
+            ui->comboBox_2->setDisabled(1);
             QString str = ui->comboBox->currentText();
             char *ch;
             QByteArray ba = str.toLatin1(); // must
@@ -47,6 +48,7 @@ void Serial::creat_process() {
         } else {
             ui->pushButton->setText("打开");
             ui->comboBox->setDisabled(0);
+            ui->comboBox_2->setDisabled(0);
             CloseSerial();
 
         }
@@ -59,7 +61,10 @@ void Serial::creat_process() {
 
 
 bool Serial::open_serial(std::basic_string<TCHAR> s1) {
-    HANDLE hCom;
+
+    char str[400] = {0};
+    DWORD wCount;//读取的字节数
+    BOOL bReadStat;
     std::basic_string<TCHAR> s2 = "\\\\.\\";
     std::basic_string<TCHAR> s3 = s2 + s1;
     LPCTSTR a3 = s3.c_str();
@@ -81,12 +86,11 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
 //设定读超时
     TimeOuts.ReadIntervalTimeout = 0;
     TimeOuts.ReadTotalTimeoutMultiplier = 0;
-    TimeOuts.ReadTotalTimeoutConstant = 1000;
+    TimeOuts.ReadTotalTimeoutConstant = 1800;
 //设定写超时
     TimeOuts.WriteTotalTimeoutMultiplier = 50;
     TimeOuts.WriteTotalTimeoutConstant = 2000;
     SetCommTimeouts(hCom, &TimeOuts); //设置超时
-
     DCB dcb;
     GetCommState(hCom, &dcb);
     dcb.BaudRate = 9600;
@@ -95,31 +99,9 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     dcb.StopBits = ONESTOPBIT;
     SetCommState(hCom, &dcb);
     PurgeComm(hCom, PURGE_TXCLEAR | PURGE_RXCLEAR);//清空缓冲区
-
-    char str[400] = {0};
-    DWORD wCount;//读取的字节数
-    BOOL bReadStat;
-
-    BYTE Apdu[400] = {0};
-    DWORD nApduLen = 0;
     string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    transform(add.begin(), add.end(), add.begin(), ::tolower);
-    String2Hex(add, Apdu, &nApduLen, sizeof(Apdu));
-    COMSTAT ComStat;
-    DWORD dwErrorFlags;
-    BOOL bWriteStat;
-    ClearCommError(hCom, &dwErrorFlags, &ComStat);
-    DWORD dwBytesWrite = nApduLen;
-    cout << "Send: " << StringAddSpace(add) << endl;
-    bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
-    if (!bWriteStat) {
-        cout << "Write data fail!!" << endl;
-    } else {
-//            cout << "send success" << endl;
-    }
-
+    write(add);
     while (run_flag) {
-
         PurgeComm(hCom, PURGE_TXABORT |
                         PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
         bReadStat = ReadFile(hCom, str, 200, &wCount, nullptr);
@@ -140,6 +122,24 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     cout << "quit cir\n";
     auto re = CloseHandle(hCom);
     return 0;
+}
+bool Serial::write(std::string add) {
+    BYTE Apdu[400] = {0};
+    DWORD nApduLen = 0;
+//    string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
+    transform(add.begin(), add.end(), add.begin(), ::tolower);
+    String2Hex(add, Apdu, &nApduLen, sizeof(Apdu));
+    COMSTAT ComStat;
+    DWORD dwErrorFlags;
+    BOOL bWriteStat;
+    ClearCommError(hCom, &dwErrorFlags, &ComStat);
+    DWORD dwBytesWrite = nApduLen;
+    cout << "Send: " << StringAddSpace(add) << endl;
+    bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
+    if (!bWriteStat) {
+        cout << "Write data fail!!" << endl;
+    } else {}
+    return true;
 }
 
 
@@ -188,8 +188,6 @@ void Serial::warming() {
     QMessageBox::warning(this, "ERROR", "串口打开失败!", QMessageBox::Ok);
     ui->pushButton->setText("打开");
     ui->comboBox->setDisabled(0);
+    ui->comboBox_2->setDisabled(0);
 }
-//
-//void Serial::qwe() {
-//    return;
-//};
+

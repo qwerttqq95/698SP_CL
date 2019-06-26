@@ -35,6 +35,8 @@ public:
 
     static bool build_net();
 
+    bool write(std::string);
+
     HANDLE hCom;
 
 
