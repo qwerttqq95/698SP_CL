@@ -16,6 +16,12 @@ extern int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen);
 
 extern string StringAddSpace(string &input);
 
+extern string StringAddSpace(QString &input);
+
+extern int check(QString);
+
+
+
 Serial::Serial(QWidget *parent) :
         QDialog(parent),
         ui(new Ui::Dialog) {
@@ -45,7 +51,7 @@ void Serial::creat_process() {
             std::basic_string<TCHAR> s1 = ch;
             std::thread t1(&Serial::open_serial, this, s1);
             t1.detach();
-
+            close();
         } else {
             ui->pushButton->setText("打开");
             ui->comboBox->setDisabled(0);
@@ -82,13 +88,11 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     }
     run_flag = true;
     COMMTIMEOUTS TimeOuts;
-//设定读超时
     TimeOuts.ReadIntervalTimeout = 0;
     TimeOuts.ReadTotalTimeoutMultiplier = 0;
-    TimeOuts.ReadTotalTimeoutConstant = 1800;
-//设定写超时
-    TimeOuts.WriteTotalTimeoutMultiplier = 50;
-    TimeOuts.WriteTotalTimeoutConstant = 2000;
+    TimeOuts.ReadTotalTimeoutConstant = 350;
+    TimeOuts.WriteTotalTimeoutMultiplier = 0;
+    TimeOuts.WriteTotalTimeoutConstant = 0;
     SetCommTimeouts(hCom, &TimeOuts); //设置超时
     DCB dcb;
     GetCommState(hCom, &dcb);
@@ -99,13 +103,13 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     SetCommState(hCom, &dcb);
     PurgeComm(hCom, PURGE_TXCLEAR | PURGE_RXCLEAR);//清空缓冲区
     QString add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    emit send_message(add);
     emit send_write(add);
+    PurgeComm(hCom, PURGE_TXABORT |
+                    PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+    string temp1 = "";
+    int times = 0;
     while (run_flag) {
-        PurgeComm(hCom, PURGE_TXABORT |
-                        PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
         bReadStat = ReadFile(hCom, str, 200, &wCount, nullptr);
-//        cout << "run_flag: " << run_flag << endl;
         if (!bReadStat) {
             cout << "Read data fail!";
             return FALSE;
@@ -119,7 +123,34 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
             if (output == "") {
                 continue;
             }
-            cout << "Receive: " << output << endl;
+            if (temp1 != "") {
+                output = temp1 + output;
+                times += 1;
+                if (times > 2) {
+                    temp1 = "";
+                    times = 0;
+                    continue;
+                }
+            }
+            switch (check(QString::fromStdString(output))) {
+                case 0: {
+                }
+                    break;
+                case 1: {
+                    cout << "Receive: " << output << endl;
+                    emit receive_message(QString::fromStdString(output));
+                    PurgeComm(hCom, PURGE_TXABORT |
+                                    PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
+                    temp1 = "";
+                }
+                    break;
+                case 2: {
+                    temp1 = output;
+                }
+                    break;
+                default:
+                    break;
+            }
         }
     }
     cout << "quit cir\n";
@@ -130,7 +161,6 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
 bool Serial::write(QString add) {
     std::thread t3(&Serial::write_, this, add);
     t3.detach();
-
 }
 
 bool Serial::write_(QString add) {
@@ -146,7 +176,7 @@ bool Serial::write_(QString add) {
     ClearCommError(hCom, &dwErrorFlags, &ComStat);
     DWORD dwBytesWrite = nApduLen;
     cout << "Send: " << StringAddSpace(new_add) << endl;
-    emit
+    emit send_message(add);
     bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
     if (!bWriteStat) {
         cout << "Write data fail!!" << endl;
@@ -186,13 +216,12 @@ QStringList Serial::getEnableCommPort(QList<QString> &PortList) {
         }
     }
     RegCloseKey(hkey);
-    qDebug() << "Date:" << PortList;
+//    qDebug() << "Date:" << PortList;
     return PortList;
 }
 
 
-Serial::~Serial() {
-}
+Serial::~Serial() {}
 
 void Serial::warming() {
     QMessageBox::warning(this, "ERROR", "串口打开失败!", QMessageBox::Ok);

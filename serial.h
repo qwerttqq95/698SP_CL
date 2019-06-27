@@ -36,6 +36,7 @@ public:
 
     bool write_(QString);
 
+
     HANDLE hCom;
 
 
@@ -55,6 +56,8 @@ public slots:
 signals:
 
     void send_message(QString);
+
+    void receive_message(QString);
 
     void open_fail_message();
 
