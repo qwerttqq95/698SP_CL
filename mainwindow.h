@@ -8,6 +8,48 @@
 #include <QString>
 #include <time.h>
 
+#define DATA_NULL                        0
+#define DATA_ARRAY                        1
+#define DATA_STRUCT                    2
+#define DATA_BOOL                        3
+#define DATA_BITSTRING                    4
+#define DATA_DOUBLE_LONG                5
+#define DATA_DOUBLE_LONG_UNSIGNED        6
+#define DATA_OCT_STRING                9
+#define DATA_VISIBLE_STRING            10
+#define DATA_UTF8_STRING                12
+#define DATA_INTEGER                    15
+#define DATA_LONG                        16
+#define DATA_UNSIGNED                    17
+#define DATA_LONG_UNSIGNED                18
+#define DATA_LONG64                        20
+#define DATA_LONG64_UNSIGNED            21
+#define DATA_ENUM                        22
+#define DATA_FLOAT32                    23
+#define DATA_FLOAT64                    24
+#define DATA_DATE_TIME                    25
+#define DATA_DATE                        26
+#define DATA_TIME                        27
+#define DATA_DATE_TIME_S                28
+#define DATA_OI                            80
+#define DATA_OAD                        81
+#define DATA_ROAD                        82
+#define DATA_OMD                        83
+#define DATA_TI                            84
+#define DATA_TSA                        85
+#define DATA_MAC                        86
+#define DATA_RN                            87
+#define DATA_REGION                        88
+#define DATA_SCALER_UNIT                89
+#define DATA_RSD                        90
+#define DATA_CSD                        91
+#define DATA_MS                            92
+#define DATA_SID                        93
+#define DATA_SID_MAC                    94
+#define DATA_COMDCB                        95
+#define DATA_RCSD                        96
+
+
 namespace Ui {
     class MainWindow;
 }
@@ -20,6 +62,8 @@ public:
 
     bool analysis(QString a);
 
+    QString deal_data(QStringList);
+
     ~MainWindow() override;
 
     QString revert_add;
@@ -28,20 +72,22 @@ public:
         QString PIIDACD;
         QString OAD;
         QString GET_RESULT_TYPE;
-        QString DATA;
+        QStringList DATA;
     } GET_RESPOND_NORMAL;
 
 private:
     Ui::MainWindow *ui;
     Serial *serial;
 signals:
-
+    void send_analysis(QString);
 
 public slots:
 
     void show_message_send(QString);
 
     void show_message_receive(QString);
+
+    void analysis_show(QString);
 
     void about();
 
