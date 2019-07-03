@@ -3,33 +3,12 @@
 #include <QString>
 #include <QtCore/QStringList>
 #include <QDebug>
+#include <iostream>
 
+#define PPPINITFCS16 0xffff
 
 using namespace std;
 
-int check(QString a) {
-    QStringList list = a.split(' ', QString::SkipEmptyParts);
-    if (list[0] == "68" and list[list.size() - 1] == "16") {
-        qDebug() << "check granted";
-        return 1;
-    } else {
-        if (list[0] == "68") {
-//            qDebug() << "check denied but find 68 with start: " << list;
-            return 2;
-        } else
-            qDebug() << "check denied: " << list;
-        return 0;
-    }
-}
-string DtoB(int d)
-{
-    if(d/2)
-        DtoB(d/2);
-    char x[] = {0};
-    sprintf(x,"%d",d%2);
-    string a = x;
-    return a;
-}
 int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen) {
     int i, j = 0;
     DWORD len;
@@ -70,22 +49,6 @@ int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen) {
     return 0;
 }
 
-string StringAddSpace(string &input) {
-    string output = "";
-    for (int i = 0; i < input.length(); i += 2) {
-        output = output + input[i] + input[i + 1] + ' ';
-    }
-    return output;
-}
-
-QString StringAddSpace(QString &input) {
-    QString output = "";
-    for (int i = 0; i < input.length(); i += 2) {
-        output = output + input[i] + input[i + 1] + ' ';
-    }
-    return output;
-}
-
 const static WORD fcstab[256] = {
         0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
         0x8c48, 0x9dc1, 0xaf5a, 0xbed3, 0xca6c, 0xdbe5, 0xe97e, 0xf8f7,
@@ -122,6 +85,98 @@ const static WORD fcstab[256] = {
 };
 
 unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len) {
-    while (len--) fcs = (fcs >> 8) ^ fcstab[(fcs ^ *p++) & 0xff];
+    while (len--) {
+        cout << "\np: " << p << "\n*p: " << *p;
+        fcs = (fcs >> 8) ^ fcstab[(fcs ^ *p++) & 0xff];
+    }
     return (fcs ^ 0xffff);
 }
+
+void BtoD(int a, int *b) {
+    *b = 0;
+    while (a--) {
+        *b *= 2;
+        *b += getchar() - '0';
+    }
+
+}
+
+QString BuildMessage(QString apdu, QString SA) {
+    apdu.remove(' ');
+    int len = SA.length() / 2 - 1;
+    if (len == -1) {
+        qDebug() << "error";
+        return "0";
+    }
+    QString SA_sign = QString("%1").arg(len);
+    int apdu_len = apdu.length() / 2;
+    if (apdu_len & 1 == 1) {
+        return 0;
+    } else {
+        int Total_length = 10 + len + apdu_len;
+        int lenth1 = Total_length & 0x00ff;
+        int lenth2 = Total_length >> 8;
+        char len1[3] = {'0', '0'};
+        char len2[3] = {'0', '0'};
+        sprintf(len1, "%0X", lenth1);
+        sprintf(len2, "%0X", lenth2);
+        for (int i = 0; i != 2; i++) {
+            if (len2[i] == 0)
+                len2[i] = '0';
+        }
+        char full_len[4];
+        sprintf(full_len, "%.2s%.2s", len1, len2);
+        QString text(full_len);
+        QString Head = text + "430" + SA_sign + SA + "10";
+        string a = Head.toStdString();
+        BYTE text1[400] = {0};
+        DWORD nApduLen = 0;
+        String2Hex(a, text1, &nApduLen, sizeof(text1));
+        cout << "text1" << text1 << endl;
+        unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, nApduLen);
+        std::cout << "hcs: " << TempLen << endl;
+        return Head;
+    }
+}
+
+int check(QString a) {
+    QStringList list = a.split(' ', QString::SkipEmptyParts);
+    if (list[0] == "68" and list[list.size() - 1] == "16") {
+        qDebug() << "check granted";
+        return 1;
+    } else {
+        if (list[0] == "68") {
+//            qDebug() << "check denied but find 68 with start: " << list;
+            return 2;
+        } else
+            qDebug() << "check denied: " << list;
+        return 0;
+    }
+}
+
+string DtoB(int d) {
+    if (d / 2)
+        DtoB(d / 2);
+    char x[] = {0};
+    sprintf(x, "%d", d % 2);
+    string a = x;
+    return a;
+}
+
+
+string StringAddSpace(string &input) {
+    string output = "";
+    for (int i = 0; i < input.length(); i += 2) {
+        output = output + input[i] + input[i + 1] + ' ';
+    }
+    return output;
+}
+
+QString StringAddSpace(QString &input) {
+    QString output = "";
+    for (int i = 0; i < input.length(); i += 2) {
+        output = output + input[i] + input[i + 1] + ' ';
+    }
+    return output;
+}
+

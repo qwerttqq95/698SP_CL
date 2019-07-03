@@ -70,7 +70,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     char str[400] = {0};
     DWORD wCount;//读取的字节数
     BOOL bReadStat;
-    std::basic_string<TCHAR> s2 = "\\\\.\\";
+    std::basic_string<TCHAR> s2 = R"(\\.\)";
     std::basic_string<TCHAR> s3 = s2 + s1;
     LPCTSTR a3 = s3.c_str();
     hCom = CreateFile(a3,

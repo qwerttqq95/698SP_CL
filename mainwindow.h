@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "Custom_APDU.h"
 #include <QMainWindow>
 #include "serial.h"
 #include <QList>
@@ -78,7 +79,10 @@ public:
 private:
     Ui::MainWindow *ui;
     Serial *serial;
+    Custom_APDU *Custom;
+
 signals:
+
     void send_analysis(QString);
 
 public slots:
@@ -92,6 +96,8 @@ public slots:
     void about();
 
     void serial_config();
+
+    void custom();
 
     void send_find_add();
 };

@@ -2,11 +2,11 @@
 #include "ui_mainwindow.h"
 #include "QMessageBox"
 #include "ui_serial.h"
+#include <ui_Custom_APDU.h>
+
 #include <iostream>
 
 using namespace std;
-
-extern string DtoB(int);
 
 extern QString StringAddSpace(QString &input);
 
@@ -15,14 +15,18 @@ MainWindow::MainWindow(QWidget *parent) :
         ui(new Ui::MainWindow) {
     ui->setupUi(this);
     serial = new Serial();
+
     setWindowTitle("698SP V1.0");
     connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config()));
+    connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
     connect(ui->action, SIGNAL(triggered()), this, SLOT(send_find_add()));
     connect(serial, SIGNAL(send_message(QString)), this, SLOT(show_message_send(QString)));
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(this, SIGNAL(send_analysis(QString)), this, SLOT(analysis_show(QString)));
     serial->show();
+
+
 }
 
 bool MainWindow::analysis(QString a) {
@@ -93,6 +97,13 @@ void MainWindow::about() {
 
 void MainWindow::serial_config() {
     serial->show();
+}
+
+
+void MainWindow::custom() {
+    Custom = new Custom_APDU(revert_add);
+    connect(Custom, SIGNAL(send_write(QString)), serial, SLOT(write(QString)), Qt::UniqueConnection);
+    Custom->show();
 }
 
 void MainWindow::show_message_send(QString a) {
