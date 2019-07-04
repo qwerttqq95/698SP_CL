@@ -4,10 +4,24 @@
 #include <QtCore/QStringList>
 #include <QDebug>
 #include <iostream>
+#include <QList>
 
 #define PPPINITFCS16 0xffff
 
 using namespace std;
+
+QString message_swap(QString a) {
+    QList<QString> list;
+    for (int i = 0; i <= a.length() / 2; i += 2) {
+        list.append(a.mid(i, i + 2));
+    }
+    QString re = "";
+    for (int y = list.length() - 1; y >= 0; y--) {
+        re = re + list[y];
+    }
+    qDebug() << "message_swap re" << re;
+    return re;
+}
 
 int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen) {
     int i, j = 0;
@@ -86,7 +100,7 @@ const static WORD fcstab[256] = {
 
 unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len) {
     while (len--) {
-        cout << "\np: " << p << "\n*p: " << *p;
+//        cout << "\np: " << p << "\n*p: " << *p;
         fcs = (fcs >> 8) ^ fcstab[(fcs ^ *p++) & 0xff];
     }
     return (fcs ^ 0xffff);
@@ -129,19 +143,33 @@ QString BuildMessage(QString apdu, QString SA) {
         QString text(full_len);
         QString Head = text + "430" + SA_sign + SA + "10";
         string a = Head.toStdString();
-        BYTE text1[400] = {0};
+        BYTE text1[600] = {0};
         DWORD nApduLen = 0;
         String2Hex(a, text1, &nApduLen, sizeof(text1));
-        cout << "text1" << text1 << endl;
         unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, nApduLen);
-        std::cout << "hcs: " << TempLen << endl;
+        char hcs[5];
+        sprintf(hcs, "%X", TempLen);
+        QString HCS = message_swap((QString) hcs);
+        Head = Head + HCS + apdu.remove(QString::SkipEmptyParts);
+        a = Head.toStdString();
+        nApduLen = 0;
+        String2Hex(a, text1, &nApduLen, sizeof(text1));
+        TempLen = pppfcs16(PPPINITFCS16, text1, nApduLen);
+        char fcs[5];
+        sprintf(fcs, "%04X", TempLen);
+        QString FCS = message_swap((QString) fcs);
+        Head = "68" + Head + FCS + "16";
         return Head;
     }
 }
 
 int check(QString a) {
     QStringList list = a.split(' ', QString::SkipEmptyParts);
-    if (list[0] == "68" and list[list.size() - 1] == "16") {
+    if (list.length() < 20) {
+        return 2;
+    }
+//    qDebug()<<"shuchu"<<(list[2]+ list[1]).toInt(nullptr, 16);
+    if (list[0] == "68" and (list.length() >= ((list[2] + list[1]).toInt(nullptr, 16)))) {
         qDebug() << "check granted";
         return 1;
     } else {

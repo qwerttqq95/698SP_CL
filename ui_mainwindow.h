@@ -14,13 +14,14 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QStatusBar>
-#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -91,8 +92,7 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QLabel *label;
     QLineEdit *lineEdit;
-    QHBoxLayout *horizontalLayout;
-    QTextEdit *textEdit_2;
+    QTableWidget *tableWidget;
     QMenuBar *menubar;
     QMenu *menuOpen;
     QMenu *menu;
@@ -241,7 +241,6 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(9, 9, 9, 9);
         groupBox = new QGroupBox(centralwidget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -274,26 +273,30 @@ public:
 
         verticalLayout->addWidget(groupBox);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(5);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-        textEdit_2 = new QTextEdit(centralwidget);
-        textEdit_2->setObjectName(QStringLiteral("textEdit_2"));
-        textEdit_2->setEnabled(true);
-        QSizePolicy sizePolicy1(QSizePolicy::Ignored, QSizePolicy::MinimumExpanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(textEdit_2->sizePolicy().hasHeightForWidth());
-        textEdit_2->setSizePolicy(sizePolicy1);
-        textEdit_2->setReadOnly(true);
-        textEdit_2->setOverwriteMode(false);
-        textEdit_2->setCursorWidth(1);
+        tableWidget = new QTableWidget(centralwidget);
+        if (tableWidget->columnCount() < 3)
+            tableWidget->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        tableWidget->setObjectName(QStringLiteral("tableWidget"));
+        tableWidget->setFrameShape(QFrame::StyledPanel);
+        tableWidget->setFrameShadow(QFrame::Sunken);
+        tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableWidget->setProperty("showDropIndicator", QVariant(false));
+        tableWidget->setAlternatingRowColors(true);
+        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableWidget->setTextElideMode(Qt::ElideLeft);
+        tableWidget->setGridStyle(Qt::CustomDashLine);
+        tableWidget->horizontalHeader()->setVisible(false);
+        tableWidget->verticalHeader()->setVisible(false);
 
-        horizontalLayout->addWidget(textEdit_2);
-
-
-        verticalLayout->addLayout(horizontalLayout);
+        verticalLayout->addWidget(tableWidget);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -476,6 +479,12 @@ public:
         groupBox->setTitle(QApplication::translate("MainWindow", "\344\277\241\346\201\257:", nullptr));
         label->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\345\234\260\345\235\200:", nullptr));
         lineEdit->setText(QApplication::translate("MainWindow", "111111111111", nullptr));
+        QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "New Column", nullptr));
+        QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "New Column", nullptr));
+        QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "New Column", nullptr));
         menuOpen->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\346\265\213\350\257\225", nullptr));

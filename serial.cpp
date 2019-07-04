@@ -67,7 +67,7 @@ void Serial::creat_process() {
 
 
 bool Serial::open_serial(std::basic_string<TCHAR> s1) {
-    char str[400] = {0};
+    char str[700] = {0};
     DWORD wCount;//读取的字节数
     BOOL bReadStat;
     std::basic_string<TCHAR> s2 = R"(\\.\)";
@@ -90,7 +90,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     COMMTIMEOUTS TimeOuts;
     TimeOuts.ReadIntervalTimeout = 0;
     TimeOuts.ReadTotalTimeoutMultiplier = 0;
-    TimeOuts.ReadTotalTimeoutConstant = 350;
+    TimeOuts.ReadTotalTimeoutConstant = 150;
     TimeOuts.WriteTotalTimeoutMultiplier = 0;
     TimeOuts.WriteTotalTimeoutConstant = 0;
     SetCommTimeouts(hCom, &TimeOuts); //设置超时
@@ -109,7 +109,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     string temp1 = "";
     int times = 0;
     while (run_flag) {
-        bReadStat = ReadFile(hCom, str, 200, &wCount, nullptr);
+        bReadStat = ReadFile(hCom, str, 700, &wCount, nullptr);
         if (!bReadStat) {
             cout << "Read data fail!";
             return FALSE;
@@ -126,7 +126,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
             if (temp1 != "") {
                 output = temp1 + output;
                 times += 1;
-                if (times > 2) {
+                if (times > 100) {
                     temp1 = "";
                     times = 0;
                     continue;
@@ -134,6 +134,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
             }
             switch (check(QString::fromStdString(output))) {
                 case 0: {
+//                    qDebug()<<"case 0";
                 }
                     break;
                 case 1: {
@@ -145,10 +146,12 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
                 }
                     break;
                 case 2: {
+//                    qDebug()<<"case 2";
                     temp1 = output;
                 }
                     break;
                 default:
+//                    qDebug()<<"default";
                     break;
             }
         }

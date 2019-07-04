@@ -59,8 +59,10 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 
 public:
+    int current = 0;
     explicit MainWindow(QWidget *parent = nullptr);
 
+    void closeEvent(QCloseEvent *event);
     bool analysis(QString a);
 
     QString deal_data(QStringList);
@@ -75,6 +77,17 @@ public:
         QString GET_RESULT_TYPE;
         QStringList DATA;
     } GET_RESPOND_NORMAL;
+
+    typedef struct {
+        QString PIIDACD;
+        QString is_last_frame;
+        QString slicing_index;
+        QString GetResponseNextType;
+        QString SequenceOf_ResultNormal;
+        QString OAD;
+        QString GET_RESULT_TYPE;
+        QStringList DATA;
+    } GetResponseNext;
 
 private:
     Ui::MainWindow *ui;
