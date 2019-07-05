@@ -77,9 +77,7 @@ bool MainWindow::analysis(QString a) {
                     n.slicing_index = list[apdu_0 + 4] + list[apdu_0 + 5];
                     if (n.is_last_frame == "00") {
                         QString text = "0505" + n.PIIDACD + n.slicing_index + "00";
-                        Custom = new Custom_APDU(revert_add);
-                        emit Custom->send_write(BuildMessage(a, revert_add));
-                        //#todo
+                        emit serial->send_write(BuildMessage(text, revert_add));
                     }
                     n.GetResponseNextType = list[apdu_0 + 6];
                     n.SequenceOf_ResultNormal = list[apdu_0 + 7];

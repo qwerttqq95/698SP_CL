@@ -10,6 +10,8 @@
 
 using namespace std;
 
+int Stringlist2Hex(QString &str, BYTE *pOut);
+
 QString message_swap(QString a) {
     QList<QString> list;
     for (int i = 0; i <= a.length() / 2; i += 2) {
@@ -49,7 +51,6 @@ int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen) {
             x = 0;
             j = 0;
         }
-
     }
     if (j) {
         pOut[len++] = (BYTE) x;
@@ -100,7 +101,6 @@ const static WORD fcstab[256] = {
 
 unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len) {
     while (len--) {
-//        cout << "\np: " << p << "\n*p: " << *p;
         fcs = (fcs >> 8) ^ fcstab[(fcs ^ *p++) & 0xff];
     }
     return (fcs ^ 0xffff);
@@ -117,6 +117,7 @@ void BtoD(int a, int *b) {
 
 QString BuildMessage(QString apdu, QString SA) {
     apdu.remove(' ');
+    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
     if (len == -1) {
         qDebug() << "error";
@@ -142,21 +143,18 @@ QString BuildMessage(QString apdu, QString SA) {
         sprintf(full_len, "%.2s%.2s", len1, len2);
         QString text(full_len);
         QString Head = text + "430" + SA_sign + SA + "10";
-        string a = Head.toStdString();
         BYTE text1[600] = {0};
-        DWORD nApduLen = 0;
-        String2Hex(a, text1, &nApduLen, sizeof(text1));
-        unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, nApduLen);
+        Stringlist2Hex(Head, text1);
+        unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
         char hcs[5];
-        sprintf(hcs, "%X", TempLen);
+        sprintf(hcs, "%04X", TempLen);
         QString HCS = message_swap((QString) hcs);
-        Head = Head + HCS + apdu.remove(QString::SkipEmptyParts);
-        a = Head.toStdString();
-        nApduLen = 0;
-        String2Hex(a, text1, &nApduLen, sizeof(text1));
-        TempLen = pppfcs16(PPPINITFCS16, text1, nApduLen);
+        Head = Head + HCS + apdu;
+        BYTE text2[600] = {0};
+        Stringlist2Hex(Head, text2);
+        unsigned short TempLen2 = pppfcs16(PPPINITFCS16, text2, (unsigned) Head.length() / 2);
         char fcs[5];
-        sprintf(fcs, "%04X", TempLen);
+        sprintf(fcs, "%04X", TempLen2);
         QString FCS = message_swap((QString) fcs);
         Head = "68" + Head + FCS + "16";
         return Head;
@@ -208,3 +206,13 @@ QString StringAddSpace(QString &input) {
     return output;
 }
 
+int Stringlist2Hex(QString &str, BYTE *pOut) {
+    QList<QString> str_list;
+    str_list = StringAddSpace(str).split(' ');
+    int len = str_list.length();
+    for (int i = 0, j = 0; i < len; i++) {
+        int qwe = str_list[i].toInt(nullptr, 16);
+        pOut[i] = (BYTE) qwe;
+    }
+    return 0;
+}
