@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <iostream>
 #include <QList>
+#include <MeterArchives.h>
+#include <mainwindow.h>
 
 #define PPPINITFCS16 0xffff
 
@@ -12,7 +14,7 @@ using namespace std;
 
 int Stringlist2Hex(QString &str, BYTE *pOut);
 
-QString message_swap(QString a) {
+QString message_swap(const QString &a) {
     QList<QString> list;
     for (int i = 0; i <= a.length() / 2; i += 2) {
         list.append(a.mid(i, i + 2));
@@ -21,7 +23,6 @@ QString message_swap(QString a) {
     for (int y = list.length() - 1; y >= 0; y--) {
         re = re + list[y];
     }
-    qDebug() << "message_swap re" << re;
     return re;
 }
 
@@ -117,7 +118,7 @@ void BtoD(int a, int *b) {
 
 QString BuildMessage(QString apdu, QString SA) {
     apdu.remove(' ');
-    qDebug() << "apdu" << apdu;
+//    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
     if (len == -1) {
         qDebug() << "error";
@@ -215,4 +216,66 @@ int Stringlist2Hex(QString &str, BYTE *pOut) {
         pOut[i] = (BYTE) qwe;
     }
     return 0;
+}
+
+
+VALUE_LEFT Data_deal(QList<QString> a) {
+    int qwe = (a.takeFirst()).toInt(nullptr, 16);
+    VALUE_LEFT m;
+    switch (qwe) {
+        case DATA_ARRAY: {
+            int b = (a.takeFirst()).toInt(nullptr, 16);
+            return Data_deal(a);
+        }
+        case DATA_STRUCT : {
+            int b = (a.takeFirst()).toInt(nullptr, 16);
+            return Data_deal(a);
+        }
+        case DATA_OCT_STRING: {
+            m.value = "";
+            int b = (a.takeFirst()).toInt(nullptr, 16);
+            for (int i = 0; i < b; i++) {
+                m.value = m.value + a.takeFirst();
+            }
+            m.left = a;
+            return m;
+        }
+        case DATA_UNSIGNED: {
+            m.value = a.takeFirst();
+            m.left = a;
+            return m;
+        }
+        case DATA_LONG_UNSIGNED: {
+            int nu = (a[0] + a[1]).toInt(nullptr, 16);
+            m.value = QString::number(nu);
+            a.removeFirst();
+            a.removeFirst();
+            m.left = a;
+            return m;
+        }
+        case DATA_ENUM: {
+            m.value = a.takeFirst();
+            m.left = a;
+            return m;
+        }
+        case DATA_OAD: {
+            m.value = "";
+            for (int i = 0; i < 4; i++) {
+                m.value = m.value + a.takeFirst();
+            }
+            m.left = a;
+            return m;
+        }
+        case DATA_TSA: {
+            int len = (a.takeFirst()).toInt(nullptr, 16);
+            QString tsa = "";
+            a.removeFirst();
+            for (int i = 1; i < len; i++) {
+                tsa = tsa + a.takeFirst();
+            }
+            m.value = tsa;
+            m.left = a;
+            return m;
+        }
+    }
 }

@@ -85,6 +85,7 @@ public:
     QAction *action_24;
     QAction *actiononline;
     QAction *action_25;
+    QAction *actionbiaodangan;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
@@ -106,6 +107,7 @@ public:
     QMenu *menu_10;
     QMenu *menu_11;
     QMenu *menu_9;
+    QMenu *menu_12;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -235,6 +237,8 @@ public:
         action_25 = new QAction(MainWindow);
         action_25->setObjectName(QStringLiteral("action_25"));
         action_25->setCheckable(true);
+        actionbiaodangan = new QAction(MainWindow);
+        actionbiaodangan->setObjectName(QStringLiteral("actionbiaodangan"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -274,14 +278,16 @@ public:
         verticalLayout->addWidget(groupBox);
 
         tableWidget = new QTableWidget(centralwidget);
-        if (tableWidget->columnCount() < 3)
-            tableWidget->setColumnCount(3);
+        if (tableWidget->columnCount() < 4)
+            tableWidget->setColumnCount(4);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setFrameShape(QFrame::StyledPanel);
         tableWidget->setFrameShadow(QFrame::Sunken);
@@ -336,6 +342,8 @@ public:
         menu_9 = new QMenu(menubar);
         menu_9->setObjectName(QStringLiteral("menu_9"));
         menu_9->setEnabled(true);
+        menu_12 = new QMenu(menubar);
+        menu_12->setObjectName(QStringLiteral("menu_12"));
         MainWindow->setMenuBar(menubar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -345,11 +353,12 @@ public:
 #endif // QT_NO_SHORTCUT
 
         menubar->addAction(menuOpen->menuAction());
+        menubar->addAction(menu_12->menuAction());
         menubar->addAction(menu_4->menuAction());
         menubar->addAction(menu_10->menuAction());
+        menubar->addAction(menu_5->menuAction());
         menubar->addAction(menu_2->menuAction());
         menubar->addAction(menu_9->menuAction());
-        menubar->addAction(menu_5->menuAction());
         menubar->addAction(menu->menuAction());
         menuOpen->addAction(actionSd);
         menuOpen->addAction(action);
@@ -409,6 +418,7 @@ public:
         menu_11->addSeparator();
         menu_11->addAction(actionZ);
         menu_9->addAction(actiononline);
+        menu_12->addAction(actionbiaodangan);
 
         retranslateUi(MainWindow);
 
@@ -476,6 +486,9 @@ public:
         action_24->setText(QApplication::translate("MainWindow", "\345\215\225\345\234\260\345\235\200\350\267\263\351\227\270(\347\254\2542\350\275\256)", nullptr));
         actiononline->setText(QApplication::translate("MainWindow", "\346\265\213\350\257\225", nullptr));
         action_25->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\344\270\213\345\217\221", nullptr));
+        actionbiaodangan->setText(
+                QApplication::translate("MainWindow", "\350\241\250\346\241\243\346\241\210\350\256\276\347\275\256",
+                                        nullptr));
         groupBox->setTitle(QApplication::translate("MainWindow", "\344\277\241\346\201\257:", nullptr));
         label->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\345\234\260\345\235\200:", nullptr));
         lineEdit->setText(QApplication::translate("MainWindow", "111111111111", nullptr));
@@ -485,6 +498,8 @@ public:
         ___qtablewidgetitem1->setText(QApplication::translate("MainWindow", "New Column", nullptr));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("MainWindow", "New Column", nullptr));
+        QTableWidgetItem *___qtablewidgetitem3 = tableWidget->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QApplication::translate("MainWindow", "New Column", nullptr));
         menuOpen->setTitle(QApplication::translate("MainWindow", "\346\226\207\344\273\266", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\345\270\256\345\212\251", nullptr));
         menu_2->setTitle(QApplication::translate("MainWindow", "\346\265\213\350\257\225", nullptr));
@@ -497,6 +512,7 @@ public:
         menu_10->setTitle(QApplication::translate("MainWindow", "\346\216\247\345\210\266(\350\204\211\345\206\262)", nullptr));
         menu_11->setTitle(QApplication::translate("MainWindow", "\351\201\245\346\216\247", nullptr));
         menu_9->setTitle(QApplication::translate("MainWindow", "\347\272\277\344\270\212", nullptr));
+        menu_12->setTitle(QApplication::translate("MainWindow", "\345\217\202\346\225\260", nullptr));
     } // retranslateUi
 
 };

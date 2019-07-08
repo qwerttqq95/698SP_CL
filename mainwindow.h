@@ -4,6 +4,7 @@
 #include "Custom_APDU.h"
 #include <QMainWindow>
 #include "serial.h"
+#include "MeterArchives.h"
 #include <QList>
 #include <QDebug>
 #include <QString>
@@ -60,10 +61,13 @@ Q_OBJECT
 
 public:
     int current = 0;
+    int times = 0;
+
     explicit MainWindow(QWidget *parent = nullptr);
 
     void closeEvent(QCloseEvent *event);
-    bool analysis(QString a);
+
+    QString analysis(QString a);
 
     QString deal_data(QStringList);
 
@@ -93,13 +97,16 @@ private:
     Ui::MainWindow *ui;
     Serial *serial;
     Custom_APDU *Custom;
+    MeterArchives *MeterArchive;
 
 signals:
 
     void send_analysis(QString);
 
+    void deal_with_meter(QList<QString>);
 public slots:
 
+    void move_Cursor();
     void show_message_send(QString);
 
     void show_message_receive(QString);
@@ -112,7 +119,10 @@ public slots:
 
     void custom();
 
+    void open_MeterArchives();
+
     void send_find_add();
+
 };
 
 #endif // MAINWINDOW_H

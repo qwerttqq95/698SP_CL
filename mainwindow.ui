@@ -131,6 +131,11 @@
                     <string>New Column</string>
                 </property>
             </column>
+            <column>
+                <property name="text">
+                    <string>New Column</string>
+                </property>
+            </column>
         </widget>
     </item>
    </layout>
@@ -292,12 +297,19 @@
     </property>
     <addaction name="actiononline"/>
    </widget>
+      <widget class="QMenu" name="menu_12">
+          <property name="title">
+              <string>参数</string>
+          </property>
+          <addaction name="actionbiaodangan"/>
+      </widget>
    <addaction name="menuOpen"/>
+      <addaction name="menu_12"/>
    <addaction name="menu_4"/>
    <addaction name="menu_10"/>
+      <addaction name="menu_5"/>
    <addaction name="menu_2"/>
    <addaction name="menu_9"/>
-   <addaction name="menu_5"/>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -612,6 +624,11 @@
     <string>停止下发</string>
    </property>
   </action>
+     <action name="actionbiaodangan">
+         <property name="text">
+             <string>表档案设置</string>
+         </property>
+     </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

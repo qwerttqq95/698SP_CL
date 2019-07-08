@@ -139,7 +139,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
                     break;
                 case 1: {
                     cout << "Receive: " << output << endl;
-                    emit receive_message(QString::fromStdString(output));
+                    emit receive_message(QString::fromStdString(output));   //接收显示
                     PurgeComm(hCom, PURGE_TXABORT |
                                     PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
                     temp1 = "";

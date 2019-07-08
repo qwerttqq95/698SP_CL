@@ -3,8 +3,10 @@
 #include "QMessageBox"
 #include "ui_serial.h"
 #include <ui_Custom_APDU.h>
-
+#include <MeterArchives.h>
+#include <ui_MeterArchives.h>
 #include <iostream>
+#include <QScrollBar>
 
 using namespace std;
 
@@ -19,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     serial = new Serial();
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
     setWindowTitle("698SP V1.0");
     connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about()));
@@ -29,9 +32,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, SIGNAL(send_message(QString)), this, SLOT(show_message_send(QString)));
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(this, SIGNAL(send_analysis(QString)), this, SLOT(analysis_show(QString)));//解析
+    connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     serial->show();
+}
 
+void MainWindow::move_Cursor() {
+//    ui->tableWidget->verticalScrollBar()->setValue(current+1);
+    ui->tableWidget->scrollToBottom();
+}
 
+void MainWindow::open_MeterArchives() {
+    MeterArchive = new MeterArchives(revert_add);
+    connect(MeterArchive, SIGNAL(send_write(QString)), serial, SLOT(write(QString)), Qt::UniqueConnection);
+    connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(show_meter_message(QList<QString>)));
+    MeterArchive->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -39,9 +53,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     close();
 }
 
-bool MainWindow::analysis(QString a) {
+QString MainWindow::analysis(QString a) {
     QStringList list = a.split(' ', QString::SkipEmptyParts);
-    int message_len = list[2].toInt(nullptr, 16) + list[1].toInt(nullptr, 16);  //报文长度
+    int message_len = (list[2] + list[1]).toInt(nullptr, 16);  //报文长度
     int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
     int SA_len = list[4].toInt(nullptr, 16) & 0xF;
     QString add = "";
@@ -67,6 +81,14 @@ bool MainWindow::analysis(QString a) {
                     }
                     n.GET_RESULT_TYPE = list[apdu_0 + 7];
                     n.DATA = list.mid(apdu_0 + 8, list.length() - apdu_0 - 11);
+                    if (n.OAD == "60000200") {
+                        qDebug() << "收到表档案信息";
+
+
+
+                        emit deal_with_meter(n.DATA);
+                    }
+
                     emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析
                 }
                     break;
@@ -75,10 +97,7 @@ bool MainWindow::analysis(QString a) {
                     n.PIIDACD = list[apdu_0 + 2];
                     n.is_last_frame = list[apdu_0 + 3];
                     n.slicing_index = list[apdu_0 + 4] + list[apdu_0 + 5];
-                    if (n.is_last_frame == "00") {
-                        QString text = "0505" + n.PIIDACD + n.slicing_index + "00";
-                        emit serial->send_write(BuildMessage(text, revert_add));
-                    }
+
                     n.GetResponseNextType = list[apdu_0 + 6];
                     n.SequenceOf_ResultNormal = list[apdu_0 + 7];
                     n.OAD = "";
@@ -87,12 +106,28 @@ bool MainWindow::analysis(QString a) {
                     }
                     n.GET_RESULT_TYPE = list[apdu_0 + 12];
                     n.DATA = list.mid(apdu_0 + 13, list.length() - apdu_0 - 11);
+
+                    if (n.OAD == "60000200") {
+                        qDebug() << "收到多表档案信息";
+                        emit deal_with_meter(n.DATA);
+                    }
+
+                    if (n.is_last_frame == "00") {
+                        QString text = "0505" + n.PIIDACD + n.slicing_index + "00";
+                        emit serial->send_write(BuildMessage(text, revert_add));
+                        times++;
+                        return QString().sprintf("收到分帧,第%d帧", times);
+                    }
+                    if (n.is_last_frame == "01") {
+                        times = 0;
+                        return "最后一帧";
+                    }
                 }
-                    break;
             }
         }
             break;
     }
+    return "";
 }
 
 QString MainWindow::deal_data(QStringList a) {
@@ -144,10 +179,10 @@ void MainWindow::show_message_send(QString a) {
     ui->tableWidget->insertRow(current);
     ui->tableWidget->setItem(current, 0, new QTableWidgetItem("发送:"));
     ui->tableWidget->setItem(current, 1, new QTableWidgetItem(StringAddSpace(a)));
-    ui->tableWidget->setItem(current, 2, new QTableWidgetItem(x));
+    ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
     ui->tableWidget->item(current, 1)->setToolTip(StringAddSpace(a));
     current += 1;
-
+    move_Cursor();
 }
 
 void MainWindow::show_message_receive(QString a) {
@@ -158,15 +193,17 @@ void MainWindow::show_message_receive(QString a) {
     QString x = tmp;
     ui->tableWidget->insertRow(current);
     ui->tableWidget->setItem(current, 0, new QTableWidgetItem("收到:"));
+    QString te = analysis(a);
     ui->tableWidget->setItem(current, 1, new QTableWidgetItem(a));
-    ui->tableWidget->setItem(current, 2, new QTableWidgetItem(x));
+    ui->tableWidget->setItem(current, 2, new QTableWidgetItem(te));
+    ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
     ui->tableWidget->item(current, 1)->setToolTip(a);
     current += 1;
-    analysis(a);
+    move_Cursor();
+
 }
 
 void MainWindow::analysis_show(QString a) {
 //    ui->textEdit_2->append(a);
 }
-
 
