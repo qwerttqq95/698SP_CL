@@ -126,7 +126,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
             if (temp1 != "") {
                 output = temp1 + output;
                 times += 1;
-                if (times > 100) {
+                if (times > 500) {
                     temp1 = "";
                     times = 0;
                     continue;

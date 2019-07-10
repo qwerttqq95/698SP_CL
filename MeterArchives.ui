@@ -159,7 +159,21 @@
                     <item>
                         <widget class="QPushButton" name="pushButton_6">
                             <property name="text">
-                                <string>清空</string>
+                                <string>清空当前列表</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="pushButton_8">
+                            <property name="text">
+                                <string>清空表档案</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="Line" name="line">
+                            <property name="orientation">
+                                <enum>Qt::Vertical</enum>
                             </property>
                         </widget>
                     </item>

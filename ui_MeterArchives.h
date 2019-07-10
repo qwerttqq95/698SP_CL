@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QPushButton>
@@ -33,6 +34,8 @@ public:
     QPushButton *pushButton_3;
     QPushButton *pushButton_5;
     QPushButton *pushButton_6;
+    QPushButton *pushButton_8;
+    QFrame *line;
     QPushButton *pushButton_4;
     QPushButton *pushButton_7;
     QSpacerItem *horizontalSpacer;
@@ -121,6 +124,18 @@ public:
 
         horizontalLayout->addWidget(pushButton_6);
 
+        pushButton_8 = new QPushButton(Form);
+        pushButton_8->setObjectName(QStringLiteral("pushButton_8"));
+
+        horizontalLayout->addWidget(pushButton_8);
+
+        line = new QFrame(Form);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::VLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout->addWidget(line);
+
         pushButton_4 = new QPushButton(Form);
         pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
 
@@ -195,7 +210,12 @@ public:
         pushButton_2->setText(QApplication::translate("Form", "\345\210\240\351\231\244", nullptr));
         pushButton_3->setText(QApplication::translate("Form", "\344\270\213\345\217\221", nullptr));
         pushButton_5->setText(QApplication::translate("Form", "\346\237\245\350\257\242", nullptr));
-        pushButton_6->setText(QApplication::translate("Form", "\346\270\205\347\251\272", nullptr));
+        pushButton_6->setText(QApplication::translate("Form",
+                                                      "\346\270\205\347\251\272\345\275\223\345\211\215\345\210\227\350\241\250",
+                                                      nullptr));
+        pushButton_8->setText(
+                QApplication::translate("Form", "\346\270\205\347\251\272\350\241\250\346\241\243\346\241\210",
+                                        nullptr));
         pushButton_4->setText(QApplication::translate("Form", "\345\257\274\345\205\245", nullptr));
         pushButton_7->setText(QApplication::translate("Form", "\345\257\274\345\207\272", nullptr));
     } // retranslateUi

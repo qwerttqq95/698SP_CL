@@ -8,6 +8,8 @@
 #include <QtCore>
 #include <QString>
 #include <QDialog>
+#include <AddMeter.h>
+
 
 namespace Ui {
     class myMeterArchives;
@@ -42,13 +44,22 @@ public:
     int row_count = 0;
 public slots:
 
+    void show_add();
     void show_meter_message(QList<QString>);
 
+    void select_all_checkbox();
     void Get_6000200();
 
+    void clearlist();
+
+    void all();
+
+    void clear_6000200();
+
+    void del();
 private:
     Ui::myMeterArchives *ui;
-
+    AddMeters *addmeter;
 
 signals:
 

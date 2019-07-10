@@ -167,6 +167,13 @@ int check(QString a) {
     if (list.length() < 20) {
         return 2;
     }
+    while (1) {
+        if (list[0] == "FE")
+            list.removeFirst();
+        else
+            break;
+    }
+
 //    qDebug()<<"shuchu"<<(list[2]+ list[1]).toInt(nullptr, 16);
     if (list[0] == "68" and (list.length() >= ((list[2] + list[1]).toInt(nullptr, 16)))) {
         qDebug() << "check granted";
