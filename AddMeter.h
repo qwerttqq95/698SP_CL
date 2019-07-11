@@ -15,6 +15,10 @@ Q_OBJECT
 public:
     explicit AddMeters(QWidget *parent = nullptr);
 
+signals:
+
+    void send_list(QList<QString>);
+
 public slots:
 
     void ok();

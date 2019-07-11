@@ -23,10 +23,10 @@
                         <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
                     </property>
                     <property name="editTriggers">
-                        <set>QAbstractItemView::NoEditTriggers</set>
+                        <set>QAbstractItemView::DoubleClicked</set>
                     </property>
                     <property name="selectionMode">
-                        <enum>QAbstractItemView::SingleSelection</enum>
+                        <enum>QAbstractItemView::NoSelection</enum>
                     </property>
                     <property name="selectionBehavior">
                         <enum>QAbstractItemView::SelectRows</enum>
@@ -79,7 +79,7 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>用户类型</string>
+                            <string>用户类型(HEX)</string>
                         </property>
                     </column>
                     <column>
@@ -89,12 +89,12 @@
                     </column>
                     <column>
                         <property name="text">
-                            <string>额定电压</string>
+                            <string>额定电压(-1)</string>
                         </property>
                     </column>
                     <column>
                         <property name="text">
-                            <string>额定电流</string>
+                            <string>额定电流(-1)</string>
                         </property>
                     </column>
                     <column>

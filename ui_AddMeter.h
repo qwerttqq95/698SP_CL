@@ -21,7 +21,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Dialog4 {
+class Ui_Dialog3 {
 public:
     QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout_2;
@@ -39,55 +39,55 @@ public:
     QPushButton *pushButton_2;
     QLabel *label_17;
     QLabel *label_18;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QHBoxLayout *horizontalLayout_10;
     QLabel *label;
     QLineEdit *lineEdit;
-    QWidget *widget1;
+    QWidget *layoutWidget2;
     QHBoxLayout *horizontalLayout_6;
     QLabel *label_2;
     QLineEdit *lineEdit_2;
-    QWidget *widget2;
+    QWidget *layoutWidget3;
     QHBoxLayout *horizontalLayout;
     QLabel *label_13;
     QComboBox *comboBox;
-    QWidget *widget3;
+    QWidget *layoutWidget4;
     QHBoxLayout *horizontalLayout_7;
     QLabel *label_3;
     QLineEdit *lineEdit_3;
-    QWidget *widget4;
+    QWidget *layoutWidget5;
     QHBoxLayout *horizontalLayout_8;
     QLabel *label_4;
     QLineEdit *lineEdit_4;
-    QWidget *widget5;
+    QWidget *layoutWidget6;
     QHBoxLayout *horizontalLayout_9;
     QLabel *label_5;
     QLineEdit *lineEdit_5;
-    QWidget *widget6;
+    QWidget *layoutWidget7;
     QHBoxLayout *horizontalLayout_5;
     QLabel *label_6;
     QLineEdit *lineEdit_6;
-    QWidget *widget7;
+    QWidget *layoutWidget8;
     QHBoxLayout *horizontalLayout_11;
     QLabel *label_12;
     QLineEdit *lineEdit_12;
-    QWidget *widget8;
+    QWidget *layoutWidget9;
     QHBoxLayout *horizontalLayout_12;
     QLabel *label_7;
     QLineEdit *lineEdit_7;
-    QWidget *widget9;
+    QWidget *layoutWidget10;
     QHBoxLayout *horizontalLayout_13;
     QLabel *label_11;
     QLineEdit *lineEdit_11;
-    QWidget *widget10;
+    QWidget *layoutWidget11;
     QHBoxLayout *horizontalLayout_14;
     QLabel *label_8;
     QLineEdit *lineEdit_8;
-    QWidget *widget11;
+    QWidget *layoutWidget12;
     QHBoxLayout *horizontalLayout_15;
     QLabel *label_10;
     QLineEdit *lineEdit_10;
-    QWidget *widget12;
+    QWidget *layoutWidget13;
     QHBoxLayout *horizontalLayout_16;
     QLabel *label_9;
     QLineEdit *lineEdit_9;
@@ -98,7 +98,7 @@ public:
         Dialog->resize(243, 501);
         layoutWidget = new QWidget(Dialog);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(9, 98, 131, 22));
+        layoutWidget->setGeometry(QRect(9, 98, 136, 22));
         horizontalLayout_2 = new QHBoxLayout(layoutWidget);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -118,7 +118,7 @@ public:
 
         layoutWidget_2 = new QWidget(Dialog);
         layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
-        layoutWidget_2->setGeometry(QRect(9, 128, 107, 22));
+        layoutWidget_2->setGeometry(QRect(9, 128, 111, 22));
         horizontalLayout_3 = new QHBoxLayout(layoutWidget_2);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
@@ -168,13 +168,13 @@ public:
         label_18 = new QLabel(Dialog);
         label_18->setObjectName(QStringLiteral("label_18"));
         label_18->setGeometry(QRect(130, 280, 54, 12));
-        widget = new QWidget(Dialog);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(9, 9, 91, 22));
-        horizontalLayout_10 = new QHBoxLayout(widget);
+        layoutWidget1 = new QWidget(Dialog);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(9, 9, 81, 22));
+        horizontalLayout_10 = new QHBoxLayout(layoutWidget1);
         horizontalLayout_10->setObjectName(QStringLiteral("horizontalLayout_10"));
         horizontalLayout_10->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(widget);
+        label = new QLabel(layoutWidget1);
         label->setObjectName(QStringLiteral("label"));
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
@@ -184,43 +184,48 @@ public:
 
         horizontalLayout_10->addWidget(label);
 
-        lineEdit = new QLineEdit(widget);
+        lineEdit = new QLineEdit(layoutWidget1);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         sizePolicy.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
         lineEdit->setSizePolicy(sizePolicy);
 
         horizontalLayout_10->addWidget(lineEdit);
 
-        widget1 = new QWidget(Dialog);
-        widget1->setObjectName(QStringLiteral("widget1"));
-        widget1->setGeometry(QRect(9, 39, 131, 22));
-        horizontalLayout_6 = new QHBoxLayout(widget1);
+        layoutWidget2 = new QWidget(Dialog);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(9, 39, 131, 22));
+        horizontalLayout_6 = new QHBoxLayout(layoutWidget2);
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
         horizontalLayout_6->setContentsMargins(0, 0, 0, 0);
-        label_2 = new QLabel(widget1);
+        label_2 = new QLabel(layoutWidget2);
         label_2->setObjectName(QStringLiteral("label_2"));
 
         horizontalLayout_6->addWidget(label_2);
 
-        lineEdit_2 = new QLineEdit(widget1);
+        lineEdit_2 = new QLineEdit(layoutWidget2);
         lineEdit_2->setObjectName(QStringLiteral("lineEdit_2"));
         lineEdit_2->setMaxLength(12);
         lineEdit_2->setFrame(true);
 
         horizontalLayout_6->addWidget(lineEdit_2);
 
-        widget2 = new QWidget(Dialog);
-        widget2->setObjectName(QStringLiteral("widget2"));
-        widget2->setGeometry(QRect(9, 68, 119, 22));
-        horizontalLayout = new QHBoxLayout(widget2);
+        layoutWidget3 = new QWidget(Dialog);
+        layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
+        layoutWidget3->setGeometry(QRect(9, 68, 119, 22));
+        horizontalLayout = new QHBoxLayout(layoutWidget3);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        label_13 = new QLabel(widget2);
+        label_13 = new QLabel(layoutWidget3);
         label_13->setObjectName(QStringLiteral("label_13"));
 
         horizontalLayout->addWidget(label_13);
 
-        comboBox = new QComboBox(widget2);
+        comboBox = new QComboBox(layoutWidget3);
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
+        comboBox->addItem(QString());
         comboBox->addItem(QString());
         comboBox->addItem(QString());
         comboBox->addItem(QString());
@@ -228,162 +233,162 @@ public:
 
         horizontalLayout->addWidget(comboBox);
 
-        widget3 = new QWidget(Dialog);
-        widget3->setObjectName(QStringLiteral("widget3"));
-        widget3->setGeometry(QRect(9, 157, 195, 22));
-        horizontalLayout_7 = new QHBoxLayout(widget3);
+        layoutWidget4 = new QWidget(Dialog);
+        layoutWidget4->setObjectName(QStringLiteral("layoutWidget4"));
+        layoutWidget4->setGeometry(QRect(9, 157, 195, 22));
+        horizontalLayout_7 = new QHBoxLayout(layoutWidget4);
         horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
         horizontalLayout_7->setContentsMargins(0, 0, 0, 0);
-        label_3 = new QLabel(widget3);
+        label_3 = new QLabel(layoutWidget4);
         label_3->setObjectName(QStringLiteral("label_3"));
 
         horizontalLayout_7->addWidget(label_3);
 
-        lineEdit_3 = new QLineEdit(widget3);
+        lineEdit_3 = new QLineEdit(layoutWidget4);
         lineEdit_3->setObjectName(QStringLiteral("lineEdit_3"));
 
         horizontalLayout_7->addWidget(lineEdit_3);
 
-        widget4 = new QWidget(Dialog);
-        widget4->setObjectName(QStringLiteral("widget4"));
-        widget4->setGeometry(QRect(9, 187, 131, 22));
-        horizontalLayout_8 = new QHBoxLayout(widget4);
+        layoutWidget5 = new QWidget(Dialog);
+        layoutWidget5->setObjectName(QStringLiteral("layoutWidget5"));
+        layoutWidget5->setGeometry(QRect(9, 187, 131, 22));
+        horizontalLayout_8 = new QHBoxLayout(layoutWidget5);
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
         horizontalLayout_8->setContentsMargins(0, 0, 0, 0);
-        label_4 = new QLabel(widget4);
+        label_4 = new QLabel(layoutWidget5);
         label_4->setObjectName(QStringLiteral("label_4"));
 
         horizontalLayout_8->addWidget(label_4);
 
-        lineEdit_4 = new QLineEdit(widget4);
+        lineEdit_4 = new QLineEdit(layoutWidget5);
         lineEdit_4->setObjectName(QStringLiteral("lineEdit_4"));
 
         horizontalLayout_8->addWidget(lineEdit_4);
 
-        widget5 = new QWidget(Dialog);
-        widget5->setObjectName(QStringLiteral("widget5"));
-        widget5->setGeometry(QRect(9, 217, 131, 22));
-        horizontalLayout_9 = new QHBoxLayout(widget5);
+        layoutWidget6 = new QWidget(Dialog);
+        layoutWidget6->setObjectName(QStringLiteral("layoutWidget6"));
+        layoutWidget6->setGeometry(QRect(9, 217, 131, 22));
+        horizontalLayout_9 = new QHBoxLayout(layoutWidget6);
         horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
         horizontalLayout_9->setContentsMargins(0, 0, 0, 0);
-        label_5 = new QLabel(widget5);
+        label_5 = new QLabel(layoutWidget6);
         label_5->setObjectName(QStringLiteral("label_5"));
 
         horizontalLayout_9->addWidget(label_5);
 
-        lineEdit_5 = new QLineEdit(widget5);
+        lineEdit_5 = new QLineEdit(layoutWidget6);
         lineEdit_5->setObjectName(QStringLiteral("lineEdit_5"));
 
         horizontalLayout_9->addWidget(lineEdit_5);
 
-        widget6 = new QWidget(Dialog);
-        widget6->setObjectName(QStringLiteral("widget6"));
-        widget6->setGeometry(QRect(9, 276, 111, 22));
-        horizontalLayout_5 = new QHBoxLayout(widget6);
+        layoutWidget7 = new QWidget(Dialog);
+        layoutWidget7->setObjectName(QStringLiteral("layoutWidget7"));
+        layoutWidget7->setGeometry(QRect(9, 276, 111, 22));
+        horizontalLayout_5 = new QHBoxLayout(layoutWidget7);
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         horizontalLayout_5->setContentsMargins(0, 0, 0, 0);
-        label_6 = new QLabel(widget6);
+        label_6 = new QLabel(layoutWidget7);
         label_6->setObjectName(QStringLiteral("label_6"));
 
         horizontalLayout_5->addWidget(label_6);
 
-        lineEdit_6 = new QLineEdit(widget6);
+        lineEdit_6 = new QLineEdit(layoutWidget7);
         lineEdit_6->setObjectName(QStringLiteral("lineEdit_6"));
 
         horizontalLayout_5->addWidget(lineEdit_6);
 
-        widget7 = new QWidget(Dialog);
-        widget7->setObjectName(QStringLiteral("widget7"));
-        widget7->setGeometry(QRect(9, 306, 111, 22));
-        horizontalLayout_11 = new QHBoxLayout(widget7);
+        layoutWidget8 = new QWidget(Dialog);
+        layoutWidget8->setObjectName(QStringLiteral("layoutWidget8"));
+        layoutWidget8->setGeometry(QRect(9, 306, 111, 22));
+        horizontalLayout_11 = new QHBoxLayout(layoutWidget8);
         horizontalLayout_11->setObjectName(QStringLiteral("horizontalLayout_11"));
         horizontalLayout_11->setContentsMargins(0, 0, 0, 0);
-        label_12 = new QLabel(widget7);
+        label_12 = new QLabel(layoutWidget8);
         label_12->setObjectName(QStringLiteral("label_12"));
 
         horizontalLayout_11->addWidget(label_12);
 
-        lineEdit_12 = new QLineEdit(widget7);
+        lineEdit_12 = new QLineEdit(layoutWidget8);
         lineEdit_12->setObjectName(QStringLiteral("lineEdit_12"));
 
         horizontalLayout_11->addWidget(lineEdit_12);
 
-        widget8 = new QWidget(Dialog);
-        widget8->setObjectName(QStringLiteral("widget8"));
-        widget8->setGeometry(QRect(9, 336, 207, 22));
-        horizontalLayout_12 = new QHBoxLayout(widget8);
+        layoutWidget9 = new QWidget(Dialog);
+        layoutWidget9->setObjectName(QStringLiteral("layoutWidget9"));
+        layoutWidget9->setGeometry(QRect(9, 336, 207, 22));
+        horizontalLayout_12 = new QHBoxLayout(layoutWidget9);
         horizontalLayout_12->setObjectName(QStringLiteral("horizontalLayout_12"));
         horizontalLayout_12->setContentsMargins(0, 0, 0, 0);
-        label_7 = new QLabel(widget8);
+        label_7 = new QLabel(layoutWidget9);
         label_7->setObjectName(QStringLiteral("label_7"));
 
         horizontalLayout_12->addWidget(label_7);
 
-        lineEdit_7 = new QLineEdit(widget8);
+        lineEdit_7 = new QLineEdit(layoutWidget9);
         lineEdit_7->setObjectName(QStringLiteral("lineEdit_7"));
 
         horizontalLayout_12->addWidget(lineEdit_7);
 
-        widget9 = new QWidget(Dialog);
-        widget9->setObjectName(QStringLiteral("widget9"));
-        widget9->setGeometry(QRect(9, 365, 183, 22));
-        horizontalLayout_13 = new QHBoxLayout(widget9);
+        layoutWidget10 = new QWidget(Dialog);
+        layoutWidget10->setObjectName(QStringLiteral("layoutWidget10"));
+        layoutWidget10->setGeometry(QRect(9, 365, 121, 22));
+        horizontalLayout_13 = new QHBoxLayout(layoutWidget10);
         horizontalLayout_13->setObjectName(QStringLiteral("horizontalLayout_13"));
         horizontalLayout_13->setContentsMargins(0, 0, 0, 0);
-        label_11 = new QLabel(widget9);
+        label_11 = new QLabel(layoutWidget10);
         label_11->setObjectName(QStringLiteral("label_11"));
 
         horizontalLayout_13->addWidget(label_11);
 
-        lineEdit_11 = new QLineEdit(widget9);
+        lineEdit_11 = new QLineEdit(layoutWidget10);
         lineEdit_11->setObjectName(QStringLiteral("lineEdit_11"));
 
         horizontalLayout_13->addWidget(lineEdit_11);
 
-        widget10 = new QWidget(Dialog);
-        widget10->setObjectName(QStringLiteral("widget10"));
-        widget10->setGeometry(QRect(30, 400, 71, 22));
-        horizontalLayout_14 = new QHBoxLayout(widget10);
+        layoutWidget11 = new QWidget(Dialog);
+        layoutWidget11->setObjectName(QStringLiteral("layoutWidget11"));
+        layoutWidget11->setGeometry(QRect(30, 400, 71, 22));
+        horizontalLayout_14 = new QHBoxLayout(layoutWidget11);
         horizontalLayout_14->setObjectName(QStringLiteral("horizontalLayout_14"));
         horizontalLayout_14->setContentsMargins(0, 0, 0, 0);
-        label_8 = new QLabel(widget10);
+        label_8 = new QLabel(layoutWidget11);
         label_8->setObjectName(QStringLiteral("label_8"));
 
         horizontalLayout_14->addWidget(label_8);
 
-        lineEdit_8 = new QLineEdit(widget10);
+        lineEdit_8 = new QLineEdit(layoutWidget11);
         lineEdit_8->setObjectName(QStringLiteral("lineEdit_8"));
 
         horizontalLayout_14->addWidget(lineEdit_8);
 
-        widget11 = new QWidget(Dialog);
-        widget11->setObjectName(QStringLiteral("widget11"));
-        widget11->setGeometry(QRect(130, 400, 71, 22));
-        horizontalLayout_15 = new QHBoxLayout(widget11);
+        layoutWidget12 = new QWidget(Dialog);
+        layoutWidget12->setObjectName(QStringLiteral("layoutWidget12"));
+        layoutWidget12->setGeometry(QRect(130, 400, 71, 22));
+        horizontalLayout_15 = new QHBoxLayout(layoutWidget12);
         horizontalLayout_15->setObjectName(QStringLiteral("horizontalLayout_15"));
         horizontalLayout_15->setContentsMargins(0, 0, 0, 0);
-        label_10 = new QLabel(widget11);
+        label_10 = new QLabel(layoutWidget12);
         label_10->setObjectName(QStringLiteral("label_10"));
 
         horizontalLayout_15->addWidget(label_10);
 
-        lineEdit_10 = new QLineEdit(widget11);
+        lineEdit_10 = new QLineEdit(layoutWidget12);
         lineEdit_10->setObjectName(QStringLiteral("lineEdit_10"));
 
         horizontalLayout_15->addWidget(lineEdit_10);
 
-        widget12 = new QWidget(Dialog);
-        widget12->setObjectName(QStringLiteral("widget12"));
-        widget12->setGeometry(QRect(60, 430, 101, 22));
-        horizontalLayout_16 = new QHBoxLayout(widget12);
+        layoutWidget13 = new QWidget(Dialog);
+        layoutWidget13->setObjectName(QStringLiteral("layoutWidget13"));
+        layoutWidget13->setGeometry(QRect(60, 430, 101, 22));
+        horizontalLayout_16 = new QHBoxLayout(layoutWidget13);
         horizontalLayout_16->setObjectName(QStringLiteral("horizontalLayout_16"));
         horizontalLayout_16->setContentsMargins(0, 0, 0, 0);
-        label_9 = new QLabel(widget12);
+        label_9 = new QLabel(layoutWidget13);
         label_9->setObjectName(QStringLiteral("label_9"));
 
         horizontalLayout_16->addWidget(label_9);
 
-        lineEdit_9 = new QLineEdit(widget12);
+        lineEdit_9 = new QLineEdit(layoutWidget13);
         lineEdit_9->setObjectName(QStringLiteral("lineEdit_9"));
 
         horizontalLayout_16->addWidget(lineEdit_9);
@@ -394,6 +399,7 @@ public:
 
         comboBox_2->setCurrentIndex(3);
         comboBox_4->setCurrentIndex(3);
+        comboBox->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(Dialog);
@@ -433,9 +439,14 @@ public:
         label_2->setText(QApplication::translate("Dialog", "\350\241\250\345\234\260\345\235\200:", nullptr));
         lineEdit_2->setText(QString());
         label_13->setText(QApplication::translate("Dialog", "\346\263\242\347\211\271\347\216\207:", nullptr));
-        comboBox->setItemText(0, QApplication::translate("Dialog", "2400", nullptr));
-        comboBox->setItemText(1, QApplication::translate("Dialog", "4800", nullptr));
-        comboBox->setItemText(2, QApplication::translate("Dialog", "9600", nullptr));
+        comboBox->setItemText(0, QApplication::translate("Dialog", "300", nullptr));
+        comboBox->setItemText(1, QApplication::translate("Dialog", "600", nullptr));
+        comboBox->setItemText(2, QApplication::translate("Dialog", "1200", nullptr));
+        comboBox->setItemText(3, QApplication::translate("Dialog", "2400", nullptr));
+        comboBox->setItemText(4, QApplication::translate("Dialog", "4800", nullptr));
+        comboBox->setItemText(5, QApplication::translate("Dialog", "7200", nullptr));
+        comboBox->setItemText(6, QApplication::translate("Dialog", "9600", nullptr));
+        comboBox->setItemText(7, QApplication::translate("Dialog", "\350\207\252\351\200\202\345\272\224", nullptr));
 
         label_3->setText(
                 QApplication::translate("Dialog", "\351\200\232\350\256\257\345\257\206\347\240\201:", nullptr));
@@ -454,7 +465,7 @@ public:
         label_7->setText(
                 QApplication::translate("Dialog", "\351\207\207\351\233\206\345\231\250\345\234\260\345\235\200:",
                                         nullptr));
-        lineEdit_7->setText(QString());
+        lineEdit_7->setText(QApplication::translate("Dialog", "AA", nullptr));
         label_11->setText(QApplication::translate("Dialog", "\350\265\204\344\272\247\345\217\267:", nullptr));
         label_8->setText(QApplication::translate("Dialog", "PT:", nullptr));
         lineEdit_8->setText(QApplication::translate("Dialog", "1", nullptr));
@@ -468,7 +479,7 @@ public:
 };
 
 namespace Ui {
-    class myAddMeter : public Ui_Dialog4 {
+    class myAddMeter : public Ui_Dialog3 {
     };
 } // namespace Ui
 

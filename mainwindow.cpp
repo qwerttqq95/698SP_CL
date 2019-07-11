@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(this, SIGNAL(send_analysis(QString)), this, SLOT(analysis_show(QString)));//解析
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
+//    connect()
     serial->show();
 }
 
@@ -44,6 +45,7 @@ void MainWindow::move_Cursor() {
 void MainWindow::open_MeterArchives() {
     MeterArchive = new MeterArchives(revert_add);
     connect(MeterArchive, SIGNAL(send_write(QString)), serial, SLOT(write(QString)), Qt::UniqueConnection);
+    connect(MeterArchive, SIGNAL(send_write2(QString)), serial, SLOT(write(QString)), Qt::QueuedConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(show_meter_message(QList<QString>)));
     MeterArchive->show();
 }

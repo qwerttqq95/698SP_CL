@@ -84,8 +84,8 @@ public:
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         tableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContentsOnFirstShow);
-        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableWidget->setEditTriggers(QAbstractItemView::DoubleClicked);
+        tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
         tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
         tableWidget->horizontalHeader()->setDefaultSectionSize(56);
         tableWidget->verticalHeader()->setVisible(false);
@@ -184,16 +184,16 @@ public:
                 QApplication::translate("Form", "\350\264\271\347\216\207\344\270\252\346\225\260", nullptr));
         QTableWidgetItem *___qtablewidgetitem8 = tableWidget->horizontalHeaderItem(8);
         ___qtablewidgetitem8->setText(
-                QApplication::translate("Form", "\347\224\250\346\210\267\347\261\273\345\236\213", nullptr));
+                QApplication::translate("Form", "\347\224\250\346\210\267\347\261\273\345\236\213(HEX)", nullptr));
         QTableWidgetItem *___qtablewidgetitem9 = tableWidget->horizontalHeaderItem(9);
         ___qtablewidgetitem9->setText(
                 QApplication::translate("Form", "\346\216\245\347\272\277\346\226\271\345\274\217", nullptr));
         QTableWidgetItem *___qtablewidgetitem10 = tableWidget->horizontalHeaderItem(10);
         ___qtablewidgetitem10->setText(
-                QApplication::translate("Form", "\351\242\235\345\256\232\347\224\265\345\216\213", nullptr));
+                QApplication::translate("Form", "\351\242\235\345\256\232\347\224\265\345\216\213(-1)", nullptr));
         QTableWidgetItem *___qtablewidgetitem11 = tableWidget->horizontalHeaderItem(11);
         ___qtablewidgetitem11->setText(
-                QApplication::translate("Form", "\351\242\235\345\256\232\347\224\265\346\265\201", nullptr));
+                QApplication::translate("Form", "\351\242\235\345\256\232\347\224\265\346\265\201(-1)", nullptr));
         QTableWidgetItem *___qtablewidgetitem12 = tableWidget->horizontalHeaderItem(12);
         ___qtablewidgetitem12->setText(
                 QApplication::translate("Form", "\351\207\207\351\233\206\345\231\250\345\234\260\345\235\200",

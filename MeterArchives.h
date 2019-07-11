@@ -47,9 +47,11 @@ public slots:
     void show_add();
     void show_meter_message(QList<QString>);
 
+    void add_new(QList<QString> a);
     void select_all_checkbox();
     void Get_6000200();
 
+    void send();
     void clearlist();
 
     void all();
@@ -65,6 +67,7 @@ signals:
 
     void send_write(QString);
 
+    void send_write2(QString);
 
 };
 

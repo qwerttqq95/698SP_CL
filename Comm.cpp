@@ -134,12 +134,8 @@ QString BuildMessage(QString apdu, QString SA) {
         int lenth2 = Total_length >> 8;
         char len1[3] = {'0', '0'};
         char len2[3] = {'0', '0'};
-        sprintf(len1, "%0X", lenth1);
-        sprintf(len2, "%0X", lenth2);
-        for (int i = 0; i != 2; i++) {
-            if (len2[i] == 0)
-                len2[i] = '0';
-        }
+        sprintf(len1, "%02X", lenth1);
+        sprintf(len2, "%02X", lenth2);
         char full_len[4];
         sprintf(full_len, "%.2s%.2s", len1, len2);
         QString text(full_len);
@@ -151,7 +147,7 @@ QString BuildMessage(QString apdu, QString SA) {
         sprintf(hcs, "%04X", TempLen);
         QString HCS = message_swap((QString) hcs);
         Head = Head + HCS + apdu;
-        BYTE text2[600] = {0};
+        BYTE text2[2000] = {0};
         Stringlist2Hex(Head, text2);
         unsigned short TempLen2 = pppfcs16(PPPINITFCS16, text2, (unsigned) Head.length() / 2);
         char fcs[5];
