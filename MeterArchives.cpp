@@ -204,6 +204,7 @@ void MeterArchives::del() {
     for (int i = ui->tableWidget->rowCount() - 1; i >= 0; i--) {
         if (ui->tableWidget->item(i, 0)->checkState() == Qt::Checked) {
             ui->tableWidget->removeRow(i);
+            row_count -= 1;
         }
     }
 }
@@ -262,9 +263,7 @@ void MeterArchives::send() {
             sprintf(e, "%04x", n.Rated_Voltage.toInt(nullptr, 10));
             message.append("12" + (QString) e + "0204");
             n.collect_TSA = ui->tableWidget->item(i, 12)->text();
-            char f[3];
-            sprintf(f, "%02x", (n.collect_TSA.length() / 2));
-            message.append("55" + (QString) f + n.collect_TSA);
+            message.append("550705000000000000");
             n.detail_num = ui->tableWidget->item(i, 13)->text();
             message.append("0900");
             n.PT = ui->tableWidget->item(i, 14)->text();
@@ -272,14 +271,16 @@ void MeterArchives::send() {
             sprintf(g, "%04x", n.PT.toInt(nullptr, 10));
             message.append("12" + (QString) g);
             n.CT = ui->tableWidget->item(i, 15)->text();
-            char h[5];
-            sprintf(h, "%04x", n.CT.toInt(nullptr, 10));
-            message.append("12" + (QString) h + "0100");
+            char j[5];
+            sprintf(j, "%04x", n.CT.toInt(nullptr, 10));
+            message.append("12" + (QString) j + "0100");
             text.append(message);
         }
     }
     if (text.length() == 1) {
-        QString send_message = "07010060007f00" + text[0] + "00";
+        QString send_message = "07010060007f00" + text.takeFirst() + "00";
+//        qDebug()<<"send_message"<<send_message;
+        emit send_write2(BuildMessage(send_message, add_));
 
     } else {
         int len = text.length();
@@ -291,13 +292,14 @@ void MeterArchives::send() {
             }
             char qw[3];
             sprintf(qw, "%02x", j - 1);
-            send_message = "07010060007f0001" + (QString) qw + send_message + "00";
+            send_message = "0701006000800001" + (QString) qw + send_message + "00";
             emit send_write2(BuildMessage(send_message, add_));
-            QEventLoop eventloop;
-            QTimer::singleShot(2500, &eventloop, SLOT(quit()));
-            eventloop.exec();
             send_message = "";
+            QEventLoop eventloop;
+            QTimer::singleShot(6000, &eventloop, SLOT(quit()));
+            eventloop.exec();
         }
+
 
     }
 

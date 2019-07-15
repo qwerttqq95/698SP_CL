@@ -121,46 +121,45 @@ QString BuildMessage(QString apdu, QString SA) {
 //    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
     if (len == -1) {
-        qDebug() << "error";
+        qDebug() << "BuildMessage 1 error";
         return "0";
     }
+
     QString SA_sign = QString("%1").arg(len);
     int apdu_len = apdu.length() / 2;
-    if (apdu_len & 1 == 1) {
-        return 0;
-    } else {
-        int Total_length = 10 + len + apdu_len;
-        int lenth1 = Total_length & 0x00ff;
-        int lenth2 = Total_length >> 8;
-        char len1[3] = {'0', '0'};
-        char len2[3] = {'0', '0'};
-        sprintf(len1, "%02X", lenth1);
-        sprintf(len2, "%02X", lenth2);
-        char full_len[4];
-        sprintf(full_len, "%.2s%.2s", len1, len2);
-        QString text(full_len);
-        QString Head = text + "430" + SA_sign + SA + "10";
-        BYTE text1[600] = {0};
-        Stringlist2Hex(Head, text1);
-        unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
-        char hcs[5];
-        sprintf(hcs, "%04X", TempLen);
-        QString HCS = message_swap((QString) hcs);
-        Head = Head + HCS + apdu;
-        BYTE text2[2000] = {0};
-        Stringlist2Hex(Head, text2);
-        unsigned short TempLen2 = pppfcs16(PPPINITFCS16, text2, (unsigned) Head.length() / 2);
-        char fcs[5];
-        sprintf(fcs, "%04X", TempLen2);
-        QString FCS = message_swap((QString) fcs);
-        Head = "68" + Head + FCS + "16";
-        return Head;
-    }
+    int Total_length = 10 + len + apdu_len;
+    int lenth1 = Total_length & 0x00ff;
+    int lenth2 = Total_length >> 8;
+    char len1[3] = {'0', '0'};
+    char len2[3] = {'0', '0'};
+    sprintf(len1, "%02X", lenth1);
+    sprintf(len2, "%02X", lenth2);
+    char full_len[4];
+    sprintf(full_len, "%.2s%.2s", len1, len2);
+    QString text(full_len);
+    QString Head = text + "430" + SA_sign + SA + "10";
+    BYTE text1[600] = {0};
+    Stringlist2Hex(Head, text1);
+    unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
+    char hcs[5];
+    sprintf(hcs, "%04X", TempLen);
+    QString HCS = message_swap((QString) hcs);
+    Head = Head + HCS + apdu;
+    BYTE text2[2000] = {0};
+    Stringlist2Hex(Head, text2);
+    unsigned short TempLen2 = pppfcs16(PPPINITFCS16, text2, (unsigned) Head.length() / 2);
+    char fcs[5];
+    sprintf(fcs, "%04X", TempLen2);
+    QString FCS = message_swap((QString) fcs);
+    Head = "68" + Head + FCS + "16";
+//    qDebug() << "BuildMessage kankna " << Head;
+    return Head;
+
 }
 
 int check(QString a) {
     QStringList list = a.split(' ', QString::SkipEmptyParts);
-    if (list.length() < 20) {
+    if (list.length() < 5) {
         return 2;
     }
     while (1) {

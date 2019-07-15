@@ -67,7 +67,7 @@ void Serial::creat_process() {
 
 
 bool Serial::open_serial(std::basic_string<TCHAR> s1) {
-    char str[700] = {0};
+    char str[1000] = {0};
     DWORD wCount;//读取的字节数
     BOOL bReadStat;
     std::basic_string<TCHAR> s2 = R"(\\.\)";
@@ -90,7 +90,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
     COMMTIMEOUTS TimeOuts;
     TimeOuts.ReadIntervalTimeout = 0;
     TimeOuts.ReadTotalTimeoutMultiplier = 0;
-    TimeOuts.ReadTotalTimeoutConstant = 150;
+    TimeOuts.ReadTotalTimeoutConstant = 200;
     TimeOuts.WriteTotalTimeoutMultiplier = 0;
     TimeOuts.WriteTotalTimeoutConstant = 0;
     SetCommTimeouts(hCom, &TimeOuts); //设置超时
@@ -162,14 +162,16 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1) {
 }
 
 bool Serial::write(QString add) {
+//    qDebug()<<"send_message->add"<<add;
     std::thread t3(&Serial::write_, this, add);
     t3.detach();
 }
 
 bool Serial::write_(QString add) {
-    BYTE Apdu[400] = {0};
+    BYTE Apdu[1500] = {0};
     DWORD nApduLen = 0;
     string new_add = add.toStdString();
+//    cout<<"asd"<<new_add;
 //    string add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
     transform(new_add.begin(), new_add.end(), new_add.begin(), ::tolower);
     String2Hex(new_add, Apdu, &nApduLen, sizeof(Apdu));

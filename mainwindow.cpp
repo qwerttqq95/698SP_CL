@@ -45,7 +45,7 @@ void MainWindow::move_Cursor() {
 void MainWindow::open_MeterArchives() {
     MeterArchive = new MeterArchives(revert_add);
     connect(MeterArchive, SIGNAL(send_write(QString)), serial, SLOT(write(QString)), Qt::UniqueConnection);
-    connect(MeterArchive, SIGNAL(send_write2(QString)), serial, SLOT(write(QString)), Qt::QueuedConnection);
+    connect(MeterArchive, SIGNAL(send_write2(QString)), serial, SLOT(write(QString)));
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(show_meter_message(QList<QString>)));
     MeterArchive->show();
 }
@@ -124,6 +124,23 @@ QString MainWindow::analysis(QString a) {
                         times = 0;
                         return "最后一帧";
                     }
+                }
+            }
+        }
+        case 0x87: {
+            switch (list[apdu_0 + 1].toInt(nullptr, 16)) {
+                case 0x1: {
+                    switch (list[apdu_0 + 2].toInt(nullptr, 16)) {
+                        case 0:
+                            return "成功";
+                        case 8:
+                            return "越界";
+                        case 15:
+                            return "密码错误/未授权";
+
+                    }
+
+
                 }
             }
         }
