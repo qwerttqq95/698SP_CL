@@ -137,7 +137,7 @@ public:
         horizontalLayout_2->setContentsMargins(0, -1, 0, -1);
         radioButton_2 = new QRadioButton(layoutWidget1);
         radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
-        radioButton_2->setEnabled(false);
+        radioButton_2->setEnabled(true);
         sizePolicy1.setHeightForWidth(radioButton_2->sizePolicy().hasHeightForWidth());
         radioButton_2->setSizePolicy(sizePolicy1);
 
@@ -145,7 +145,7 @@ public:
 
         lineEdit = new QLineEdit(layoutWidget1);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        lineEdit->setEnabled(false);
+        lineEdit->setEnabled(true);
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -154,7 +154,7 @@ public:
 
         horizontalLayout_2->addWidget(lineEdit);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer = new QSpacerItem(230, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer);
 
@@ -186,8 +186,10 @@ public:
         comboBox_2->setItemText(0, QApplication::translate("Dialog", "2400", nullptr));
         comboBox_2->setItemText(1, QApplication::translate("Dialog", "9600", nullptr));
 
-        radioButton_2->setText(QApplication::translate("Dialog", "\344\273\245\345\244\252\347\275\221", nullptr));
-        lineEdit->setText(QApplication::translate("Dialog", "192.168.16.253:20001", nullptr));
+        radioButton_2->setText(QApplication::translate("Dialog",
+                                                       "\344\273\245\345\244\252\347\275\221\347\253\257\345\217\243\345\217\267:",
+                                                       nullptr));
+        lineEdit->setText(QApplication::translate("Dialog", "20001", nullptr));
     } // retranslateUi
 
 };

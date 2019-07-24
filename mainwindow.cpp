@@ -33,12 +33,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(this, SIGNAL(send_analysis(QString)), this, SLOT(analysis_show(QString)));//解析
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
-//    connect()
+    connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
     serial->show();
 }
 
+void MainWindow::custom_test()
+{
+
+}
+
 void MainWindow::move_Cursor() {
-//    ui->tableWidget->verticalScrollBar()->setValue(current+1);
     ui->tableWidget->scrollToBottom();
 }
 
@@ -85,9 +89,6 @@ QString MainWindow::analysis(QString a) {
                     n.DATA = list.mid(apdu_0 + 8, list.length() - apdu_0 - 11);
                     if (n.OAD == "60000200") {
                         qDebug() << "收到表档案信息";
-
-
-
                         emit deal_with_meter(n.DATA);
                     }
 
@@ -127,6 +128,7 @@ QString MainWindow::analysis(QString a) {
                 }
             }
         }
+            break;
         case 0x87: {
             switch (list[apdu_0 + 1].toInt(nullptr, 16)) {
                 case 0x1: {
@@ -138,6 +140,8 @@ QString MainWindow::analysis(QString a) {
                         case 15:
                             return "密码错误/未授权";
 
+                        default:
+                            return "未知";
                     }
 
 

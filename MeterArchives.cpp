@@ -6,6 +6,8 @@
 #include <thread>
 #include <string>
 #include <iostream>
+#include <QMessageBox>
+
 
 extern QString BuildMessage(QString apdu, QString SA);
 
@@ -13,7 +15,8 @@ extern VALUE_LEFT Data_deal(QList<QString> a);
 
 MeterArchives::MeterArchives(QString add, QWidget *parent) :
         QDialog(parent),
-        ui(new Ui::myMeterArchives) {
+        ui(new Ui::myMeterArchives)
+{
     ui->setupUi(this);
     addmeter = new AddMeters();
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(show_add()));
@@ -26,38 +29,50 @@ MeterArchives::MeterArchives(QString add, QWidget *parent) :
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(del()));
     connect(ui->pushButton_8, SIGNAL(clicked()), this, SLOT(clear_6000200()));
     connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(send()));
+    connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(output()));
+    connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(input()));
     connect(addmeter, SIGNAL(send_list(QList<QString>)), this, SLOT(add_new(QList<QString>)));
-    for (int i = 0; i != ui->tableWidget->columnCount(); i++) {
+    for (int i = 0; i != ui->tableWidget->columnCount(); i++)
+    {
         ui->tableWidget->horizontalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
     }
-
 }
 
-void MeterArchives::show_add() {
+void MeterArchives::show_add()
+{
     addmeter->show();
 }
 
-void MeterArchives::Get_6000200() {
-    QString text = "0501006000020000";
-    QString re_message = BuildMessage(text, add_);
+void MeterArchives::Get_6000200()
+{
+    QString
+            text = "0501006000020000";
+    QString
+            re_message = BuildMessage(text, add_);
     emit send_write(re_message);
 }
 
-void MeterArchives::clear_6000200() {
-    QString text = "070101600086000000";
-    QString re_message = BuildMessage(text, add_);
+void MeterArchives::clear_6000200()
+{
+    QString
+            text = "070101600086000000";
+    QString
+            re_message = BuildMessage(text, add_);
     emit send_write(re_message);
 }
 
-void MeterArchives::clearlist() {
+void MeterArchives::clearlist()
+{
     row_count = 0;
-    for (int row = ui->tableWidget->rowCount(); row >= 0; --row) {
+    for (int row = ui->tableWidget->rowCount(); row >= 0; --row)
+    {
         ui->tableWidget->removeRow(row);
     }
 
 }
 
-void MeterArchives::add_new(QList<QString> a) {
+void MeterArchives::add_new(QList<QString> a)
+{
     Archives_Configuration_Table n;
     n.NUM = a.takeFirst();
     n.TSA = a.takeFirst();
@@ -112,11 +127,13 @@ void MeterArchives::add_new(QList<QString> a) {
     row_count += 1;
 }
 
-void MeterArchives::show_meter_message(QList<QString> a) {
+void MeterArchives::show_meter_message(QList<QString> a)
+{
     Archives_Configuration_Table n;
     a.removeFirst();
     int times = (a.takeFirst()).toInt(nullptr, 16);
-    for (int i = 0; i < times; i++) {
+    for (int i = 0; i < times; i++)
+    {
         VALUE_LEFT m, n1;
         m = Data_deal(a);
         n.NUM = m.value;
@@ -187,40 +204,53 @@ void MeterArchives::show_meter_message(QList<QString> a) {
     }
 }
 
-void MeterArchives::all() {
-    if (ui->checkBox->checkState() == Qt::Checked) {
-        for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
+void MeterArchives::all()
+{
+    if (ui->checkBox->checkState() == Qt::Checked)
+    {
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
+        {
             ui->tableWidget->item(i, 0)->setCheckState(Qt::CheckState::Checked);
         }
-    } else {
-        for (int i = 0; i < ui->tableWidget->rowCount(); i++) {
+    } else
+    {
+        for (int i = 0; i < ui->tableWidget->rowCount(); i++)
+        {
             ui->tableWidget->item(i, 0)->setCheckState(Qt::CheckState::Unchecked);
         }
     }
     qApp->processEvents();
 }
 
-void MeterArchives::del() {
-    for (int i = ui->tableWidget->rowCount() - 1; i >= 0; i--) {
-        if (ui->tableWidget->item(i, 0)->checkState() == Qt::Checked) {
+void MeterArchives::del()
+{
+    for (int i = ui->tableWidget->rowCount() - 1; i >= 0; i--)
+    {
+        if (ui->tableWidget->item(i, 0)->checkState() == Qt::Checked)
+        {
             ui->tableWidget->removeRow(i);
             row_count -= 1;
         }
     }
 }
 
-void MeterArchives::select_all_checkbox() {
+void MeterArchives::select_all_checkbox()
+{
     std::thread t1(&MeterArchives::all, this);
     t1.detach();
 }
 
-void MeterArchives::send() {
+void MeterArchives::send()
+{
     Archives_Configuration_Table n;
     int check_count = 0;
     QList<QString> text;
-    QString message;
-    for (int i = 0; i <= ui->tableWidget->rowCount() - 1; i++) {
-        if (ui->tableWidget->item(i, 0)->checkState() == Qt::Checked) {
+    QString
+            message;
+    for (int i = 0; i <= ui->tableWidget->rowCount() - 1; i++)
+    {
+        if (ui->tableWidget->item(i, 0)->checkState() == Qt::Checked)
+        {
             check_count += 1;
             n.NUM = ui->tableWidget->item(i, 1)->text();
             char a[5];
@@ -229,12 +259,14 @@ void MeterArchives::send() {
             n.TSA = ui->tableWidget->item(i, 2)->text();
             message.append(n.TSA);
             n.baud_rate = ui->tableWidget->item(i, 3)->text();
-            if (n.baud_rate.length() == 1) {
+            if (n.baud_rate.length() == 1)
+            {
                 n.baud_rate = "0" + n.baud_rate;
             }
             message.append("16" + n.baud_rate);
             n.meter_style = ui->tableWidget->item(i, 4)->text();
-            if (n.meter_style.length() == 1) {
+            if (n.meter_style.length() == 1)
+            {
                 n.meter_style = "0" + n.meter_style;
             }
             message.append("16" + n.meter_style);
@@ -250,7 +282,8 @@ void MeterArchives::send() {
             sprintf(c, "%02x", n.user_style.toInt(nullptr, 16));
             message.append("11" + (QString) c);
             n.connect_way = ui->tableWidget->item(i, 9)->text();
-            if (n.connect_way.length() == 1) {
+            if (n.connect_way.length() == 1)
+            {
                 n.connect_way = "0" + n.connect_way;
             }
             message.append("16" + n.connect_way);
@@ -277,17 +310,23 @@ void MeterArchives::send() {
             text.append(message);
         }
     }
-    if (text.length() == 1) {
-        QString send_message = "07010060007f00" + text.takeFirst() + "00";
+    if (text.length() == 1)
+    {
+        QString
+                send_message = "07010060007f00" + text.takeFirst() + "00";
 //        qDebug()<<"send_message"<<send_message;
         emit send_write2(BuildMessage(send_message, add_));
 
-    } else {
+    } else
+    {
         int len = text.length();
         int j;
-        QString send_message = "";
-        while (len > 0) {
-            for (j = 1; j < 15 and len > 0; j++, len--) {
+        QString
+                send_message = "";
+        while (len > 0)
+        {
+            for (j = 1; j < 15 and len > 0; j++, len--)
+            {
                 send_message = send_message + text.takeFirst();
             }
             char qw[3];
@@ -303,7 +342,196 @@ void MeterArchives::send() {
 
     }
 
+}
 
+void MeterArchives::output()
+{
+    QString
+            filename = QFileDialog::getSaveFileName(this, tr("Save"), ".", tr(" (*.xls)"));
+    YExcel::BasicExcel excelTermInfo;
+    excelTermInfo.New();
+    YExcel::BasicExcelWorksheet *pSheet = excelTermInfo.GetWorksheet((size_t) 0);
+    YExcel::BasicExcelCell *pCell;
+    int nItemNum = ui->tableWidget->rowCount();
+    int nCol, nRow, i;
+    nCol = 0;
+    nRow = 0;
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"序号");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"表地址");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"波特率");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"规约号");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"端口号");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"密码");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"费率");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"用户类型");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"点表类型");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"额定电压");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"额定电流");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"采集器地址");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetWString(L"资产号");
+    pCell = pSheet->Cell(nRow, nCol++);
+    pCell->SetString("PT");
+    pCell = pSheet->Cell(static_cast<size_t>(nRow), nCol++);
+    pCell->SetString("CT");
+    nRow = 1;
+    for (i = 0; i < ui->tableWidget->rowCount(); i++, nRow++)
+    {
+        nCol = 0;
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
+    }
+    excelTermInfo.SaveAs(filename.toStdString().c_str());
+}
+
+
+void MeterArchives::input()
+{
+    QString
+            filename = QFileDialog::getOpenFileName(nullptr, "open", ".", "*.*");
+    YExcel::BasicExcel excelTermInfo;
+    if (!excelTermInfo.Load(filename.toStdString().c_str()))
+    {
+        return;
+    }
+
+    clearlist();
+    YExcel::BasicExcelWorksheet *pSheet = excelTermInfo.GetWorksheet((size_t) 0);
+    YExcel::BasicExcelCell *pCell;
+
+    int nMaxRows = pSheet->GetTotalRows();
+    int nMaxCols = pSheet->GetTotalCols();
+    int nCol, nRow;
+    QString strTmp;
+    for (nRow = 1; nRow < nMaxRows; nRow++)
+    {
+        QList<QString> li;
+        auto *pArch = new Archives_Configuration_Table;
+        nCol = 0;
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->NUM);
+        li.append(pArch->NUM);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->TSA);
+        li.append(pArch->TSA);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->baud_rate);
+        li.append(pArch->baud_rate);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->meter_style);
+        li.append(pArch->meter_style);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->port);
+        li.append(pArch->port);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->password);
+        li.append(pArch->password);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->fee_count);
+        li.append(pArch->fee_count);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->user_style);
+        li.append(pArch->user_style);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->connect_way);
+        li.append(pArch->connect_way);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->Rated_Voltage);
+        li.append(pArch->Rated_Voltage);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->Rated_Electric_current);
+        li.append(pArch->Rated_Electric_current);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->collect_TSA);
+        li.append(pArch->collect_TSA);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->detail_num);
+        li.append(pArch->detail_num);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->PT);
+        li.append(pArch->PT);
+
+        pCell = pSheet->Cell(nRow, nCol++);
+        GetExcelValue(pCell, pArch->CT);
+        li.append(pArch->CT);
+
+        add_new(li);
+    }
+
+
+}
+
+bool MeterArchives::GetExcelValue(YExcel::BasicExcelCell *pCell, QString &str)
+{
+    QString strTemp;
+    str = QString(pCell->GetString());
+    str.replace(" ", "");
+    return true;
 }
 
 

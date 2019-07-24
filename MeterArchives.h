@@ -9,7 +9,10 @@
 #include <QString>
 #include <QDialog>
 #include <AddMeter.h>
-
+#include <ActiveQt/QAxObject>
+#include <QFileDialog>
+#include <BasicExcel/BasicExcel.h>
+#include <minwindef.h>
 
 namespace Ui {
     class myMeterArchives;
@@ -18,6 +21,9 @@ class MeterArchives : public QDialog {
 Q_OBJECT
 public:
     explicit MeterArchives(QString add, QWidget *parent = nullptr);
+
+    bool GetExcelValue(YExcel::BasicExcelCell *pCell, QString &str);
+
 
 
     typedef struct {
@@ -56,6 +62,9 @@ public slots:
 
     void all();
 
+    void output();
+
+    void input();
     void clear_6000200();
 
     void del();

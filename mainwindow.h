@@ -123,6 +123,8 @@ public slots:
 
     void send_find_add();
 
+    void custom_test();
+
 };
 
 #endif // MAINWINDOW_H
