@@ -1,5 +1,5 @@
 #include <string>
-#include <windows.h>
+
 #include <QString>
 #include <QtCore/QStringList>
 #include <QDebug>
@@ -7,6 +7,7 @@
 #include <QList>
 #include <MeterArchives.h>
 #include <mainwindow.h>
+#include <windows.h>
 
 #define PPPINITFCS16 0xffff
 
@@ -14,46 +15,56 @@ using namespace std;
 
 int Stringlist2Hex(QString &str, BYTE *pOut);
 
-QString message_swap(const QString &a) {
+QString message_swap(const QString &a)
+{
     QList<QString> list;
-    for (int i = 0; i <= a.length() / 2; i += 2) {
+    for (int i = 0; i <= a.length() / 2; i += 2)
+    {
         list.append(a.mid(i, i + 2));
     }
     QString re = "";
-    for (int y = list.length() - 1; y >= 0; y--) {
+    for (int y = list.length() - 1; y >= 0; y--)
+    {
         re = re + list[y];
     }
     return re;
 }
 
-int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen) {
+int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen)
+{
     int i, j = 0;
     DWORD len;
     TCHAR x;
     for (i = 0, x = 0, len = 0;
          i < (int) str.length() && len < (int) nMaxLen;
-         i++) {
-        if (j >= 2) {
+         i++)
+    {
+        if (j >= 2)
+        {
             pOut[len++] = (BYTE) x;
             x = 0;
             j = 0;
         }
-        if (str[i] >= '0' && str[i] <= '9') {
+        if (str[i] >= '0' && str[i] <= '9')
+        {
             x <<= 4;
             x |= str[i] - '0';
             j++;
         } else if ((str[i] >= 'A' && str[i] <= 'F')
-                   || (str[i] >= 'a' && str[i] <= 'f')) {
+                   || (str[i] >= 'a' && str[i] <= 'f'))
+        {
             x <<= 4;
             x |= _toupper (str[i]) - 'A' + 10;
             j++;
-        } else if (j) {
+        } else if (j)
+        {
             pOut[len++] = (BYTE) x;
             x = 0;
             j = 0;
         }
     }
-    if (j) {
+    if (j)
+    {
         pOut[len++] = (BYTE) x;
         x = 0;
         j = 0;
@@ -100,27 +111,33 @@ const static WORD fcstab[256] = {
         0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
 
-unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len) {
-    while (len--) {
+unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len)
+{
+    while (len--)
+    {
         fcs = (fcs >> 8) ^ fcstab[(fcs ^ *p++) & 0xff];
     }
     return (fcs ^ 0xffff);
 }
 
-void BtoD(int a, int *b) {
+void BtoD(int a, int *b)
+{
     *b = 0;
-    while (a--) {
+    while (a--)
+    {
         *b *= 2;
         *b += getchar() - '0';
     }
 
 }
 
-QString BuildMessage(QString apdu, QString SA) {
+QString BuildMessage(QString apdu, QString SA, QString ctrl_zone)
+{
     apdu.remove(' ');
 //    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
-    if (len == -1) {
+    if (len == -1)
+    {
         qDebug() << "BuildMessage 1 error";
         return "0";
     }
@@ -137,7 +154,7 @@ QString BuildMessage(QString apdu, QString SA) {
     char full_len[4];
     sprintf(full_len, "%.2s%.2s", len1, len2);
     QString text(full_len);
-    QString Head = text + "430" + SA_sign + SA + "10";
+    QString Head = text + ctrl_zone + "0" + SA_sign + SA + "10";
     BYTE text1[600] = {0};
     Stringlist2Hex(Head, text1);
     unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
@@ -157,12 +174,15 @@ QString BuildMessage(QString apdu, QString SA) {
 
 }
 
-int check(QString a) {
+int check(QString a)
+{
     QStringList list = a.split(' ', QString::SkipEmptyParts);
-    if (list.length() < 5) {
+    if (list.length() < 5)
+    {
         return 2;
     }
-    while (1) {
+    while (1)
+    {
         if (list[0] == "FE")
             list.removeFirst();
         else
@@ -170,11 +190,14 @@ int check(QString a) {
     }
 
 //    qDebug()<<"shuchu"<<(list[2]+ list[1]).toInt(nullptr, 16);
-    if (list[0] == "68" and (list.length() >= ((list[2] + list[1]).toInt(nullptr, 16)))) {
+    if (list[0] == "68" and (list.length() >= ((list[2] + list[1]).toInt(nullptr, 16))))
+    {
         qDebug() << "check granted";
         return 1;
-    } else {
-        if (list[0] == "68") {
+    } else
+    {
+        if (list[0] == "68")
+        {
 //            qDebug() << "check denied but find 68 with start: " << list;
             return 2;
         } else
@@ -183,7 +206,8 @@ int check(QString a) {
     }
 }
 
-string DtoB(int d) {
+string DtoB(int d)
+{
     if (d / 2)
         DtoB(d / 2);
     char x[] = {0};
@@ -193,61 +217,87 @@ string DtoB(int d) {
 }
 
 
-string StringAddSpace(string &input) {
+string StringAddSpace(string &input)
+{
     string output = "";
-    for (int i = 0; i < input.length(); i += 2) {
+    for (int i = 0; i < input.length(); i += 2)
+    {
         output = output + input[i] + input[i + 1] + ' ';
     }
     return output;
 }
 
-QString StringAddSpace(QString &input) {
+QString StringAddSpace(QString &input)
+{
     QString output = "";
-    for (int i = 0; i < input.length(); i += 2) {
+    for (int i = 0; i < input.length(); i += 2)
+    {
         output = output + input[i] + input[i + 1] + ' ';
     }
     return output;
 }
 
-int Stringlist2Hex(QString &str, BYTE *pOut) {
+int Stringlist2Hex(QString &str, BYTE *pOut)
+{
     QList<QString> str_list;
     str_list = StringAddSpace(str).split(' ');
     int len = str_list.length();
-    for (int i = 0, j = 0; i < len; i++) {
+    for (int i = 0, j = 0; i < len; i++)
+    {
         int qwe = str_list[i].toInt(nullptr, 16);
         pOut[i] = (BYTE) qwe;
     }
     return 0;
 }
 
+int Stringlist2Hex_char(QString &str, char *pOut)
+{
+    QList<QString> str_list;
+    str_list = StringAddSpace(str).split(' ');
+    int len = str_list.length();
+    for (int i = 0, j = 0; i < len; i++)
+    {
+        int qwe = str_list[i].toInt(nullptr, 16);
+        pOut[i] = qwe;
+    }
+    return 0;
+}
 
-VALUE_LEFT Data_deal(QList<QString> a) {
+VALUE_LEFT Data_deal(QList<QString> a)
+{
     int qwe = (a.takeFirst()).toInt(nullptr, 16);
     VALUE_LEFT m;
-    switch (qwe) {
-        case DATA_ARRAY: {
+    switch (qwe)
+    {
+        case DATA_ARRAY:
+        {
             int b = (a.takeFirst()).toInt(nullptr, 16);
             return Data_deal(a);
         }
-        case DATA_STRUCT : {
+        case DATA_STRUCT :
+        {
             int b = (a.takeFirst()).toInt(nullptr, 16);
             return Data_deal(a);
         }
-        case DATA_OCT_STRING: {
+        case DATA_OCT_STRING:
+        {
             m.value = "";
             int b = (a.takeFirst()).toInt(nullptr, 16);
-            for (int i = 0; i < b; i++) {
+            for (int i = 0; i < b; i++)
+            {
                 m.value = m.value + a.takeFirst();
             }
             m.left = a;
             return m;
         }
-        case DATA_UNSIGNED: {
+        case DATA_UNSIGNED:
+        {
             m.value = a.takeFirst();
             m.left = a;
             return m;
         }
-        case DATA_LONG_UNSIGNED: {
+        case DATA_LONG_UNSIGNED:
+        {
             int nu = (a[0] + a[1]).toInt(nullptr, 16);
             m.value = QString::number(nu);
             a.removeFirst();
@@ -255,24 +305,29 @@ VALUE_LEFT Data_deal(QList<QString> a) {
             m.left = a;
             return m;
         }
-        case DATA_ENUM: {
+        case DATA_ENUM:
+        {
             m.value = a.takeFirst();
             m.left = a;
             return m;
         }
-        case DATA_OAD: {
+        case DATA_OAD:
+        {
             m.value = "";
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++)
+            {
                 m.value = m.value + a.takeFirst();
             }
             m.left = a;
             return m;
         }
-        case DATA_TSA: {
+        case DATA_TSA:
+        {
             int len = (a.takeFirst()).toInt(nullptr, 16);
             QString tsa = "";
             a.removeFirst();
-            for (int i = 1; i < len; i++) {
+            for (int i = 1; i < len; i++)
+            {
                 tsa = tsa + a.takeFirst();
             }
             m.value = tsa;
@@ -280,4 +335,15 @@ VALUE_LEFT Data_deal(QList<QString> a) {
             return m;
         }
     }
+}
+
+
+QString return_current_time()
+{
+    time_t timep;
+    time(&timep);
+    char tmp[64];
+    strftime(tmp, sizeof(tmp), "%Y%m%d%H%M%S00", localtime(&timep));
+    QString x = tmp;
+
 }

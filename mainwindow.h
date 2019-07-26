@@ -52,11 +52,13 @@
 #define DATA_RCSD                        96
 
 
-namespace Ui {
+namespace Ui
+{
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
 Q_OBJECT
 
 public:
@@ -75,14 +77,24 @@ public:
 
     QString revert_add;
 
-    typedef struct {
+    typedef struct
+    {
+        QString PIIDACD;
+        QString LINK_REQUSET_TYPE;
+        QString HEART_BEAT_INTERVAL;
+        QString REQUEST_TIMEDATE_TIME;
+    } LINK_REQUEST;
+
+    typedef struct
+    {
         QString PIIDACD;
         QString OAD;
         QString GET_RESULT_TYPE;
         QStringList DATA;
     } GET_RESPOND_NORMAL;
 
-    typedef struct {
+    typedef struct
+    {
         QString PIIDACD;
         QString is_last_frame;
         QString slicing_index;
@@ -104,9 +116,11 @@ signals:
     void send_analysis(QString);
 
     void deal_with_meter(QList<QString>);
+
 public slots:
 
     void move_Cursor();
+
     void show_message_send(QString);
 
     void show_message_receive(QString);

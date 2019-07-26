@@ -3,7 +3,7 @@
 #include <Qt>
 #include <QString>
 
-extern QString BuildMessage(QString apdu, QString SA);
+extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
 
 Custom_APDU::Custom_APDU(QString add, QWidget *parent) :
         QDialog(parent),
@@ -20,7 +20,7 @@ void Custom_APDU::send() {
     QString re_message;
     if (a[0] != '6') {
         qDebug() << "发送add" << add_;
-        re_message = BuildMessage(a, add_);
+        re_message = BuildMessage(a, add_, "43");
     }
     emit send_write(re_message);
 }

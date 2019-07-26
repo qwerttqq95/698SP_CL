@@ -4,13 +4,15 @@
 
 AddMeters::AddMeters(QWidget *parent) :
         QDialog(parent),
-        ui(new Ui::myAddMeter) {
+        ui(new Ui::myAddMeter)
+{
     ui->setupUi(this);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(ok()));
 
 }
 
-void AddMeters::ok() {
+void AddMeters::ok()
+{
     QString bat = ui->lineEdit_9->text();
     QList<QString> SENT;
     Archives_Configuration_Table n;
@@ -44,11 +46,28 @@ void AddMeters::ok() {
     SENT.append(n.PT);
     n.CT = ui->lineEdit_10->text();
     SENT.append(n.CT);
-    if (n.NUM == "" or n.TSA == "" or n.TSA.length() < 12) {
+    if (n.NUM == "" or n.TSA == "" or n.TSA.length() < 12)
+    {
         QMessageBox::warning(this, "错误", "输入错误", QMessageBox::Ok);
-    } else {
-        emit send_list(SENT);
-        close();
+    } else
+    {
+        if (ui->lineEdit_9->text() != "0")
+        {
+            int times = ui->lineEdit_9->text().toInt(nullptr, 10) - 1;
+            emit send_list(SENT);
+            while (times)
+            {
+                SENT[0] = (QString) (SENT[0].toInt(nullptr, 10) + 1);
+                SENT[1] = (QString) (SENT[1].toInt(nullptr, 10) + 1);
+
+                times -= 1;
+            }
+        } else
+        {
+            emit send_list(SENT);
+            close();
+        }
+
     }
 
 }
