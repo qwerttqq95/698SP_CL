@@ -57,10 +57,12 @@ void AddMeters::ok()
             emit send_list(SENT);
             while (times)
             {
-                SENT[0] = (QString) (SENT[0].toInt(nullptr, 10) + 1);
-                SENT[1] = (QString) (SENT[1].toInt(nullptr, 10) + 1);
+                SENT[0] = QString::number(SENT[0].toInt(nullptr, 10) + 1, 10);
+                SENT[1] = QString("%1").arg(SENT[1].toLongLong(nullptr, 10) + 1, 12, 10, QChar('0'));
+                qDebug() << "SENT[1]" << SENT[1];
 
                 times -= 1;
+                emit send_list(SENT);
             }
         } else
         {

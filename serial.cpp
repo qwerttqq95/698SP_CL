@@ -260,11 +260,11 @@ bool Serial::build_net()
     while (run_flag)
     {
         cout << "running eth\n";
-        char buff[MAXBYTE] = {0};
+        char buff[1400] = {0};
         //接收客户端发来的命令
         int i = 1;
-        i = recv(clientSock, buff, MAXBYTE, 0);
-        int ti = MAXBYTE - 1;
+        i = recv(clientSock, buff, 1400, 0);
+        int ti = 1400 - 1;
         int qwe = 0;
         while (true)
         {
@@ -278,7 +278,7 @@ bool Serial::build_net()
         }
         char a[100] = {0};
         string output = "";
-        for (int x = 0; x < MAXBYTE - qwe; x++)
+        for (int x = 0; x < 1400 - qwe; x++)
         {
             sprintf(a, "%02X ", (BYTE) buff[x]);
             output = output + a;
