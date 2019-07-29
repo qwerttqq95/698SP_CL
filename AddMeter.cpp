@@ -63,6 +63,7 @@ void AddMeters::ok()
 
                 times -= 1;
                 emit send_list(SENT);
+                close();
             }
         } else
         {

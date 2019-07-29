@@ -12,6 +12,7 @@ using namespace std;
 #define NAME_LEN 500
 
 extern int Stringlist2Hex_char(QString &str, char *pOut);
+
 extern int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen);
 
 extern string StringAddSpace(string &input);
@@ -45,6 +46,7 @@ void Serial::creat_process()
     {
         if (ui->pushButton->text() == "打开")
         {
+            run_flag = true;
             ui->pushButton->setText("关闭");
             ui->comboBox->setDisabled(1);
             ui->comboBox_2->setDisabled(1);
@@ -70,15 +72,21 @@ void Serial::creat_process()
             CloseSerial();
         }
 
-    } else
+    } else //以太网
     {
         if (ui->pushButton->text() == "打开")
         {
+            run_flag = true;
             ui->pushButton->setText("关闭");
             std::thread t2(&Serial::build_net, this);
             t2.detach();
             close();
             internet_or_serial = 0;
+            ui->comboBox->setDisabled(1);
+            ui->comboBox_2->setDisabled(1);
+            ui->lineEdit->setDisabled(1);
+            ui->radioButton->setDisabled(1);
+
         } else
         {
             ui->pushButton->setText("打开");
@@ -86,6 +94,8 @@ void Serial::creat_process()
             ui->comboBox_2->setDisabled(0);
             ui->lineEdit->setDisabled(0);
             ui->radioButton_2->setDisabled(0);
+            ui->radioButton->setDisabled(0);
+            CloseSerial();
         }
     }
 }
@@ -255,15 +265,21 @@ bool Serial::build_net()
     listen(s, 1);
     SOCKADDR clientAddr;
     int nSize = sizeof(SOCKADDR);
-    //这个socket用来接收客户端发过来的信息
+    int recvTimeout = 1000; //3s
+    setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char *) &recvTimeout, sizeof(int));
     clientSock = ::accept(s, &clientAddr, &nSize);
     while (run_flag)
     {
-        cout << "running eth\n";
+//        cout << "running eth\n";
         char buff[1400] = {0};
-        //接收客户端发来的命令
         int i = 1;
         i = recv(clientSock, buff, 1400, 0);
+//        qDebug() << "i: "<<i;
+        if (i == 0)
+        {
+            qDebug() << "i=0";
+            break;
+        }
         int ti = 1400 - 1;
         int qwe = 0;
         while (true)
@@ -289,9 +305,8 @@ bool Serial::build_net()
 
             emit receive_message(QString::fromStdString(output));
         }
-
-
     }
+    qDebug() << "qiute eth";
     closesocket(clientSock);
     closesocket(s);
     WSACleanup();

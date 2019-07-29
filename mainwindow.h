@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QString>
 #include <time.h>
+#include<fstream>
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -71,6 +72,7 @@ public:
 
     QString analysis(QString a);
 
+
     QString deal_data(QStringList);
 
     ~MainWindow() override;
@@ -105,6 +107,14 @@ public:
         QStringList DATA;
     } GetResponseNext;
 
+    typedef struct
+    {
+        QString PIIDACD;
+        QString SequenceOfLen;
+        QString OAD;
+        QString RCSD;
+    } ReportNotificationRecordList;
+
 private:
     Ui::MainWindow *ui;
     Serial *serial;
@@ -138,6 +148,8 @@ public slots:
     void send_find_add();
 
     void custom_test();
+
+    void function();
 
 };
 
