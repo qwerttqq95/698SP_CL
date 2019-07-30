@@ -49,7 +49,7 @@ void MeterArchives::Get_6000200()
             text = "0501006000020000";
     QString
             re_message = BuildMessage(text, add_, "43");
-    emit send_write(re_message);
+    emit send_write({re_message, "0"});
 }
 
 void MeterArchives::clear_6000200()
@@ -58,7 +58,7 @@ void MeterArchives::clear_6000200()
             text = "070101600086000000";
     QString
             re_message = BuildMessage(text, add_, "43");
-    emit send_write(re_message);
+    emit send_write({re_message, "0"});
 }
 
 void MeterArchives::clearlist()

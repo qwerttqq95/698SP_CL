@@ -131,6 +131,21 @@ void BtoD(int a, int *b)
 
 }
 
+QString DARType(int a)
+{
+    switch (a)
+    {
+        case 0:
+            return "成功";
+        case 8:
+            return "越界";
+        case 15:
+            return "密码错误/未授权";
+            // 68 1a 00 c3 05 56 34 12 56 34 12 10 9e 98 87 01 1c 81 03 03 00 00 00 00 00 c4 80 16
+        default:
+            return "未知";
+    }
+}
 QString BuildMessage(QString apdu, QString SA, QString ctrl_zone)
 {
     apdu.remove(' ');

@@ -74,7 +74,7 @@ private:
 
 signals:
 
-    void send_write(QString);
+    void send_write(QList<QString>);
 
     void send_write2(QString);
 

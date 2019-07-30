@@ -31,7 +31,7 @@ Serial::Serial(QWidget *parent) :
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::MSWindowsFixedSizeDialogHint);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(creat_process()));
     connect(this, SIGNAL(open_fail_message()), this, SLOT(warming()));
-    connect(this, SIGNAL(send_write(QString)), this, SLOT(write(QString)));
+    connect(this, SIGNAL(send_write(QList<QString>)), this, SLOT(write(QList<QString>)));
     QList<QString> PortList;
     PortList = getEnableCommPort(PortList);
     for (int i = 0; i < PortList.size(); i++)
@@ -140,7 +140,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1)
     SetCommState(hCom, &dcb);
     PurgeComm(hCom, PURGE_TXCLEAR | PURGE_RXCLEAR);//清空缓冲区
     QString add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    emit send_write(add);
+    emit send_write({add, ""});
     PurgeComm(hCom, PURGE_TXABORT |
                     PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
     string temp1 = "";
@@ -209,20 +209,20 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1)
     return 0;
 }
 
-bool Serial::write(QString add)
+bool Serial::write(QList<QString> add)
 {
-//    qDebug()<<"send_message->add"<<add;
+
     std::thread t3(&Serial::write_, this, add);
     t3.detach();
 }
 
-bool Serial::write_(QString add) //发送
+bool Serial::write_(QList<QString> add) //发送
 {
     if (internet_or_serial == 1) //串口
     {
         BYTE Apdu[1500] = {0};
         DWORD nApduLen = 0;
-        string new_add = add.toStdString();
+        string new_add = add[0].toStdString();
         transform(new_add.begin(), new_add.end(), new_add.begin(), ::tolower);
         String2Hex(new_add, Apdu, &nApduLen, sizeof(Apdu));
         COMSTAT ComStat;
@@ -241,12 +241,11 @@ bool Serial::write_(QString add) //发送
     } else  //以太网
     {
         char Apdu[1500] = {0};
-        Stringlist2Hex_char(add, Apdu);
-        send(clientSock, Apdu, add.length() / 2, 0);
-        string new_add = add.toStdString();
+        Stringlist2Hex_char(add[0], Apdu);
+        send(clientSock, Apdu, add[0].length() / 2, 0);
+        string new_add = add[0].toStdString();
         cout << "Eth Send: " << StringAddSpace(new_add) << endl;
         emit send_message(add);
-
     }
     return true;
 }
@@ -277,7 +276,7 @@ bool Serial::build_net()
 //        qDebug() << "i: "<<i;
         if (i == 0)
         {
-            qDebug() << "i=0";
+//            qDebug() << "i=0";//终端下线
             break;
         }
         int ti = 1400 - 1;

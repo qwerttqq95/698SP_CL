@@ -10,9 +10,11 @@
 
 using namespace std;
 
+extern QString DARType(int);
+
 extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
 
-extern QString StringAddSpace(QString & input);
+extern QString StringAddSpace(QString &input);
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -30,33 +32,39 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config()));
     connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
     connect(ui->action, SIGNAL(triggered()), this, SLOT(send_find_add()));
-    connect(serial, SIGNAL(send_message(QString)), this, SLOT(show_message_send(QString)));
+    connect(serial, SIGNAL(send_message(QList<QString>)), this, SLOT(show_message_send(QList<QString>)));
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(this, SIGNAL(send_analysis(QString)), this, SLOT(analysis_show(QString)));//解析
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
-    QList < QAction * > act = ui->menu_10->actions();
+    QList<QAction *> act = ui->menu_10->actions();
     for (int i = 0, b = act.size(); i < b; i++)
     {
-        qDebug() << "size" << act.size();
         connect(act.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
-//
-//    connect(ui->actionShuju, SIGNAL(triggered()), this, SLOT(function()));
-//    connect(ui->actionCanshu, SIGNAL(triggered()), this, SLOT(function()));
+    QList<QAction *> act2 = ui->menu_11->actions();
+    for (int i = 0, b = act2.size(); i < b; i++)
+    {
+        connect(act2.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
+    }
+    QList<QAction *> act5 = ui->menu_5->actions();
+    for (int i = 0, b = act5.size(); i < b; i++)
+    {
+        connect(act5.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
+    }
     serial->show();
 }
 
 void MainWindow::function()
 {
-    QAction * f_action = (QAction *) sender();
+    QAction *f_action = (QAction *) sender();
     ifstream in;
     in.open(".\\Data\\Default", ios::in);
     string temp;
     while (getline(in, temp))
     {
         QString
-        temp2 = QString::fromStdString(temp);
+                temp2 = QString::fromStdString(temp);
         if (temp2 == f_action->text())
         {
             while (getline(in, temp))
@@ -68,10 +76,10 @@ void MainWindow::function()
                 }
                 temp2 = QString::fromStdString(temp);
                 qDebug() << temp2;
-                QList < QString > temp_list = temp2.split("#");
-                serial->send_write(BuildMessage(temp_list[1], revert_add, "43"));
+                QList<QString> temp_list = temp2.split("#");
+                serial->send_write({BuildMessage(temp_list[1], revert_add, "43"), temp_list[0]});
                 QEventLoop
-                eventloop;
+                        eventloop;
                 QTimer::singleShot(3000, &eventloop, SLOT(quit()));
                 eventloop.exec();
             }
@@ -96,10 +104,11 @@ void MainWindow::move_Cursor()
 void MainWindow::open_MeterArchives()
 {
     MeterArchive = new MeterArchives(revert_add);
-    connect(MeterArchive, SIGNAL(send_write(QString)), serial, SLOT(write(QString)), Qt::UniqueConnection);
-    connect(MeterArchive, SIGNAL(send_write2(QString)), serial, SLOT(write(QString)));
-    connect(this, SIGNAL(deal_with_meter(QList < QString > )), MeterArchive, SLOT(
-            show_meter_message(QList < QString > )));
+    connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
+            Qt::UniqueConnection);
+    connect(MeterArchive, SIGNAL(send_write2(QString)), serial, SLOT(write(QList<QString>)));
+    connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
+            show_meter_message(QList<QString>)));
     MeterArchive->show();
 }
 
@@ -116,7 +125,7 @@ QString MainWindow::analysis(QString a)
     int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
     int SA_len = list[4].toInt(nullptr, 16) & 0xF;
     QString
-    add = "";
+            add = "";
     for (int i = 0; i <= SA_len; i++)
     {
         add = list[5 + i] + add;
@@ -147,15 +156,15 @@ QString MainWindow::analysis(QString a)
             time(&timep);
             strftime(year, sizeof(year), "%Y", localtime(&timep));
             QString
-            y = year;
+                    y = year;
             sprintf(year, "%04X", y.toInt(nullptr, 10));
             char tmp[30];
             strftime(tmp, sizeof(tmp), "%m %d 0%w %H %M %S 00 00", localtime(&timep));
             QString
-            mouth_to_s = tmp;
+                    mouth_to_s = tmp;
             QString
-            date_times = "";
-            QList < QString > date_time;
+                    date_times = "";
+            QList<QString> date_time;
             date_time = mouth_to_s.split(' ');
             for (int i = 0; i < date_time.length(); i++)
             {
@@ -164,12 +173,12 @@ QString MainWindow::analysis(QString a)
                 date_times = date_times + temp;
             }
             QString
-            APDU = "81" + n.PIIDACD + "80" + n.REQUEST_TIMEDATE_TIME + year + date_times + year + date_times;
+                    APDU = "81" + n.PIIDACD + "80" + n.REQUEST_TIMEDATE_TIME + year + date_times + year + date_times;
             emit
-            serial->send_write(BuildMessage(APDU, revert_add, "01"));
+            serial->send_write({BuildMessage(APDU, revert_add, "01"), "登录/心跳响应"});
             return "登录/心跳";
         }
-            break;
+
         case 0x85:
         {
             switch (list[apdu_0 + 1].toInt(nullptr, 16))
@@ -220,9 +229,9 @@ QString MainWindow::analysis(QString a)
                     if (n.is_last_frame == "00")
                     {
                         QString
-                        text = "0505" + n.PIIDACD + n.slicing_index + "00";
+                                text = "0505" + n.PIIDACD + n.slicing_index + "00";
                         emit
-                        serial->send_write(BuildMessage(text, revert_add, "43"));
+                        serial->send_write({BuildMessage(text, revert_add, "43"), ""});
                         times++;
                         return QString().sprintf("收到分帧,第%d帧", times);
                     }
@@ -239,28 +248,24 @@ QString MainWindow::analysis(QString a)
             }
         }
             break;
+        case 0x86:
+        {
+            switch (list[apdu_0 + 1].toInt(nullptr, 16))
+            {
+                case 0x1:
+                {
+                    return DARType(list[apdu_0 + 7].toInt(nullptr, 16));
+                }
+            }
+        }
         case 0x87:
         {
             switch (list[apdu_0 + 1].toInt(nullptr, 16))
             {
                 case 0x1:
                 {
-                    switch (list[apdu_0 + 2].toInt(nullptr, 16))
-                    {
-                        case 0:
-                            return "成功";
-                        case 8:
-                            return "越界";
-                        case 15:
-                            return "密码错误/未授权";
-                            // 68 1a 00 c3 05 56 34 12 56 34 12 10 9e 98 87 01 1c 81 03 03 00 00 00 00 00 c4 80 16
-                        default:
-                            return "未知";
-                    }
-
-
+                    return DARType(list[apdu_0 + 7].toInt(nullptr, 16));
                 }
-                    break;
             }
         }
             break;
@@ -268,6 +273,22 @@ QString MainWindow::analysis(QString a)
         {
             switch (list[apdu_0 + 1].toInt(nullptr, 16))
             {
+                case 0x1:
+                { //未处理完
+                    ReportNotificationList n;
+                    n.PIIDACD = list[apdu_0 + 2];
+                    n.SequenceOfLen = list[apdu_0 + 3];
+                    n.OAD = "";
+                    for (int i = 1; i < 5; i++)
+                    {
+                        n.OAD = n.OAD + list[apdu_0 + 3 + i];
+                    }
+                    QString
+                            APDU = "0801" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
+                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "上报响应"});
+                    n.GetResultType = list[apdu_0 + 8];
+                    return "上报消息";
+                }
                 case 0x2: //未处理完
                 {
                     ReportNotificationRecordList n;
@@ -279,13 +300,12 @@ QString MainWindow::analysis(QString a)
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
                     QString
-                    APDU = "8802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    serial->send_write(BuildMessage(APDU, revert_add, "01"));
+                            APDU = "0802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
+                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "上报响应"});
                     n.RCSD = list[apdu_0 + 8];
-                    return "上报响应";
+                    return "上报消息";
 
                 }
-                    break;
                 default:
                     qDebug() << "880?";
                     break;
@@ -303,7 +323,7 @@ QString MainWindow::deal_data(QStringList a)
         case DATA_OCT_STRING:
         {
             QString
-            text = "";
+                    text = "";
             for (int i = 0; i < a[1].toInt(nullptr, 16); i++)
             {
                 text = text + a[2 + i];
@@ -320,8 +340,8 @@ QString MainWindow::deal_data(QStringList a)
 void MainWindow::send_find_add()
 {
     QString
-    add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    emit serial->send_write(add);                   ////发送
+            add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
+    emit serial->send_write({add, "读地址"});                   ////发送
 }
 
 MainWindow::~MainWindow()
@@ -343,23 +363,25 @@ void MainWindow::serial_config()
 void MainWindow::custom()
 {
     Custom = new Custom_APDU(revert_add);
-    connect(Custom, SIGNAL(send_write(QString)), serial, SLOT(write(QString)), Qt::UniqueConnection);
+    connect(Custom, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
     Custom->show();
 }
 
-void MainWindow::show_message_send(QString a)
+void MainWindow::show_message_send(QList<QString> a)
 {
     time_t timep;
     time(&timep);
     char tmp[64];
     strftime(tmp, sizeof(tmp), "%H:%M:%S", localtime(&timep));
     QString
-    x = tmp;
+            x = tmp;
     ui->tableWidget->insertRow(current);
     ui->tableWidget->setItem(current, 0, new QTableWidgetItem("发送:"));
-    ui->tableWidget->setItem(current, 1, new QTableWidgetItem(StringAddSpace(a)));
+    ui->tableWidget->setItem(current, 1, new QTableWidgetItem(StringAddSpace(a[0])));
+    ui->tableWidget->setItem(current, 2, new QTableWidgetItem(a[1]));
     ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
-    ui->tableWidget->item(current, 1)->setToolTip(StringAddSpace(a));
+    ui->tableWidget->item(current, 1)->setToolTip(StringAddSpace(a[0]));
+    ui->tableWidget->item(current, 2)->setToolTip((a[1]));
     current += 1;
     move_Cursor();
 }
@@ -371,11 +393,11 @@ void MainWindow::show_message_receive(QString a)
     char tmp[64];
     strftime(tmp, sizeof(tmp), "%H:%M:%S", localtime(&timep));
     QString
-    x = tmp;
+            x = tmp;
     ui->tableWidget->insertRow(current);
     ui->tableWidget->setItem(current, 0, new QTableWidgetItem("收到:"));
     QString
-    te = analysis(a);
+            te = analysis(a);
     ui->tableWidget->setItem(current, 1, new QTableWidgetItem(a));
     ui->tableWidget->setItem(current, 2, new QTableWidgetItem(te));
     ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));

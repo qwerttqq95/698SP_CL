@@ -115,6 +115,13 @@ public:
         QString RCSD;
     } ReportNotificationRecordList;
 
+    typedef struct
+    {
+        QString PIIDACD;
+        QString SequenceOfLen;
+        QString OAD;
+        QString GetResultType;
+    } ReportNotificationList;
 private:
     Ui::MainWindow *ui;
     Serial *serial;
@@ -131,7 +138,7 @@ public slots:
 
     void move_Cursor();
 
-    void show_message_send(QString);
+    void show_message_send(QList<QString>);
 
     void show_message_receive(QString);
 

@@ -20,7 +20,7 @@ public slots:
 
 signals:
 
-    void send_write(QString);
+    void send_write(QList<QString>);
 
 private:
     Ui::myDialog *ui;

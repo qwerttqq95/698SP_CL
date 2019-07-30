@@ -39,7 +39,7 @@ public:
 
     bool build_net();
 
-    bool write_(QString);
+    bool write_(QList<QString>);
 
 
     HANDLE hCom;
@@ -51,22 +51,21 @@ private:
 
 public slots:
 
-    bool write(QString);
+    bool write(QList<QString>);
 
     void creat_process();
-
 
     void warming();
 
 signals:
 
-    void send_message(QString);
+    void send_message(QList<QString>);
 
     void receive_message(QString);
 
     void open_fail_message();
 
-    void send_write(QString);
+    void send_write(QList<QString>);
 
 };
 
