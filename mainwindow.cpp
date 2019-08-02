@@ -7,6 +7,7 @@
 #include <ui_MeterArchives.h>
 #include <iostream>
 #include <QScrollBar>
+#include <QtWidgets/QInputDialog>
 
 using namespace std;
 
@@ -34,9 +35,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->action, SIGNAL(triggered()), this, SLOT(send_find_add()));
     connect(serial, SIGNAL(send_message(QList<QString>)), this, SLOT(show_message_send(QList<QString>)));
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
-    connect(this, SIGNAL(send_analysis(QString)), this, SLOT(analysis_show(QString)));//解析
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
+
+    QAction *shijian_init;
+    shijian_init = new QAction();
+    shijian_init->setObjectName(QStringLiteral("shijian_init"));
+    shijian_init->setText("事件初始化");
+    ui->menu_5->addAction(shijian_init);
+
     QList<QAction *> act = ui->menu_10->actions();
     for (int i = 0, b = act.size(); i < b; i++)
     {
@@ -52,7 +59,8 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         connect(act5.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
-    serial->show();
+//    serial->show();
+    Communication_parameters();
 }
 
 void MainWindow::function()
@@ -93,7 +101,8 @@ void MainWindow::function()
 
 void MainWindow::custom_test()
 {
-
+    check = new Check(revert_add);
+    check->show();
 }
 
 void MainWindow::move_Cursor()
@@ -106,7 +115,7 @@ void MainWindow::open_MeterArchives()
     MeterArchive = new MeterArchives(revert_add);
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
-    connect(MeterArchive, SIGNAL(send_write2(QString)), serial, SLOT(write(QList<QString>)));
+    connect(MeterArchive, SIGNAL(send_write2(QList<QString>)), serial, SLOT(write(QList<QString>)));
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
             show_meter_message(QList<QString>)));
     MeterArchive->show();
@@ -407,9 +416,34 @@ void MainWindow::show_message_receive(QString a)
 
 }
 
-void MainWindow::analysis_show(QString a)
+
+void MainWindow::Communication_parameters()
 {
-//    ui->textEdit_2->append(a);
+    QMenu *menu_comm;
+    menu_comm = new QMenu(ui->menu_12);
+    ui->menu_12->addAction(menu_comm->menuAction());
+    menu_comm->setObjectName(QStringLiteral("menu_comm"));
+    menu_comm->setEnabled(true);
+    menu_comm->setTitle("通信参数");
+
+    QAction *wrieless_station_ip;
+    wrieless_station_ip = new QAction();
+    wrieless_station_ip->setObjectName(QStringLiteral("wrieless_station_ip"));
+    wrieless_station_ip->setText("设置无线公网主站IP");
+    menu_comm->addAction(wrieless_station_ip);
+    connect(wrieless_station_ip, SIGNAL(triggered()), this, SLOT(set_ip()));
+
+
+}
+
+void MainWindow::set_ip()
+{
+    QStringList item;
+    bool ok;
+    item << "192.168.16.253:20001" << "111.207.214.169:20001";
+    QString text = QInputDialog::getItem(this, "设置无线公网主站IP", "主站IP:", item, 0, true, &ok);
+    if (ok && !item.isEmpty())
+        qDebug() << text;
 }
 
 

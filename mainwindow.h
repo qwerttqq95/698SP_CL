@@ -9,7 +9,8 @@
 #include <QDebug>
 #include <QString>
 #include <time.h>
-#include<fstream>
+#include <fstream>
+#include <Check.h>
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -72,6 +73,7 @@ public:
 
     QString analysis(QString a);
 
+    void Communication_parameters();
 
     QString deal_data(QStringList);
 
@@ -127,6 +129,7 @@ private:
     Serial *serial;
     Custom_APDU *Custom;
     MeterArchives *MeterArchive;
+    Check *check;
 
 signals:
 
@@ -142,7 +145,7 @@ public slots:
 
     void show_message_receive(QString);
 
-    void analysis_show(QString);
+    void set_ip();
 
     void about();
 

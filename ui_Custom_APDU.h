@@ -21,7 +21,8 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Dialog2 {
+class myDialogUi_Dialog2
+{
 public:
     QTextEdit *textEdit;
     QLabel *label;
@@ -30,7 +31,8 @@ public:
     QPushButton *pushButton;
     QDialogButtonBox *buttonBox;
 
-    void setupUi(QDialog *Dialog) {
+    void setupUi(QDialog *Dialog)
+    {
         if (Dialog->objectName().isEmpty())
             Dialog->setObjectName(QStringLiteral("Dialog"));
         Dialog->resize(663, 381);
@@ -68,13 +70,13 @@ public:
 
 
         retranslateUi(Dialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), Dialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), Dialog, SLOT(reject()));
+        QObject::connect(buttonBox, SIGNAL(clicked(QAbstractButton * )), Dialog, SLOT(close()));
 
         QMetaObject::connectSlotsByName(Dialog);
     } // setupUi
 
-    void retranslateUi(QDialog *Dialog) {
+    void retranslateUi(QDialog *Dialog)
+    {
         Dialog->setWindowTitle(QApplication::translate("Dialog",
                                                        "\350\207\252\345\256\232\344\271\211\346\212\245\346\226\207\345\217\221\351\200\201",
                                                        nullptr));
@@ -85,7 +87,8 @@ public:
 };
 
 namespace Ui {
-    class myDialog : public Ui_Dialog2 {
+    class myDialog : public myDialogUi_Dialog2
+    {
     };
 } // namespace Ui
 

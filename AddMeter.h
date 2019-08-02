@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QString>
 #include <QDialog>
+#include <QList>
 
 
 namespace Ui {

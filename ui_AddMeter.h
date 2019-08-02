@@ -21,7 +21,8 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Dialog3 {
+class myAddMeterUi_Dialog
+{
 public:
     QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout_2;
@@ -92,7 +93,8 @@ public:
     QLabel *label_9;
     QLineEdit *lineEdit_9;
 
-    void setupUi(QDialog *Dialog) {
+    void setupUi(QDialog *Dialog)
+    {
         if (Dialog->objectName().isEmpty())
             Dialog->setObjectName(QStringLiteral("Dialog"));
         Dialog->resize(243, 501);
@@ -405,7 +407,8 @@ public:
         QMetaObject::connectSlotsByName(Dialog);
     } // setupUi
 
-    void retranslateUi(QDialog *Dialog) {
+    void retranslateUi(QDialog *Dialog)
+    {
         Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", nullptr));
         label_14->setText(
                 QApplication::translate("Dialog", "\350\247\204\347\272\246\347\261\273\345\236\213:", nullptr));
@@ -479,7 +482,8 @@ public:
 };
 
 namespace Ui {
-    class myAddMeter : public Ui_Dialog3 {
+    class myAddMeter : public myAddMeterUi_Dialog
+    {
     };
 } // namespace Ui
 

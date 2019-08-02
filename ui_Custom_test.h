@@ -20,7 +20,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Dialog5
+class myCustom_testUi_Dialog
 {
 public:
     QHBoxLayout *horizontalLayout;
@@ -152,7 +152,7 @@ public:
 
 namespace Ui
 {
-    class myCustom_test : public Ui_Dialog5
+    class myCustom_test : public myCustom_testUi_Dialog
     {
     };
 } // namespace Ui

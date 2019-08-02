@@ -23,7 +23,8 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Form {
+class myMeterArchivesUi_Form
+{
 public:
     QVBoxLayout *verticalLayout;
     QTableWidget *tableWidget;
@@ -40,7 +41,8 @@ public:
     QPushButton *pushButton_7;
     QSpacerItem *horizontalSpacer;
 
-    void setupUi(QWidget *Form) {
+    void setupUi(QWidget *Form)
+    {
         if (Form->objectName().isEmpty())
             Form->setObjectName(QStringLiteral("Form"));
         Form->resize(934, 390);
@@ -159,7 +161,8 @@ public:
         QMetaObject::connectSlotsByName(Form);
     } // setupUi
 
-    void retranslateUi(QWidget *Form) {
+    void retranslateUi(QWidget *Form)
+    {
         Form->setWindowTitle(
                 QApplication::translate("Form", "\350\241\250\346\241\243\346\241\210\350\256\276\347\275\256",
                                         nullptr));
@@ -223,7 +226,8 @@ public:
 };
 
 namespace Ui {
-    class myMeterArchives : public Ui_Form {
+    class myMeterArchives : public myMeterArchivesUi_Form
+    {
     };
 } // namespace Ui
 

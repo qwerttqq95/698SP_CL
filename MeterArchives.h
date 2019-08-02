@@ -14,10 +14,12 @@
 #include <BasicExcel/BasicExcel.h>
 #include <minwindef.h>
 
-namespace Ui {
+namespace Ui
+{
     class myMeterArchives;
 }
-class MeterArchives : public QDialog {
+class MeterArchives : public QDialog
+{
 Q_OBJECT
 public:
     explicit MeterArchives(QString add, QWidget *parent = nullptr);
@@ -25,8 +27,8 @@ public:
     bool GetExcelValue(YExcel::BasicExcelCell *pCell, QString &str);
 
 
-
-    typedef struct {
+    typedef struct
+    {
         QString NUM;
         QString TSA;
         QString baud_rate;
@@ -51,13 +53,17 @@ public:
 public slots:
 
     void show_add();
+
     void show_meter_message(QList<QString>);
 
     void add_new(QList<QString> a);
+
     void select_all_checkbox();
+
     void Get_6000200();
 
     void send();
+
     void clearlist();
 
     void all();
@@ -65,9 +71,11 @@ public slots:
     void output();
 
     void input();
+
     void clear_6000200();
 
     void del();
+
 private:
     Ui::myMeterArchives *ui;
     AddMeters *addmeter;
@@ -76,11 +84,12 @@ signals:
 
     void send_write(QList<QString>);
 
-    void send_write2(QString);
+    void send_write2(QList<QString>);
 
 };
 
-typedef struct {
+typedef struct
+{
     QString value;
     QList<QString> left;
 } VALUE_LEFT;

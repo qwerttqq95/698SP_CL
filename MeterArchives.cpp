@@ -49,7 +49,7 @@ void MeterArchives::Get_6000200()
             text = "0501006000020000";
     QString
             re_message = BuildMessage(text, add_, "43");
-    emit send_write({re_message, "0"});
+    emit send_write({re_message, "查询表档案"});
 }
 
 void MeterArchives::clear_6000200()
@@ -58,7 +58,7 @@ void MeterArchives::clear_6000200()
             text = "070101600086000000";
     QString
             re_message = BuildMessage(text, add_, "43");
-    emit send_write({re_message, "0"});
+    emit send_write({re_message, "清空表档案"});
 }
 
 void MeterArchives::clearlist()
@@ -315,7 +315,7 @@ void MeterArchives::send()
         QString
                 send_message = "07010060007f00" + text.takeFirst() + "00";
 //        qDebug()<<"send_message"<<send_message;
-        emit send_write2(BuildMessage(send_message, add_, "43"));
+        emit send_write2({BuildMessage(send_message, add_, "43"), ""});
 
     } else
     {
@@ -332,16 +332,13 @@ void MeterArchives::send()
             char qw[3];
             sprintf(qw, "%02x", j - 1);
             send_message = "0701006000800001" + (QString) qw + send_message + "00";
-            emit send_write2(BuildMessage(send_message, add_, "43"));
+            emit send_write2({BuildMessage(send_message, add_, "43"), ""});
             send_message = "";
             QEventLoop eventloop;
-            QTimer::singleShot(6000, &eventloop, SLOT(quit()));
+            QTimer::singleShot(3500, &eventloop, SLOT(quit()));
             eventloop.exec();
         }
-
-
     }
-
 }
 
 void MeterArchives::output()

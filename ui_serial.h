@@ -24,7 +24,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_Dialog
+class DialogUi_Dialog
 {
 public:
     QWidget *layoutWidget;
@@ -195,7 +195,9 @@ public:
 };
 
 namespace Ui {
-    class Dialog: public Ui_Dialog {};
+    class Dialog : public DialogUi_Dialog
+    {
+    };
 } // namespace Ui
 
 QT_END_NAMESPACE
