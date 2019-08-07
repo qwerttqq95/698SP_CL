@@ -37,7 +37,7 @@ public:
 
     BOOL CloseSerial();
 
-    bool build_net();
+    bool build_net(int com);
 
     bool write_(QList<QString>);
 

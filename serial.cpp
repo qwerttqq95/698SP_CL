@@ -78,7 +78,7 @@ void Serial::creat_process()
         {
             run_flag = true;
             ui->pushButton->setText("关闭");
-            std::thread t2(&Serial::build_net, this);
+            std::thread t2(&Serial::build_net, this, ui->lineEdit->text().toInt());
             t2.detach();
             close();
             internet_or_serial = 0;
@@ -250,7 +250,7 @@ bool Serial::write_(QList<QString> add) //发送
     return true;
 }
 
-bool Serial::build_net()
+bool Serial::build_net(int com)
 {
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
@@ -258,7 +258,7 @@ bool Serial::build_net()
     SOCKET s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     sockaddr_in addr;
     addr.sin_addr.S_un.S_addr = inet_addr("0.0.0.0");
-    addr.sin_port = htons(20001);
+    addr.sin_port = htons(com);
     addr.sin_family = PF_INET;
     bind(s, (SOCKADDR *) &addr, sizeof(SOCKADDR));
     listen(s, 1);

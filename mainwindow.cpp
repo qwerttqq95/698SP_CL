@@ -8,6 +8,7 @@
 #include <iostream>
 #include <QScrollBar>
 #include <QtWidgets/QInputDialog>
+#include "XMLFile/tinyxml2.h"
 
 using namespace std;
 
@@ -59,7 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         connect(act5.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
-//    serial->show();
+    serial->show();
     Communication_parameters();
 }
 
@@ -205,7 +206,7 @@ QString MainWindow::analysis(QString a)
                     n.DATA = list.mid(apdu_0 + 8, list.length() - apdu_0 - 11);
                     if (n.OAD == "60000200")
                     {
-                        qDebug() << "收到表档案信息";
+                        qDebug() << "收到表档案信息: " << n.DATA;
                         emit deal_with_meter(n.DATA);
                     }
 
@@ -433,17 +434,71 @@ void MainWindow::Communication_parameters()
     menu_comm->addAction(wrieless_station_ip);
     connect(wrieless_station_ip, SIGNAL(triggered()), this, SLOT(set_ip()));
 
+    QAction *eth_station_ip;
+    eth_station_ip = new QAction();
+    eth_station_ip->setObjectName(QStringLiteral("eth_station_ip"));
+    eth_station_ip->setText("设置以太网主站IP");
+    menu_comm->addAction(eth_station_ip);
+    connect(eth_station_ip, SIGNAL(triggered()), this, SLOT(set_ip()));
+
 
 }
 
 void MainWindow::set_ip()
 {
-    QStringList item;
+    QAction *f_action = (QAction *) sender();
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile("config.xml");
+    tinyxml2::XMLElement *root = doc.RootElement();
+    tinyxml2::XMLElement *first_child = root->FirstChildElement("Eth");
+    tinyxml2::XMLElement *child_child = first_child->FirstChildElement();
+    const char *content;
+    content = child_child->GetText();
+    QString item_text;
+    item_text = (QString) content;
+    QStringList item_text_list = item_text.split(';', QString::SkipEmptyParts);
     bool ok;
-    item << "192.168.16.253:20001" << "111.207.214.169:20001";
-    QString text = QInputDialog::getItem(this, "设置无线公网主站IP", "主站IP:", item, 0, true, &ok);
-    if (ok && !item.isEmpty())
-        qDebug() << text;
+    QString text = QInputDialog::getItem(this, f_action->text(), "主站IP:", item_text_list, 0, true, &ok);
+    if (ok && !item_text_list.isEmpty())
+    {
+        int index = item_text_list.indexOf(text);
+        if (index == -1)
+        {
+            qDebug() << "-1";
+            item_text_list.insert(0, text);
+        } else if (index > 0)
+            item_text_list.insert(0, item_text_list.takeAt(index));
+        QString new_string = item_text_list.join(";");
+        QByteArray sr = new_string.toLocal8Bit();
+        int len = sr.length();
+        char *buf = new char[len + 2];
+        buf[len] = buf[len + 1] = 0;
+        strcpy(buf, sr.data());
+        cout << buf;
+        child_child->SetText(buf);
+        QStringList list1 = text.split(':', QString::SkipEmptyParts);
+        QStringList list2 = list1[0].split('.', QString::SkipEmptyParts);
+        if (list2.size() != 4)
+            QMessageBox::warning(this, "Warming", "IP格式错误");
+        QString text_ip = "";
+        for (int i = 0; i < 4; i++)
+        {
+            char temp[3];
+            sprintf(temp, "%02X", list2[i].toInt());
+            text_ip = text_ip + temp;
+        }
+        char temp2[5];
+        sprintf(temp2, "%02X", list1[1].toInt());
+        QString message;
+        if (f_action->text().contains(tr("无线")))
+            message = "06010045000300010102020904" + text_ip + "12" + temp2;
+        else
+            message = "06010045100300010102020904" + text_ip + "12" + temp2;
+        qDebug() << "message: " << message << f_action->text();
+        serial->send_write({BuildMessage(message, revert_add, "43"), f_action->text()});
+        doc.SaveFile("config.xml");
+    }
+
 }
 
 

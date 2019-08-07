@@ -132,6 +132,11 @@ void MeterArchives::show_meter_message(QList<QString> a)
     Archives_Configuration_Table n;
     a.removeFirst();
     int times = (a.takeFirst()).toInt(nullptr, 16);
+    if (times == 0)
+    {
+        QMessageBox::information(this, "Information", "无表档案", QMessageBox::Ok);
+        return;
+    }
     for (int i = 0; i < times; i++)
     {
         VALUE_LEFT m, n1;
