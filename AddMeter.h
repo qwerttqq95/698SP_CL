@@ -6,12 +6,13 @@
 #include <QDialog>
 #include <QList>
 
-
-namespace Ui {
+namespace Ui
+{
     class myAddMeter;
 }
 
-class AddMeters : public QDialog {
+class AddMeters : public QDialog
+{
 Q_OBJECT
 public:
     explicit AddMeters(QWidget *parent = nullptr);
@@ -28,7 +29,8 @@ private:
     Ui::myAddMeter *ui;
 };
 
-typedef struct {
+typedef struct
+{
     QString NUM;
     QString TSA;
     QString baud_rate;

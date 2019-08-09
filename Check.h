@@ -5,14 +5,17 @@
 #ifndef INC_698SP_CL_CHECK_H
 #define INC_698SP_CL_CHECK_H
 
+#include <QtCore>
 #include <QDialog>
 #include <QDebug>
 #include <QtGui/QStandardItem>
 #include <QtWidgets/QDirModel>
-
+#include <QtWidgets/QFileSystemModel>
+#include "MessageCompose.h"
+#include "QFile"
 namespace Ui
 {
-    class CheckDialog;
+    class CheckDialogForm;
 }
 
 class Check : public QDialog
@@ -21,10 +24,20 @@ Q_OBJECT
 public:
     explicit Check(QString add, QWidget *parent = nullptr);
 
-
+    QFileSystemModel *model;
     QString add_;
 private:
-    Ui::CheckDialog *ui;
+    Ui::CheckDialogForm *ui;
+    MessageCompose *compose;
+
+public slots:
+
+    void remove();
+
+    void creat_dir();
+
+    void creat_file();
+
 };
 
 

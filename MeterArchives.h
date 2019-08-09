@@ -9,7 +9,6 @@
 #include <QString>
 #include <QDialog>
 #include <AddMeter.h>
-#include <ActiveQt/QAxObject>
 #include <QFileDialog>
 #include <BasicExcel/BasicExcel.h>
 #include <minwindef.h>

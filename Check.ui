@@ -30,6 +30,13 @@
                         </widget>
                     </item>
                     <item>
+                        <widget class="QPushButton" name="pushButton_7">
+                            <property name="text">
+                                <string>新建文件夹</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
                         <widget class="QPushButton" name="pushButton_2">
                             <property name="text">
                                 <string>添加方案</string>

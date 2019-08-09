@@ -361,7 +361,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::about()
 {
-    QMessageBox::information(this, "关于", "698SP C++ V1.0", QMessageBox::Ok);
+    QMessageBox::information(this, "关于", "698SP CLION V1.0 \n QT版本: 5.11.3", QMessageBox::Ok);
 }
 
 void MainWindow::serial_config()
@@ -468,6 +468,8 @@ void MainWindow::set_ip()
             item_text_list.insert(0, text);
         } else if (index > 0)
             item_text_list.insert(0, item_text_list.takeAt(index));
+        if (item_text_list.length() > 10)
+            item_text_list.removeLast();
         QString new_string = item_text_list.join(";");
         QByteArray sr = new_string.toLocal8Bit();
         int len = sr.length();
