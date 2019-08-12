@@ -131,6 +131,13 @@ void MainWindow::closeEvent(QCloseEvent *event)
 QString MainWindow::analysis(QString a)
 {
     QStringList list = a.split(' ', QString::SkipEmptyParts);
+    while (true)
+    {
+        if (list[0] == "68")
+            break;
+        else
+            list.removeFirst();
+    }
     int message_len = (list[2] + list[1]).toInt(nullptr, 16);  //报文长度
     int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
     int SA_len = list[4].toInt(nullptr, 16) & 0xF;
@@ -388,7 +395,7 @@ void MainWindow::show_message_send(QList<QString> a)
     ui->tableWidget->insertRow(current);
     ui->tableWidget->setItem(current, 0, new QTableWidgetItem("发送:"));
     ui->tableWidget->setItem(current, 1, new QTableWidgetItem(StringAddSpace(a[0])));
-    ui->tableWidget->setItem(current, 2, new QTableWidgetItem(a[1]));
+    ui->tableWidget->setItem(current, 2, new QTableWidgetItem(a[1].replace("\n", "")));
     ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
     ui->tableWidget->item(current, 1)->setToolTip(StringAddSpace(a[0]));
     ui->tableWidget->item(current, 2)->setToolTip((a[1]));

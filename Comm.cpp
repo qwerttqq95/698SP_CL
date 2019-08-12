@@ -3,15 +3,37 @@
 #include <QString>
 #include <QtCore/QStringList>
 #include <QDebug>
-#include <iostream>
-#include <QList>
 #include <MeterArchives.h>
 #include <mainwindow.h>
 #include <windows.h>
+#include<vector>
+#include "io.h"
 
 #define PPPINITFCS16 0xffff
 
 using namespace std;
+
+void getDir(string path, vector<string> &files)
+{
+    long hFile = 0;
+    struct _finddata_t fileinfo;
+    string p;
+    if ((hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1)
+    {
+        do
+        {
+            if ((fileinfo.attrib & _A_SUBDIR))
+            {
+                if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
+                {
+                    files.push_back(p.assign(path).append("\\").append(fileinfo.name));
+                    getDir(p.assign(path).append("\\").append(fileinfo.name), files);
+                }
+            }
+        } while (_findnext(hFile, &fileinfo) == 0);
+        _findclose(hFile);
+    }
+}
 
 int Stringlist2Hex(QString &str, BYTE *pOut);
 
@@ -146,6 +168,7 @@ QString DARType(int a)
             return "未知";
     }
 }
+
 QString BuildMessage(QString apdu, QString SA, QString ctrl_zone)
 {
     apdu.remove(' ');
@@ -216,7 +239,19 @@ int check(QString a)
 //            qDebug() << "check denied but find 68 with start: " << list;
             return 2;
         } else
-            qDebug() << "check denied: " << list;
+        {
+            int temp = list.indexOf("68");
+            while (temp)
+            {
+                temp--;
+                list.removeFirst();
+            }
+            QString a2 = list.join(' ');
+            if (check(a2) == 1)
+                return 1;
+            else
+                qDebug() << "check denied: " << list;
+        }
         return 0;
     }
 }

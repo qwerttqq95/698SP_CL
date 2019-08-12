@@ -17,6 +17,8 @@ Custom_APDU::Custom_APDU(QString add, QWidget *parent) :
 
 void Custom_APDU::send() {
     QString a = ui->textEdit->toPlainText().remove(' ');
+    a.remove('\n');
+    qDebug() << "get from textedit" << a;
     QString re_message;
     if (a[0] != '6') {
         qDebug() << "发送add" << add_;

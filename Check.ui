@@ -39,7 +39,7 @@
                     <item>
                         <widget class="QPushButton" name="pushButton_2">
                             <property name="text">
-                                <string>添加方案</string>
+                                <string>新建方案</string>
                             </property>
                         </widget>
                     </item>

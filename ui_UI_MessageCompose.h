@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -24,7 +25,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class MESSAGECOMPOSEUi_Form
+class MESSAGECOMPOSEFormUi_Form
 {
 public:
     QHBoxLayout *horizontalLayout_2;
@@ -32,6 +33,9 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *label;
     QLineEdit *lineEdit;
+    QSpacerItem *horizontalSpacer_2;
+    QLabel *label_2;
+    QComboBox *comboBox;
     QSpacerItem *horizontalSpacer;
     QTableWidget *tableWidget;
     QVBoxLayout *verticalLayout;
@@ -70,6 +74,21 @@ public:
         lineEdit->setSizePolicy(sizePolicy);
 
         horizontalLayout->addWidget(lineEdit);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_2);
+
+        label_2 = new QLabel(Form);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        horizontalLayout->addWidget(label_2);
+
+        comboBox = new QComboBox(Form);
+        comboBox->addItem(QString());
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+
+        horizontalLayout->addWidget(comboBox);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -175,6 +194,7 @@ public:
 
 #ifndef QT_NO_SHORTCUT
         label->setBuddy(lineEdit);
+        label_2->setBuddy(lineEdit);
 #endif // QT_NO_SHORTCUT
 
         retranslateUi(Form);
@@ -187,6 +207,9 @@ public:
         Form->setWindowTitle(
                 QApplication::translate("Form", "\346\267\273\345\212\240\346\226\271\346\241\210", nullptr));
         label->setText(QApplication::translate("Form", "\346\226\271\346\241\210\345\220\215\347\247\260:", nullptr));
+        label_2->setText(QApplication::translate("Form", "\344\277\235\345\255\230\344\275\215\347\275\256:", nullptr));
+        comboBox->setItemText(0, QApplication::translate("Form", "\346\240\271\347\233\256\345\275\225", nullptr));
+
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("Form", "\350\257\264\346\230\216", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
@@ -211,32 +234,24 @@ public:
         pushButton_4->setText(QApplication::translate("Form", "\345\256\214\346\210\220", nullptr));
         textEdit->setHtml(QApplication::translate("Form",
                                                   "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-                                                  "                                    <html><head><meta name=\"qrichtext\" content=\"1\" /><style\n"
-                                                  "                                    type=\"text/css\">\n"
-                                                  "                                    p, li { white-space: pre-wrap; }\n"
-                                                  "                                    </style></head><body style=\" font-family:'SimSun';\n"
-                                                  "                                    font-size:9pt; font-weight:400; font-style:normal;\">\n"
-                                                  "                                    <p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px;\n"
-                                                  "                                    margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\212\245\346\226\207\346\257\224\350\276\203:</p>\n"
-                                                  "                                    <p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px;\n"
-                                                  "                                    margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \345\234\250\350\257\264\346\230\216\351\207\214\345"
-                                                  "\241\253\345\206\231&quot;\346\257\224\350\276\203&quot;,APDU\345\206\205\346\224\276\347\275\256\350\246\201\345\257\271\346\257\224\344\270\212\344\270\200\346\235\241\347\232\204\350\277\224\345\233\236\347\273\223\346\236\234</p>\n"
-                                                  "                                    <p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px;\n"
-                                                  "                                    margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br\n"
-                                                  "                                    /></p>\n"
-                                                  "                                    <p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px;\n"
-                                                  "                                    margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\263\250\346\204\217:</p>\n"
-                                                  "                                    <p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px;\n"
-                                                  "                                    margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \350\257\264\346\230\216\344\270\215\345\217\257\345\214\205\345\220\253&quot;\345"
-                                                  "\273\266\346\227\266&quot;&quot;\346\257\224\350\276\203&quot;\347\255\211\345\255\227\346\240\267</p></body></html>\n"
-                                                  "                                ", nullptr));
+                                                  "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+                                                  "p, li { white-space: pre-wrap; }\n"
+                                                  "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">                                    </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\212\245\346\226\207\346\257\224\350\276\203:                                    </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \345\234\250\350\257\264\346\230\216\351\207\214\345\241\253\345\206\231&quot;\346\257\224\350\276\203&quot;,APDU\345\206\205\346\224\276\347\275\256\350\246\201\345\257\271\346\257\224\344"
+                                                  "\270\212\344\270\200\346\235\241\347\232\204\350\277\224\345\233\236\347\273\223\346\236\234                                    </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">                                    </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\263\250\346\204\217:                                    </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \350\257\264\346\230\216\344\270\215\345\217\257\345\214\205\345\220\253&quot;\345\273\266\346\227\266&quot;&quot;\346\257\224\350\276\203&quot;\347\255\211\345\255\227\346\240\267                                </p></body></html>",
+                                                  nullptr));
     } // retranslateUi
 
 };
 
 namespace Ui
 {
-    class MESSAGECOMPOSEForm : public MESSAGECOMPOSEUi_Form
+    class MESSAGECOMPOSEForm : public MESSAGECOMPOSEFormUi_Form
     {
     };
 } // namespace Ui

@@ -3,6 +3,8 @@
 
 #include <QtCore>
 #include <QDialog>
+#include<vector>
+#include "iostream"
 
 namespace Ui
 {
@@ -17,6 +19,26 @@ public:
 
 private:
     Ui::MESSAGECOMPOSEForm *ui;
+
+public slots:
+
+    void inset_line();
+
+    void delLine();
+
+    void done_save();
+
+    void add_line();
+
+    void add_delay();
+
+    void para_init();
+
+    void data_init();
+
+    void compare();
+
+    void save_place();
 };
 
 
