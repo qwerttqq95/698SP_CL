@@ -17,10 +17,15 @@ Q_OBJECT
 public:
     explicit MessageCompose(QWidget *parent = nullptr);
 
+    void clear();
+
 private:
     Ui::MESSAGECOMPOSEForm *ui;
 
 public slots:
+
+    void open_exist(QString);
+
 
     void inset_line();
 

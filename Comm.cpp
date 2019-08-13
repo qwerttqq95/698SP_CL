@@ -241,6 +241,10 @@ int check(QString a)
         } else
         {
             int temp = list.indexOf("68");
+            if (temp == -1)
+                return 2;
+            qDebug() << "temp " << temp;
+            qDebug() << "list" << list;
             while (temp)
             {
                 temp--;

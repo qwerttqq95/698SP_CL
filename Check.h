@@ -13,6 +13,7 @@
 #include <QtWidgets/QFileSystemModel>
 #include "MessageCompose.h"
 #include "QFile"
+
 namespace Ui
 {
     class CheckDialogForm;
@@ -38,7 +39,11 @@ public slots:
 
     void creat_file();
 
-};
+    void doubleclick(const QModelIndex &index);
 
+signals:
+
+    void open_signal(QString);
+};
 
 #endif //INC_698SP_CL_CHECK_H

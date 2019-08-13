@@ -1,6 +1,6 @@
-//
-// Created by admin on 30/7/2019.
-//
+
+///自定义测试方案
+
 
 #include "Check.h"
 #include <QString>
@@ -8,7 +8,7 @@
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
 #include <utility>
-
+#include <fstream>
 
 Check::Check(QString add, QWidget *parent) :
         QDialog(parent),
@@ -26,8 +26,21 @@ Check::Check(QString add, QWidget *parent) :
     connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(remove()));
     connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(creat_dir()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(creat_file()));
+    connect(ui->treeView, SIGNAL(doubleClicked(
+                                         const QModelIndex)), this, SLOT(doubleclick(
+                                                                                 const QModelIndex)));
 
+    compose = new MessageCompose();
+    connect(this, SIGNAL(open_signal(QString)), compose, SLOT(open_exist(QString)));
+}
 
+void Check::doubleclick(const QModelIndex &index)
+{
+    auto m = index.row();
+    auto fo = index.sibling(m, 0).data().toString();
+    auto fath = index.parent().data().toString();
+    qDebug() << "position " << model->filePath(index);
+    emit  open_signal(model->filePath(index));
 }
 
 void Check::remove()
@@ -52,18 +65,10 @@ void Check::creat_dir()
 
 void Check::creat_file()
 {
-    compose = new MessageCompose();
+    compose->clear();
     compose->show();
-
-
-//    model->setReadOnly(false);
-//    QModelIndex index_creat_file = ui->treeView->currentIndex();
-//    QFile file("./Data/check/test");
-//    file.open(QFile::WriteOnly|QFile::Truncate);
-//    QTextStream textStream(&file);
-//    textStream<<"123";
-//    file.close();
-//    model->setReadOnly(true);
 }
+
+
 
 
