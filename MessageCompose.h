@@ -24,7 +24,7 @@ private:
 
 public slots:
 
-    void open_exist(QString);
+    void open_exist(const QString &);
 
 
     void inset_line();

@@ -18,7 +18,7 @@ void getDir(string path, vector<string> &files)
     long hFile = 0;
     struct _finddata_t fileinfo;
     string p;
-    if ((hFile = _findfirst(p.assign(path).append("\\*").c_str(), &fileinfo)) != -1)
+    if ((hFile = _findfirst(p.assign(path).append("/*").c_str(), &fileinfo)) != -1)
     {
         do
         {
@@ -26,8 +26,8 @@ void getDir(string path, vector<string> &files)
             {
                 if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
                 {
-                    files.push_back(p.assign(path).append("\\").append(fileinfo.name));
-                    getDir(p.assign(path).append("\\").append(fileinfo.name), files);
+                    files.push_back(p.assign(path).append("/").append(fileinfo.name));
+                    getDir(p.assign(path).append("/").append(fileinfo.name), files);
                 }
             }
         } while (_findnext(hFile, &fileinfo) == 0);

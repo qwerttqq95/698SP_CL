@@ -41,6 +41,8 @@ public slots:
 
     void doubleclick(const QModelIndex &index);
 
+    void send_archeive();
+
 signals:
 
     void open_signal(QString);

@@ -1,10 +1,9 @@
 #include "MessageCompose.h"
 #include "ui_UI_MessageCompose.h"
 #include "QMessageBox"
-#include "io.h"
 #include <string>
 #include <fstream>
-//#include "iostream"
+
 
 using namespace std;
 
@@ -25,14 +24,13 @@ MessageCompose::MessageCompose(QWidget *parent) :
     connect(ui->pushButton_6, SIGNAL(clicked()), this, SLOT(data_init()));
     connect(ui->pushButton_8, SIGNAL(clicked()), this, SLOT(compare()));
     save_place();
-
 }
 
-void MessageCompose::open_exist(QString a)
+void MessageCompose::open_exist(const QString &add)
 {
     clear();
     show();
-    QByteArray cdata = a.toLocal8Bit();
+    QByteArray cdata = add.toLocal8Bit();
     std::ifstream file;
     file.open(std::string(cdata), std::ios::in);
     if (!file)
@@ -50,12 +48,10 @@ void MessageCompose::open_exist(QString a)
         file.clear();
         file.seekg(0, std::ios::beg);
         std::string a;
-        qDebug() << "a" << lineCnt;
         int line = 0;
         QList<QString> b;
         while (lineCnt)
         {
-
             std::getline(file, a);
             if (a.empty())
             {
@@ -72,6 +68,46 @@ void MessageCompose::open_exist(QString a)
             lineCnt--;
         }
         file.close();
+        QList<QString> name;
+        name = add.split("/");
+        ui->lineEdit->setText(name.last());
+        QString qwe;
+        QString new_add = "";
+        name.takeLast();
+        while (true)
+        {
+            qwe = name.takeLast();
+            if (qwe == "Data")
+            {
+                new_add = "./Data" + new_add;
+                break;
+            } else
+                new_add = "/" + qwe +
+                          new_add;
+        }
+        qDebug() << "new_add" << new_add;
+        if (new_add == "./Data/check")
+            new_add = "根目录";
+        int i = 0;
+        while (true)
+        {
+            qDebug() << "ui->comboBox->currentIndex() " << ui->comboBox->currentIndex();
+            qDebug() << "real_add " << new_add;
+            if (ui->comboBox->currentIndex() == -1)
+            {
+                qDebug() << "break";
+                break;
+            }
+            if (ui->comboBox->currentText() == new_add)
+            {
+                break;
+            } else
+            {
+                i += 1;
+                ui->comboBox->setCurrentIndex(i);
+            }
+        }
+
     }
 }
 
@@ -136,10 +172,21 @@ void MessageCompose::done_save()
     {
         QString temp = ui->comboBox->currentText();
         if (temp == "根目录")
-            temp = R"(.\Data\check\)";
-        string path = (temp + name).toStdString();
-        ofstream outfile(path, ios::trunc);
+            temp = "./Data/check/";
+        QByteArray cdata = (temp + '/' + name).toLocal8Bit();
+        string path = std::string(cdata);
         int rowcount = ui->tableWidget->rowCount();
+        for (int i = 0; i < rowcount; i++)
+        {
+            QString describe = ui->tableWidget->item(i, 0)->text();
+            QString APDU = ui->tableWidget->item(i, 1)->text();
+            if (APDU.replace(" ", "").size() % 2 == 1)
+            {
+                QMessageBox::warning(this, "Waring", "APDU长度错误在" + (QString) i + "行");
+                return;
+            }
+        }
+        ofstream outfile(path, ios::trunc);
         for (int i = 0; i < rowcount; i++)
         {
             QString describe = ui->tableWidget->item(i, 0)->text();
@@ -154,12 +201,11 @@ void MessageCompose::done_save()
 void MessageCompose::save_place()
 {
     std::vector<std::string> files;
-    std::string path = R"(.\Data\check\)";
+    std::string path = "./Data/check";
     getDir(path, files);
     for (const auto &i : files)
     {
         ui->comboBox->addItem(QString(QString::fromLocal8Bit(i.c_str())));
-//        std::cout << "i: " << i << "\n";
     }
 }
 

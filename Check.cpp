@@ -29,9 +29,31 @@ Check::Check(QString add, QWidget *parent) :
     connect(ui->treeView, SIGNAL(doubleClicked(
                                          const QModelIndex)), this, SLOT(doubleclick(
                                                                                  const QModelIndex)));
-
     compose = new MessageCompose();
     connect(this, SIGNAL(open_signal(QString)), compose, SLOT(open_exist(QString)));
+    connect(ui->pushButton, SIGNAL(clicked(
+    )), this, SLOT(send_archeive()));
+}
+
+void Check::send_archeive()
+{
+    auto index = ui->treeView->currentIndex();
+    QFile file(model->filePath(index));
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    QFileInfo fileinfo(model->filePath(index));
+    if (fileinfo.isFile())
+    {
+        while (!file.atEnd())
+        {
+            QByteArray line = file.readLine();
+            QString str(line);
+            str.replace("\n", "");
+            qDebug() << "str" << str;
+        }
+
+    }
+    file.close();
 }
 
 void Check::doubleclick(const QModelIndex &index)
@@ -40,7 +62,9 @@ void Check::doubleclick(const QModelIndex &index)
     auto fo = index.sibling(m, 0).data().toString();
     auto fath = index.parent().data().toString();
     qDebug() << "position " << model->filePath(index);
-    emit  open_signal(model->filePath(index));
+    QFileInfo fileinfo(model->filePath(index));
+    if (fileinfo.isFile())
+            emit open_signal(model->filePath(index));
 }
 
 void Check::remove()
@@ -68,6 +92,7 @@ void Check::creat_file()
     compose->clear();
     compose->show();
 }
+
 
 
 
