@@ -161,7 +161,10 @@ public slots:
     void custom_test();
 
     void compare(QString);
+
     void function();
+
+    void open_attach();
 
 };
 

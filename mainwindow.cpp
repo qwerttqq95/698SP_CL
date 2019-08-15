@@ -39,6 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
 
+    QAction *attach4520;
+    attach4520 = new QAction();
+    attach4520->setObjectName(QStringLiteral("Build_4520"));
+    attach4520->setText("Build_4520");
+    ui->menu_4->addAction(attach4520);
+    connect(attach4520, SIGNAL(triggered()), this, SLOT(open_attach()));
+
+
     QAction *shijian_init;
     shijian_init = new QAction();
     shijian_init->setObjectName(QStringLiteral("shijian_init"));
@@ -455,8 +463,6 @@ void MainWindow::Communication_parameters()
     eth_station_ip->setText("设置以太网主站IP");
     menu_comm->addAction(eth_station_ip);
     connect(eth_station_ip, SIGNAL(triggered()), this, SLOT(set_ip()));
-
-
 }
 
 void MainWindow::set_ip()
@@ -527,6 +533,21 @@ void MainWindow::compare(QString recive)
         show_message_receive("比对结果一致");
     } else
         show_message_receive("比对结果不一致");
+}
+
+void MainWindow::open_attach()
+{
+    QAction *f_action = (QAction *) sender();
+//    qDebug() << "path" << f_action->text();
+    QString current_path = QDir::currentPath().replace("/", "\\");
+    QString path = current_path + "\\attach\\" + f_action->text();
+    QString runPath = current_path + "\\attach";
+//    qDebug() << "path" << path;
+//    qDebug() << "runPath" << runPath;
+    QProcess *process = new QProcess;
+    process->setWorkingDirectory(runPath);
+    process->start("\"" + path + "\"");
+
 }
 
 
