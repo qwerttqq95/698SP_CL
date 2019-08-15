@@ -108,10 +108,11 @@ public:
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
         tableWidget->setRowCount(0);
         tableWidget->horizontalHeader()->setVisible(true);
         tableWidget->horizontalHeader()->setCascadingSectionResizes(false);
-        tableWidget->verticalHeader()->setVisible(false);
+        tableWidget->verticalHeader()->setVisible(true);
 
         verticalLayout_2->addWidget(tableWidget);
 
@@ -238,12 +239,14 @@ public:
                                                   "p, li { white-space: pre-wrap; }\n"
                                                   "</style></head><body style=\" font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
                                                   "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">                                    </p>\n"
-                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\212\245\346\226\207\346\257\224\350\276\203:                                    </p>\n"
-                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \345\234\250\350\257\264\346\230\216\351\207\214\345\241\253\345\206\231&quot;\346\257\224\350\276\203&quot;,APDU\345\206\205\346\224\276\347\275\256\350\246\201\345\257\271\346\257\224\344"
-                                                  "\270\212\344\270\200\346\235\241\347\232\204\350\277\224\345\233\236\347\273\223\346\236\234                                    </p>\n"
-                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">                                    </p>\n"
-                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\263\250\346\204\217:                                    </p>\n"
-                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \350\257\264\346\230\216\344\270\215\345\217\257\345\214\205\345\220\253&quot;\345\273\266\346\227\266&quot;&quot;\346\257\224\350\276\203&quot;\347\255\211\345\255\227\346\240\267                                </p></body></html>",
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">                                     </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\212\245\346\226\207\346\257\224\350\276\203:                                     </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \345\234\250\350\257"
+                                                  "\264\346\230\216\351\207\214\345\241\253\345\206\231&quot;\346\257\224\350\276\203&quot;,APDU\345\206\205\346\224\276\347\275\256\350\246\201\345\257\271\346\257\224\344\270\212\344\270\200\346\235\241\347\232\204\350\277\224\345\233\236\347\273\223\346\236\234                                                                        </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">                                     </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">*\346\263\250\346\204\217:                                     </p>\n"
+                                                  "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"> \350\257\264\346\230\216\344\270\215\345\217\257\345\214\205\345\220\253&quot;\345\273\266\346\227\266&quot;&quot;\346\257\224\350\276\203&quot;\347\255\211\345\255\227\346\240\267                     "
+                                                  "                                               </p></body></html>",
                                                   nullptr));
     } // retranslateUi
 

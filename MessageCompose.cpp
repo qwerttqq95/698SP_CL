@@ -85,14 +85,14 @@ void MessageCompose::open_exist(const QString &add)
                 new_add = "/" + qwe +
                           new_add;
         }
-        qDebug() << "new_add" << new_add;
+//        qDebug() << "new_add" << new_add;
         if (new_add == "./Data/check")
             new_add = "根目录";
         int i = 0;
         while (true)
         {
-            qDebug() << "ui->comboBox->currentIndex() " << ui->comboBox->currentIndex();
-            qDebug() << "real_add " << new_add;
+//            qDebug() << "ui->comboBox->currentIndex() " << ui->comboBox->currentIndex();
+//            qDebug() << "real_add " << new_add;
             if (ui->comboBox->currentIndex() == -1)
             {
                 qDebug() << "break";
@@ -134,7 +134,7 @@ void MessageCompose::add_delay()
 {
     int rowCount = ui->tableWidget->rowCount();
     ui->tableWidget->insertRow(rowCount);
-    ui->tableWidget->setItem(rowCount, 0, new QTableWidgetItem(" 延时(s)"));
+    ui->tableWidget->setItem(rowCount, 0, new QTableWidgetItem(" 延时"));
     ui->tableWidget->setItem(rowCount, 1, new QTableWidgetItem(" 60"));
 }
 
@@ -182,8 +182,11 @@ void MessageCompose::done_save()
             QString APDU = ui->tableWidget->item(i, 1)->text();
             if (APDU.replace(" ", "").size() % 2 == 1)
             {
-                QMessageBox::warning(this, "Waring", "APDU长度错误在" + (QString) i + "行");
-                return;
+                if (!describe.contains("延时"))
+                {
+                    QMessageBox::warning(this, "Waring", "APDU长度错误在第" + QString::number(i + 1) + "行");
+                    return;
+                }
             }
         }
         ofstream outfile(path, ios::trunc);

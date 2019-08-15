@@ -1,18 +1,18 @@
 
 ///自定义测试方案
 
-
 #include "Check.h"
 #include <QString>
-#include <ui_Check.h>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
-#include <utility>
 #include <fstream>
+#include <ui_Check.h>
+#include <utility>
 
-Check::Check(QString add, QWidget *parent) :
-        QDialog(parent),
-        ui(new Ui::CheckDialogForm)
+extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
+
+Check::Check(QString add, QWidget *parent)
+        : QDialog(parent), ui(new Ui::CheckDialogForm)
 {
     ui->setupUi(this);
     add_ = std::move(add);
@@ -22,38 +22,70 @@ Check::Check(QString add, QWidget *parent) :
     model->setRootPath("./Data");
     ui->treeView->setModel(model);
     ui->treeView->setRootIndex(model->index("./Data/check"));
-    ui->treeView->header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->treeView->header()->setSectionResizeMode(0,
+                                                 QHeaderView::ResizeToContents);
     connect(ui->pushButton_3, SIGNAL(clicked()), this, SLOT(remove()));
     connect(ui->pushButton_7, SIGNAL(clicked()), this, SLOT(creat_dir()));
     connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(creat_file()));
     connect(ui->treeView, SIGNAL(doubleClicked(
-                                         const QModelIndex)), this, SLOT(doubleclick(
-                                                                                 const QModelIndex)));
+                                         const QModelIndex)), this,
+            SLOT(doubleclick(
+                         const QModelIndex)));
     compose = new MessageCompose();
-    connect(this, SIGNAL(open_signal(QString)), compose, SLOT(open_exist(QString)));
-    connect(ui->pushButton, SIGNAL(clicked(
-    )), this, SLOT(send_archeive()));
+    connect(this, SIGNAL(open_signal(QString)), compose,
+            SLOT(open_exist(QString)));
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(send_archeive()));
+    connect(ui->pushButton_6, SIGNAL(clicked()), this, SLOT(stop()));
 }
 
 void Check::send_archeive()
 {
+    run_flag = true;
     auto index = ui->treeView->currentIndex();
     QFile file(model->filePath(index));
     file.open(QIODevice::ReadOnly | QIODevice::Text);
-
     QFileInfo fileinfo(model->filePath(index));
+    QList<QString> message;
     if (fileinfo.isFile())
     {
         while (!file.atEnd())
         {
+            if (!run_flag)
+            {
+                run_flag = true;
+                QMessageBox::information(this, "提示", "已停止");
+                return;
+            }
+            message.empty();
             QByteArray line = file.readLine();
             QString str(line);
             str.replace("\n", "");
             qDebug() << "str" << str;
+            message = str.split("#");
+            if (message[0].contains("比较"))
+            {
+                emit compare_signal(message[1]);
+                continue;
+            } else
+            {
+                if (message[0].contains("延时"))
+                {
+                    QEventLoop eventloop;
+                    QTimer::singleShot(message[1].toInt() * 1000, &eventloop, SLOT(quit()));
+                    eventloop.exec();
+                } else
+                {
+                    emit send_message({BuildMessage(message[1], add_, "43"), message[0]});
+                    QEventLoop eventloop;
+                    QTimer::singleShot(3000, &eventloop, SLOT(quit()));
+                    eventloop.exec();
+                }
+            }
         }
-
+        QMessageBox::information(this, "提示", "下发完成");
     }
     file.close();
+
 }
 
 void Check::doubleclick(const QModelIndex &index)
@@ -93,7 +125,7 @@ void Check::creat_file()
     compose->show();
 }
 
-
-
-
-
+void Check::stop()
+{
+    run_flag = false;
+}

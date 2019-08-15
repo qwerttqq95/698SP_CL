@@ -16,6 +16,11 @@
   <property name="windowTitle">
    <string>698 Special</string>
   </property>
+     <property name="windowIcon">
+         <iconset resource="cmake-build-debug/logo.qrc">
+             <normaloff>:/main/ooopic_1565853136.ico</normaloff>:/main/ooopic_1565853136.ico
+         </iconset>
+     </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -171,7 +176,7 @@
     </property>
     <widget class="QMenu" name="menu_8">
      <property name="enabled">
-      <bool>false</bool>
+         <bool>true</bool>
      </property>
      <property name="title">
       <string>默认测试方案</string>
@@ -602,6 +607,9 @@
    </property>
   </action>
   <action name="actionSichuan">
+      <property name="enabled">
+          <bool>false</bool>
+      </property>
    <property name="text">
     <string>四川专变默认参数</string>
    </property>
@@ -631,6 +639,8 @@
      </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+    <resources>
+        <include location="cmake-build-debug/logo.qrc"/>
+    </resources>
  <connections/>
 </ui>

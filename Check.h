@@ -25,6 +25,7 @@ Q_OBJECT
 public:
     explicit Check(QString add, QWidget *parent = nullptr);
 
+    bool run_flag;
     QFileSystemModel *model;
     QString add_;
 private:
@@ -43,7 +44,12 @@ public slots:
 
     void send_archeive();
 
+    void stop();
 signals:
+
+    void compare_signal(QString);
+
+    void send_message(QList<QString>);
 
     void open_signal(QString);
 };

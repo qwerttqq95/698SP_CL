@@ -60,6 +60,11 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         connect(act5.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
+    QList<QAction *> act8 = ui->menu_8->actions();
+    for (int i = 0, b = act8.size(); i < b; i++)
+    {
+        connect(act8.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
+    }
     serial->show();
     Communication_parameters();
 }
@@ -103,6 +108,8 @@ void MainWindow::function()
 void MainWindow::custom_test()
 {
     check = new Check(revert_add);
+    connect(check, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
+    connect(check, SIGNAL(compare_signal(QString)), this, SLOT(compare(QString)));
     check->show();
 }
 
@@ -133,6 +140,8 @@ QString MainWindow::analysis(QString a)
     QStringList list = a.split(' ', QString::SkipEmptyParts);
     while (true)
     {
+        if (list.size() < 10)
+            return "";
         if (list[0] == "68")
             break;
         else
@@ -424,7 +433,6 @@ void MainWindow::show_message_receive(QString a)
 
 }
 
-
 void MainWindow::Communication_parameters()
 {
     QMenu *menu_comm;
@@ -508,6 +516,17 @@ void MainWindow::set_ip()
         doc.SaveFile("config.xml");
     }
 
+}
+
+void MainWindow::compare(QString recive)
+{
+    QString last_message = ui->tableWidget->item(current - 1, 1)->text().replace(" ", "");
+    show_message_receive("比对: " + recive);
+    if (last_message.contains(recive.replace(" ", "")))
+    {
+        show_message_receive("比对结果一致");
+    } else
+        show_message_receive("比对结果不一致");
 }
 
 

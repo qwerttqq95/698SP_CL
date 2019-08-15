@@ -10,6 +10,7 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGroupBox>
@@ -116,6 +117,9 @@ public:
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->setEnabled(true);
         MainWindow->resize(670, 509);
+        QIcon icon;
+        icon.addFile(QStringLiteral(":/main/ooopic_1565853136.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         action = new QAction(MainWindow);
         action->setObjectName(QStringLiteral("action"));
         action->setIconText(QStringLiteral("Exit"));
@@ -230,6 +234,7 @@ public:
         action_23->setObjectName(QStringLiteral("action_23"));
         actionSichuan = new QAction(MainWindow);
         actionSichuan->setObjectName(QStringLiteral("actionSichuan"));
+        actionSichuan->setEnabled(false);
         action_24 = new QAction(MainWindow);
         action_24->setObjectName(QStringLiteral("action_24"));
         actiononline = new QAction(MainWindow);
@@ -317,7 +322,7 @@ public:
         menu_2->setEnabled(true);
         menu_8 = new QMenu(menu_2);
         menu_8->setObjectName(QStringLiteral("menu_8"));
-        menu_8->setEnabled(false);
+        menu_8->setEnabled(true);
         menu_6 = new QMenu(menu_2);
         menu_6->setObjectName(QStringLiteral("menu_6"));
         menu_6->setEnabled(false);

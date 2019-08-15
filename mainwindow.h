@@ -71,6 +71,7 @@ public:
 
     void closeEvent(QCloseEvent *event);
 
+
     QString analysis(QString a);
 
     void Communication_parameters();
@@ -159,6 +160,7 @@ public slots:
 
     void custom_test();
 
+    void compare(QString);
     void function();
 
 };
