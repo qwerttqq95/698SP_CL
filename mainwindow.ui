@@ -46,41 +46,101 @@
       <property name="title">
        <string>信息:</string>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>20</y>
-         <width>141</width>
-         <height>24</height>
-        </rect>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>终端地址:</string>
-          </property>
-          <property name="buddy">
-           <cstring>lineEdit</cstring>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit">
-          <property name="text">
-           <string>111111111111</string>
-          </property>
-          <property name="maxLength">
-           <number>12</number>
-          </property>
-          <property name="readOnly">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout">
+                     <item>
+                         <layout class="QHBoxLayout" name="horizontalLayout_2">
+                             <item>
+                                 <widget class="QLabel" name="label">
+                                     <property name="text">
+                                         <string>终端地址:</string>
+                                     </property>
+                                     <property name="buddy">
+                                         <cstring>lineEdit</cstring>
+                                     </property>
+                                 </widget>
+                             </item>
+                             <item>
+                                 <widget class="QLineEdit" name="lineEdit">
+                                     <property name="sizePolicy">
+                                         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                             <horstretch>0</horstretch>
+                                             <verstretch>0</verstretch>
+                                         </sizepolicy>
+                                     </property>
+                                     <property name="minimumSize">
+                                         <size>
+                                             <width>82</width>
+                                             <height>0</height>
+                                         </size>
+                                     </property>
+                                     <property name="maximumSize">
+                                         <size>
+                                             <width>77</width>
+                                             <height>16777215</height>
+                                         </size>
+                                     </property>
+                                     <property name="sizeIncrement">
+                                         <size>
+                                             <width>0</width>
+                                             <height>0</height>
+                                         </size>
+                                     </property>
+                                     <property name="baseSize">
+                                         <size>
+                                             <width>99</width>
+                                             <height>0</height>
+                                         </size>
+                                     </property>
+                                     <property name="layoutDirection">
+                                         <enum>Qt::LeftToRight</enum>
+                                     </property>
+                                     <property name="text">
+                                         <string>111111111111</string>
+                                     </property>
+                                     <property name="maxLength">
+                                         <number>12</number>
+                                     </property>
+                                     <property name="readOnly">
+                                         <bool>false</bool>
+                                     </property>
+                                 </widget>
+                             </item>
+                         </layout>
+                     </item>
+                     <item>
+                         <spacer name="horizontalSpacer">
+                             <property name="orientation">
+                                 <enum>Qt::Horizontal</enum>
+                             </property>
+                             <property name="sizeHint" stdset="0">
+                                 <size>
+                                     <width>40</width>
+                                     <height>20</height>
+                                 </size>
+                             </property>
+                         </spacer>
+                     </item>
+                     <item>
+                         <widget class="QPushButton" name="pushButton">
+                             <property name="sizePolicy">
+                                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                                     <horstretch>0</horstretch>
+                                     <verstretch>0</verstretch>
+                                 </sizepolicy>
+                             </property>
+                             <property name="layoutDirection">
+                                 <enum>Qt::LeftToRight</enum>
+                             </property>
+                             <property name="text">
+                                 <string>清空显示</string>
+                             </property>
+                         </widget>
+                     </item>
+                 </layout>
+             </item>
+         </layout>
      </widget>
     </item>
     <item>
@@ -642,5 +702,22 @@
     <resources>
         <include location="cmake-build-debug/logo.qrc"/>
     </resources>
- <connections/>
+    <connections>
+        <connection>
+            <sender>pushButton</sender>
+            <signal>clicked()</signal>
+            <receiver>tableWidget</receiver>
+            <slot>clear()</slot>
+            <hints>
+                <hint type="sourcelabel">
+                    <x>612</x>
+                    <y>67</y>
+                </hint>
+                <hint type="destinationlabel">
+                    <x>510</x>
+                    <y>195</y>
+                </hint>
+            </hints>
+        </connection>
+    </connections>
 </ui>

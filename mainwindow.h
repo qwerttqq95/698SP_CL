@@ -166,6 +166,8 @@ public slots:
 
     void open_attach();
 
+    void clear_view();
+
 };
 
 #endif // MAINWINDOW_H

@@ -21,6 +21,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -90,10 +92,13 @@ public:
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QGroupBox *groupBox;
-    QWidget *layoutWidget;
+    QHBoxLayout *horizontalLayout_3;
+    QHBoxLayout *horizontalLayout;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label;
     QLineEdit *lineEdit;
+    QSpacerItem *horizontalSpacer;
+    QPushButton *pushButton;
     QTableWidget *tableWidget;
     QMenuBar *menubar;
     QMenu *menuOpen;
@@ -259,25 +264,58 @@ public:
         groupBox->setSizePolicy(sizePolicy);
         groupBox->setMinimumSize(QSize(13, 50));
         groupBox->setBaseSize(QSize(18, 42));
-        layoutWidget = new QWidget(groupBox);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 20, 141, 24));
-        horizontalLayout_2 = new QHBoxLayout(layoutWidget);
+        horizontalLayout_3 = new QHBoxLayout(groupBox);
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(layoutWidget);
+        label = new QLabel(groupBox);
         label->setObjectName(QStringLiteral("label"));
 
         horizontalLayout_2->addWidget(label);
 
-        lineEdit = new QLineEdit(layoutWidget);
+        lineEdit = new QLineEdit(groupBox);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
+        lineEdit->setSizePolicy(sizePolicy1);
+        lineEdit->setMinimumSize(QSize(82, 0));
+        lineEdit->setMaximumSize(QSize(77, 16777215));
+        lineEdit->setSizeIncrement(QSize(0, 0));
+        lineEdit->setBaseSize(QSize(99, 0));
+        lineEdit->setLayoutDirection(Qt::LeftToRight);
         lineEdit->setMaxLength(12);
         lineEdit->setReadOnly(false);
 
         horizontalLayout_2->addWidget(lineEdit);
+
+
+        horizontalLayout->addLayout(horizontalLayout_2);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        pushButton = new QPushButton(groupBox);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy2);
+        pushButton->setLayoutDirection(Qt::LeftToRight);
+
+        horizontalLayout->addWidget(pushButton);
+
+
+        horizontalLayout_3->addLayout(horizontalLayout);
 
 
         verticalLayout->addWidget(groupBox);
@@ -426,6 +464,7 @@ public:
         menu_12->addAction(actionbiaodangan);
 
         retranslateUi(MainWindow);
+        QObject::connect(pushButton, SIGNAL(clicked()), tableWidget, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -497,6 +536,8 @@ public:
         groupBox->setTitle(QApplication::translate("MainWindow", "\344\277\241\346\201\257:", nullptr));
         label->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\345\234\260\345\235\200:", nullptr));
         lineEdit->setText(QApplication::translate("MainWindow", "111111111111", nullptr));
+        pushButton->setText(
+                QApplication::translate("MainWindow", "\346\270\205\347\251\272\346\230\276\347\244\272", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "New Column", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);

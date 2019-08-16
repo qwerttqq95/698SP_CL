@@ -75,6 +75,7 @@ public slots:
 
     void del();
 
+
 private:
     Ui::myMeterArchives *ui;
     AddMeters *addmeter;

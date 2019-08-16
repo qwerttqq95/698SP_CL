@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <QMessageBox>
+#include "QScrollBar"
 
 
 extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
@@ -224,8 +225,11 @@ void MeterArchives::all()
             ui->tableWidget->item(i, 0)->setCheckState(Qt::CheckState::Unchecked);
         }
     }
-    qApp->processEvents();
+    QScrollBar *a = ui->tableWidget->horizontalScrollBar();
+    a->setValue(1);
+
 }
+
 
 void MeterArchives::del()
 {
@@ -533,7 +537,15 @@ bool MeterArchives::GetExcelValue(YExcel::BasicExcelCell *pCell, QString &str)
     QString strTemp;
     str = QString(pCell->GetString());
     str.replace(" ", "");
+    if (str == "")
+    {
+        int num;
+        num = pCell->GetInteger();
+        str = QString::number(num, 10);
+    }
     return true;
 }
+
+
 
 

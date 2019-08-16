@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
+    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(clear_view()));
 
     QAction *attach4520;
     attach4520 = new QAction();
@@ -548,6 +549,13 @@ void MainWindow::open_attach()
     process->setWorkingDirectory(runPath);
     process->start("\"" + path + "\"");
 
+}
+
+void MainWindow::clear_view()
+{
+    while (current--)
+        ui->tableWidget->removeRow(0);
+    current += 1;
 }
 
 
