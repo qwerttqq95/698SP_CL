@@ -34,7 +34,7 @@
       <property name="minimumSize">
        <size>
         <width>13</width>
-        <height>50</height>
+           <height>55</height>
        </size>
       </property>
       <property name="baseSize">
@@ -127,8 +127,32 @@
                              <property name="sizePolicy">
                                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                                      <horstretch>0</horstretch>
-                                     <verstretch>0</verstretch>
+                                     <verstretch>33</verstretch>
                                  </sizepolicy>
+                             </property>
+                             <property name="minimumSize">
+                                 <size>
+                                     <width>0</width>
+                                     <height>20</height>
+                                 </size>
+                             </property>
+                             <property name="maximumSize">
+                                 <size>
+                                     <width>16777215</width>
+                                     <height>16777203</height>
+                                 </size>
+                             </property>
+                             <property name="sizeIncrement">
+                                 <size>
+                                     <width>0</width>
+                                     <height>21</height>
+                                 </size>
+                             </property>
+                             <property name="baseSize">
+                                 <size>
+                                     <width>0</width>
+                                     <height>22</height>
+                                 </size>
                              </property>
                              <property name="layoutDirection">
                                  <enum>Qt::LeftToRight</enum>
@@ -144,63 +168,137 @@
      </widget>
     </item>
     <item>
-        <widget class="QTableWidget" name="tableWidget">
+        <widget class="QSplitter" name="splitter">
             <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-      </property>
+                <enum>QFrame::NoFrame</enum>
+            </property>
             <property name="frameShadow">
                 <enum>QFrame::Sunken</enum>
-      </property>
-            <property name="verticalScrollBarPolicy">
-                <enum>Qt::ScrollBarAsNeeded</enum>
             </property>
-            <property name="horizontalScrollBarPolicy">
-                <enum>Qt::ScrollBarAlwaysOff</enum>
+            <property name="lineWidth">
+                <number>0</number>
             </property>
-            <property name="editTriggers">
-                <set>QAbstractItemView::NoEditTriggers</set>
+            <property name="midLineWidth">
+                <number>0</number>
             </property>
-            <property name="showDropIndicator" stdset="0">
-                <bool>false</bool>
+            <property name="orientation">
+                <enum>Qt::Vertical</enum>
             </property>
-            <property name="alternatingRowColors">
-                <bool>true</bool>
-            </property>
-            <property name="selectionMode">
-                <enum>QAbstractItemView::SingleSelection</enum>
-            </property>
-            <property name="textElideMode">
-                <enum>Qt::ElideLeft</enum>
-            </property>
-            <property name="gridStyle">
-                <enum>Qt::CustomDashLine</enum>
-            </property>
-            <attribute name="horizontalHeaderVisible">
-                <bool>false</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-                <bool>false</bool>
-            </attribute>
-            <column>
-                <property name="text">
-                    <string>New Column</string>
+            <widget class="QFrame" name="frame_2">
+                <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
                 </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>New Column</string>
+                <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
                 </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>New Column</string>
+                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                    <item>
+                        <widget class="QMdiArea" name="mdiArea">
+                            <property name="frameShape">
+                                <enum>QFrame::StyledPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>QFrame::Sunken</enum>
+                            </property>
+                            <property name="background">
+                                <brush brushstyle="NoBrush">
+                                    <color alpha="255">
+                                        <red>160</red>
+                                        <green>160</green>
+                                        <blue>160</blue>
+                                    </color>
+                                </brush>
+                            </property>
+                            <property name="viewMode">
+                                <enum>QMdiArea::SubWindowView</enum>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
+            <widget class="QFrame" name="frame">
+                <property name="frameShape">
+                    <enum>QFrame::Panel</enum>
                 </property>
-            </column>
-            <column>
-                <property name="text">
-                    <string>New Column</string>
+                <property name="frameShadow">
+                    <enum>QFrame::Sunken</enum>
                 </property>
-            </column>
+                <property name="lineWidth">
+                    <number>1</number>
+                </property>
+                <property name="midLineWidth">
+                    <number>0</number>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_4">
+                    <item>
+                        <widget class="QTableWidget" name="tableWidget">
+                            <property name="frameShape">
+                                <enum>QFrame::StyledPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>QFrame::Sunken</enum>
+                            </property>
+                            <property name="verticalScrollBarPolicy">
+                                <enum>Qt::ScrollBarAsNeeded</enum>
+                            </property>
+                            <property name="horizontalScrollBarPolicy">
+                                <enum>Qt::ScrollBarAlwaysOff</enum>
+                            </property>
+                            <property name="editTriggers">
+                                <set>QAbstractItemView::NoEditTriggers</set>
+                            </property>
+                            <property name="showDropIndicator" stdset="0">
+                                <bool>false</bool>
+                            </property>
+                            <property name="alternatingRowColors">
+                                <bool>true</bool>
+                            </property>
+                            <property name="selectionMode">
+                                <enum>QAbstractItemView::SingleSelection</enum>
+                            </property>
+                            <property name="textElideMode">
+                                <enum>Qt::ElideLeft</enum>
+                            </property>
+                            <property name="gridStyle">
+                                <enum>Qt::CustomDashLine</enum>
+                            </property>
+                            <attribute name="horizontalHeaderVisible">
+                                <bool>false</bool>
+                            </attribute>
+                            <attribute name="verticalHeaderVisible">
+                                <bool>false</bool>
+                            </attribute>
+                            <column>
+                                <property name="text">
+                                    <string>New Column</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>New Column</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>New Column</string>
+                                </property>
+                            </column>
+                            <column>
+                                <property name="text">
+                                    <string>New Column</string>
+                                </property>
+                            </column>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="Line" name="line">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </widget>
         </widget>
     </item>
    </layout>

@@ -9,6 +9,7 @@
 #include <QScrollBar>
 #include <QtWidgets/QInputDialog>
 #include "XMLFile/tinyxml2.h"
+#include <QSize>
 
 using namespace std;
 
@@ -39,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(clear_view()));
-
+    setWindowState(Qt::WindowMaximized);
     QAction *attach4520;
     attach4520 = new QAction();
     attach4520->setObjectName(QStringLiteral("Build_4520"));
@@ -103,7 +104,7 @@ void MainWindow::function()
                 serial->send_write({BuildMessage(temp_list[1], revert_add, "43"), temp_list[0]});
                 QEventLoop
                         eventloop;
-                QTimer::singleShot(3000, &eventloop, SLOT(quit()));
+                QTimer::singleShot(1500, &eventloop, SLOT(quit()));
                 eventloop.exec();
             }
             break;
@@ -135,6 +136,8 @@ void MainWindow::open_MeterArchives()
     connect(MeterArchive, SIGNAL(send_write2(QList<QString>)), serial, SLOT(write(QList<QString>)));
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
             show_meter_message(QList<QString>)));
+    ui->mdiArea->windowTitle();
+    ui->mdiArea->addSubWindow(MeterArchive);
     MeterArchive->show();
 }
 

@@ -13,16 +13,19 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMdiArea>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QVBoxLayout>
@@ -99,7 +102,14 @@ public:
     QLineEdit *lineEdit;
     QSpacerItem *horizontalSpacer;
     QPushButton *pushButton;
+    QSplitter *splitter;
+    QFrame *frame_2;
+    QHBoxLayout *horizontalLayout_5;
+    QMdiArea *mdiArea;
+    QFrame *frame;
+    QHBoxLayout *horizontalLayout_4;
     QTableWidget *tableWidget;
+    QFrame *line;
     QMenuBar *menubar;
     QMenu *menuOpen;
     QMenu *menu;
@@ -262,7 +272,7 @@ public:
         sizePolicy.setVerticalStretch(22);
         sizePolicy.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
         groupBox->setSizePolicy(sizePolicy);
-        groupBox->setMinimumSize(QSize(13, 50));
+        groupBox->setMinimumSize(QSize(13, 55));
         groupBox->setBaseSize(QSize(18, 42));
         horizontalLayout_3 = new QHBoxLayout(groupBox);
         horizontalLayout_3->setSpacing(6);
@@ -307,9 +317,13 @@ public:
         pushButton->setObjectName(QStringLiteral("pushButton"));
         QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setVerticalStretch(33);
         sizePolicy2.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
         pushButton->setSizePolicy(sizePolicy2);
+        pushButton->setMinimumSize(QSize(0, 20));
+        pushButton->setMaximumSize(QSize(16777215, 16777203));
+        pushButton->setSizeIncrement(QSize(0, 21));
+        pushButton->setBaseSize(QSize(0, 22));
         pushButton->setLayoutDirection(Qt::LeftToRight);
 
         horizontalLayout->addWidget(pushButton);
@@ -320,7 +334,44 @@ public:
 
         verticalLayout->addWidget(groupBox);
 
-        tableWidget = new QTableWidget(centralwidget);
+        splitter = new QSplitter(centralwidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setFrameShape(QFrame::NoFrame);
+        splitter->setFrameShadow(QFrame::Sunken);
+        splitter->setLineWidth(0);
+        splitter->setMidLineWidth(0);
+        splitter->setOrientation(Qt::Vertical);
+        frame_2 = new QFrame(splitter);
+        frame_2->setObjectName(QStringLiteral("frame_2"));
+        frame_2->setFrameShape(QFrame::StyledPanel);
+        frame_2->setFrameShadow(QFrame::Raised);
+        horizontalLayout_5 = new QHBoxLayout(frame_2);
+        horizontalLayout_5->setSpacing(6);
+        horizontalLayout_5->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        mdiArea = new QMdiArea(frame_2);
+        mdiArea->setObjectName(QStringLiteral("mdiArea"));
+        mdiArea->setFrameShape(QFrame::StyledPanel);
+        mdiArea->setFrameShadow(QFrame::Sunken);
+        QBrush brush(QColor(160, 160, 160, 255));
+        brush.setStyle(Qt::NoBrush);
+        mdiArea->setBackground(brush);
+        mdiArea->setViewMode(QMdiArea::SubWindowView);
+
+        horizontalLayout_5->addWidget(mdiArea);
+
+        splitter->addWidget(frame_2);
+        frame = new QFrame(splitter);
+        frame->setObjectName(QStringLiteral("frame"));
+        frame->setFrameShape(QFrame::Panel);
+        frame->setFrameShadow(QFrame::Sunken);
+        frame->setLineWidth(1);
+        frame->setMidLineWidth(0);
+        horizontalLayout_4 = new QHBoxLayout(frame);
+        horizontalLayout_4->setSpacing(6);
+        horizontalLayout_4->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        tableWidget = new QTableWidget(frame);
         if (tableWidget->columnCount() < 4)
             tableWidget->setColumnCount(4);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
@@ -345,7 +396,18 @@ public:
         tableWidget->horizontalHeader()->setVisible(false);
         tableWidget->verticalHeader()->setVisible(false);
 
-        verticalLayout->addWidget(tableWidget);
+        horizontalLayout_4->addWidget(tableWidget);
+
+        line = new QFrame(frame);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_4->addWidget(line);
+
+        splitter->addWidget(frame);
+
+        verticalLayout->addWidget(splitter);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);

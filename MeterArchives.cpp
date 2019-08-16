@@ -8,7 +8,8 @@
 #include <iostream>
 #include <QMessageBox>
 #include "QScrollBar"
-
+#include <typeinfo.h>
+#include <QtWidgets/QMdiArea>
 
 extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
 
@@ -37,6 +38,7 @@ MeterArchives::MeterArchives(QString add, QWidget *parent) :
     {
         ui->tableWidget->horizontalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
     }
+
 }
 
 void MeterArchives::show_add()
@@ -265,49 +267,61 @@ void MeterArchives::send()
             char a[5];
             sprintf(a, "%04x", n.NUM.toInt(nullptr, 10));
             message = "020412" + (QString) a + "020a550705";
+            qDebug() << "message 1:" << message;
             n.TSA = ui->tableWidget->item(i, 2)->text();
             message.append(n.TSA);
+            qDebug() << "message 2 :" << message;
             n.baud_rate = ui->tableWidget->item(i, 3)->text();
             if (n.baud_rate.length() == 1)
             {
                 n.baud_rate = "0" + n.baud_rate;
             }
             message.append("16" + n.baud_rate);
+            qDebug() << "message 3:" << message;
             n.meter_style = ui->tableWidget->item(i, 4)->text();
             if (n.meter_style.length() == 1)
             {
                 n.meter_style = "0" + n.meter_style;
             }
             message.append("16" + n.meter_style);
+            qDebug() << "message 4:" << message;
             n.port = ui->tableWidget->item(i, 5)->text();
+            qDebug() << "n.port :" << n.port;
             message.append("51" + n.port + "090100");
+            qDebug() << "message 5:" << message;
             n.password = "090100";
             n.fee_count = ui->tableWidget->item(i, 7)->text();
             char b[3];
             sprintf(b, "%02x", n.fee_count.toInt(nullptr, 10));
             message.append("11" + (QString) b);
+            qDebug() << "message 6:" << message;
             n.user_style = ui->tableWidget->item(i, 8)->text();
             char c[3];
             sprintf(c, "%02x", n.user_style.toInt(nullptr, 16));
             message.append("11" + (QString) c);
+            qDebug() << "message 7:" << message;
             n.connect_way = ui->tableWidget->item(i, 9)->text();
             if (n.connect_way.length() == 1)
             {
                 n.connect_way = "0" + n.connect_way;
             }
             message.append("16" + n.connect_way);
+            qDebug() << "message 8:" << message;
             n.Rated_Voltage = ui->tableWidget->item(i, 10)->text();
             char d[5];
             sprintf(d, "%04x", n.Rated_Voltage.toInt(nullptr, 10));
             message.append("12" + (QString) d);
+            qDebug() << "message 9:" << message;
             n.Rated_Electric_current = ui->tableWidget->item(i, 11)->text();
             char e[5];
             sprintf(e, "%04x", n.Rated_Voltage.toInt(nullptr, 10));
             message.append("12" + (QString) e + "0204");
             n.collect_TSA = ui->tableWidget->item(i, 12)->text();
             message.append("550705000000000000");
+            qDebug() << "message 10:" << message;
             n.detail_num = ui->tableWidget->item(i, 13)->text();
             message.append("0900");
+
             n.PT = ui->tableWidget->item(i, 14)->text();
             char g[5];
             sprintf(g, "%04x", n.PT.toInt(nullptr, 10));
@@ -317,6 +331,7 @@ void MeterArchives::send()
             sprintf(j, "%04x", n.CT.toInt(nullptr, 10));
             message.append("12" + (QString) j + "0100");
             text.append(message);
+            qDebug() << "message 11:" << message;
         }
     }
     if (text.length() == 1)
@@ -344,7 +359,7 @@ void MeterArchives::send()
             emit send_write2({BuildMessage(send_message, add_, "43"), ""});
             send_message = "";
             QEventLoop eventloop;
-            QTimer::singleShot(3500, &eventloop, SLOT(quit()));
+            QTimer::singleShot(2700, &eventloop, SLOT(quit()));
             eventloop.exec();
         }
     }
@@ -484,6 +499,37 @@ void MeterArchives::input()
 
         pCell = pSheet->Cell(nRow, nCol++);
         GetExcelValue(pCell, pArch->port);
+        if (pArch->port.size() < 4)
+        {
+            int num = pArch->port.toInt();
+            switch (num)
+            {
+                case 0:
+                {
+                    pArch->port = "F2080201";
+                }
+                    break;
+                case 1:
+                {
+                    pArch->port = "F2010201";
+                }
+                    break;
+                case 2:
+                {
+                    pArch->port = "F2010202";
+                }
+                    break;
+                case 3:
+                {
+                    pArch->port = "F2090201";
+                }
+                    break;
+                default:
+                    pArch->port = "F2010201";
+
+            }
+        }
+
         li.append(pArch->port);
 
         pCell = pSheet->Cell(nRow, nCol++);
