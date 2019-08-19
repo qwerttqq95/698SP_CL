@@ -11,11 +11,12 @@
 
 extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
 
-Check::Check(QString add, QWidget *parent)
+extern QString re_rever_add();
+
+Check::Check(QWidget *parent)
         : QDialog(parent), ui(new Ui::CheckDialogForm)
 {
     ui->setupUi(this);
-    add_ = std::move(add);
     model = new QFileSystemModel(this);
     model->setReadOnly(true);
     model->sort(0, Qt::AscendingOrder);
@@ -75,7 +76,8 @@ void Check::send_archeive()
                     eventloop.exec();
                 } else
                 {
-                    emit send_message({BuildMessage(message[1], add_, "43"), message[0]});
+                    QString add = re_rever_add();
+                    emit send_message({BuildMessage(message[1], add, "43"), message[0]});
                     QEventLoop eventloop;
                     QTimer::singleShot(3000, &eventloop, SLOT(quit()));
                     eventloop.exec();
@@ -85,8 +87,8 @@ void Check::send_archeive()
         QMessageBox::information(this, "提示", "下发完成");
     }
     file.close();
-
 }
+
 
 void Check::doubleclick(const QModelIndex &index)
 {
@@ -111,10 +113,12 @@ void Check::creat_dir()
 {
     model->setReadOnly(false);
     QModelIndex index_creat_dir = ui->treeView->currentIndex();
-    if (!model->mkdir(index_creat_dir, "new").isValid())
+    QString text = QInputDialog::getText(this, "新建文件夹", "文件名:");
+
+    if (!model->mkdir(index_creat_dir, text).isValid())
     {
         index_creat_dir = ui->treeView->rootIndex();
-        model->mkdir(index_creat_dir, "new");
+        model->mkdir(index_creat_dir, text);
     }
     model->setReadOnly(true);
 }

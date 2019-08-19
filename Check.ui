@@ -7,7 +7,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>739</width>
-                <height>449</height>
+                <height>466</height>
             </rect>
         </property>
         <property name="windowTitle">
@@ -23,13 +23,6 @@
                         <number>250</number>
                     </property>
                     <item>
-                        <widget class="QPushButton" name="pushButton_5">
-                            <property name="text">
-                                <string>刷新</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
                         <widget class="QPushButton" name="pushButton_7">
                             <property name="text">
                                 <string>新建文件夹</string>
@@ -40,13 +33,6 @@
                         <widget class="QPushButton" name="pushButton_2">
                             <property name="text">
                                 <string>新建方案</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_4">
-                            <property name="text">
-                                <string>查看选中方案</string>
                             </property>
                         </widget>
                     </item>

@@ -1,29 +1,26 @@
-//
-// Created by admin on 5/7/2019.
-//
 #include "MeterArchives.h"
 #include <ui_MeterArchives.h>
 #include <thread>
 #include <string>
-#include <iostream>
 #include <QMessageBox>
 #include "QScrollBar"
 #include <typeinfo.h>
-#include <QtWidgets/QMdiArea>
+#include <XMLFile/tinyxml2.h>
+
 
 extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
 
 extern VALUE_LEFT Data_deal(QList<QString> a);
 
-MeterArchives::MeterArchives(QString add, QWidget *parent) :
+extern QString re_rever_add();
+
+MeterArchives::MeterArchives(QWidget *parent) :
         QDialog(parent),
         ui(new Ui::myMeterArchives)
 {
     ui->setupUi(this);
     addmeter = new AddMeters();
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(show_add()));
-    add_ = std::move(add);
-//    setWindowFlags(Qt::MSWindowsFixedSizeDialogHint);
     connect(ui->pushButton_5, SIGNAL(clicked()), this, SLOT(clearlist()));
     connect(ui->pushButton_5, SIGNAL(clicked()), this, SLOT(Get_6000200()));
     connect(ui->pushButton_6, SIGNAL(clicked()), this, SLOT(clearlist()));
@@ -50,17 +47,19 @@ void MeterArchives::Get_6000200()
 {
     QString
             text = "0501006000020000";
+    QString add = re_rever_add();
     QString
-            re_message = BuildMessage(text, add_, "43");
+            re_message = BuildMessage(text, add, "43");
     emit send_write({re_message, "查询表档案"});
 }
 
 void MeterArchives::clear_6000200()
 {
+    QString add = re_rever_add();
     QString
             text = "070101600086000000";
     QString
-            re_message = BuildMessage(text, add_, "43");
+            re_message = BuildMessage(text, add, "43");
     emit send_write({re_message, "清空表档案"});
 }
 
@@ -334,12 +333,14 @@ void MeterArchives::send()
             qDebug() << "message 11:" << message;
         }
     }
+
+    QString add = re_rever_add();
     if (text.length() == 1)
     {
         QString
                 send_message = "07010060007f00" + text.takeFirst() + "00";
 //        qDebug()<<"send_message"<<send_message;
-        emit send_write2({BuildMessage(send_message, add_, "43"), ""});
+        emit send_write({BuildMessage(send_message, add, "43"), ""});//2
 
     } else
     {
@@ -356,12 +357,13 @@ void MeterArchives::send()
             char qw[3];
             sprintf(qw, "%02x", j - 1);
             send_message = "0701006000800001" + (QString) qw + send_message + "00";
-            emit send_write2({BuildMessage(send_message, add_, "43"), ""});
+            emit send_write({BuildMessage(send_message, add, "43"), ""});//2
             send_message = "";
             QEventLoop eventloop;
-            QTimer::singleShot(2700, &eventloop, SLOT(quit()));
+            QTimer::singleShot(3500, &eventloop, SLOT(quit()));
             eventloop.exec();
         }
+        QMessageBox::information(this, "提示", "批量下发完成");
     }
 }
 

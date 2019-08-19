@@ -21,7 +21,7 @@ class MeterArchives : public QDialog
 {
 Q_OBJECT
 public:
-    explicit MeterArchives(QString add, QWidget *parent = nullptr);
+    explicit MeterArchives(QWidget *parent = nullptr);
 
     bool GetExcelValue(YExcel::BasicExcelCell *pCell, QString &str);
 
@@ -47,7 +47,6 @@ public:
 
     } Archives_Configuration_Table;
 
-    QString add_;
     int row_count = 0;
 public slots:
 
@@ -83,8 +82,6 @@ private:
 signals:
 
     void send_write(QList<QString>);
-
-    void send_write2(QList<QString>);
 
 };
 

@@ -23,7 +23,7 @@ class Check : public QDialog
 {
 Q_OBJECT
 public:
-    explicit Check(QString add, QWidget *parent = nullptr);
+    explicit Check(QWidget *parent = nullptr);
 
     bool run_flag;
     QFileSystemModel *model;

@@ -168,6 +168,8 @@ public slots:
 
     void clear_view();
 
+    void add_change_event(QString);
+
 };
 
 #endif // MAINWINDOW_H

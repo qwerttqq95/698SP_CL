@@ -4,15 +4,16 @@
 #include <QDialog>
 #include <QDebug>
 
-namespace Ui {
+namespace Ui
+{
     class myDialog;
 }
-class Custom_APDU : public QDialog {
+class Custom_APDU : public QDialog
+{
 Q_OBJECT
 public:
-    explicit Custom_APDU(QString add, QWidget *parent = nullptr);
+    explicit Custom_APDU(QWidget *parent = nullptr);
 
-    QString add_;
 
 public slots:
 

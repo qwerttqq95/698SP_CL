@@ -10,6 +10,7 @@
 #include <QtWidgets/QInputDialog>
 #include "XMLFile/tinyxml2.h"
 #include <QSize>
+#include "QMdiSubWindow"
 
 using namespace std;
 
@@ -47,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     attach4520->setText("Build_4520");
     ui->menu_4->addAction(attach4520);
     connect(attach4520, SIGNAL(triggered()), this, SLOT(open_attach()));
-
+    Custom = new Custom_APDU();
 
     QAction *shijian_init;
     shijian_init = new QAction();
@@ -77,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
     }
     serial->show();
     Communication_parameters();
+    connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(add_change_event(QString)));
 }
 
 void MainWindow::function()
@@ -117,7 +119,7 @@ void MainWindow::function()
 
 void MainWindow::custom_test()
 {
-    check = new Check(revert_add);
+    check = new Check();
     connect(check, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
     connect(check, SIGNAL(compare_signal(QString)), this, SLOT(compare(QString)));
     check->show();
@@ -130,15 +132,15 @@ void MainWindow::move_Cursor()
 
 void MainWindow::open_MeterArchives()
 {
-    MeterArchive = new MeterArchives(revert_add);
+    MeterArchive = new MeterArchives();
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
-    connect(MeterArchive, SIGNAL(send_write2(QList<QString>)), serial, SLOT(write(QList<QString>)));
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
             show_meter_message(QList<QString>)));
-    ui->mdiArea->windowTitle();
     ui->mdiArea->addSubWindow(MeterArchive);
     MeterArchive->show();
+    QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
+    p->widget()->showMaximized();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -174,8 +176,18 @@ QString MainWindow::analysis(QString a)
     {
         revert_add = revert_add + list[5 + i];
     }
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile("config.xml");
+    tinyxml2::XMLElement *root = doc.RootElement();
+    tinyxml2::XMLElement *first_child1 = root->FirstChildElement("add");
+    const char *content2 = add.toLocal8Bit();
+    first_child1->SetText(content2);
+
+    tinyxml2::XMLElement *first_child = root->FirstChildElement("revert_add");
+    const char *content = revert_add.toLocal8Bit();
+    first_child->SetText(content);
+    doc.SaveFile("config.xml");
     int apdu_0 = 9 + SA_len;
-//    qDebug() << "cheshi" << list[apdu_0].toInt(nullptr, 16) << endl << list[apdu_0 + 1].toInt(nullptr, 16);
     switch (list[apdu_0].toInt(nullptr, 16))
     {
         case 0x01:
@@ -400,7 +412,7 @@ void MainWindow::serial_config()
 
 void MainWindow::custom()
 {
-    Custom = new Custom_APDU(revert_add);
+
     connect(Custom, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
     Custom->show();
 }
@@ -559,6 +571,34 @@ void MainWindow::clear_view()
     while (current--)
         ui->tableWidget->removeRow(0);
     current += 1;
+}
+
+void MainWindow::add_change_event(QString a)
+{
+    if (a.size() == 12)
+    {
+        tinyxml2::XMLDocument doc;
+        doc.LoadFile("config.xml");
+        tinyxml2::XMLElement *root = doc.RootElement();
+        tinyxml2::XMLElement *first_child1 = root->FirstChildElement("add");
+        const char *content2 = a.toLocal8Bit();
+        first_child1->SetText(content2);
+
+        a = StringAddSpace(a);
+        QString re_add = "";
+        QList<QString> b = a.split(" ", QString::SplitBehavior::SkipEmptyParts);
+        for (int i = 0; i < b.size(); i++)
+        {
+            re_add = b[i] + re_add;
+        }
+        tinyxml2::XMLElement *first_child2 = root->FirstChildElement("revert_add");
+        qDebug() << "a.size()" << re_add;
+        const char *content3 = re_add.toLocal8Bit();
+        first_child2->SetText(content3);
+        doc.SaveFile("config.xml");
+    } else
+        qDebug() << a.size();
+
 }
 
 

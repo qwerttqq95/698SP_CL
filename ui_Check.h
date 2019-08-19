@@ -20,16 +20,14 @@
 
 QT_BEGIN_NAMESPACE
 
-class CheckDialogUi_Form
+class CheckDialogFormUi_Form
 {
 public:
     QHBoxLayout *horizontalLayout;
     QTreeView *treeView;
     QVBoxLayout *verticalLayout;
-    QPushButton *pushButton_5;
     QPushButton *pushButton_7;
     QPushButton *pushButton_2;
-    QPushButton *pushButton_4;
     QPushButton *pushButton_3;
     QPushButton *pushButton;
     QPushButton *pushButton_6;
@@ -38,7 +36,7 @@ public:
     {
         if (Form->objectName().isEmpty())
             Form->setObjectName(QStringLiteral("Form"));
-        Form->resize(739, 449);
+        Form->resize(739, 466);
         horizontalLayout = new QHBoxLayout(Form);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         treeView = new QTreeView(Form);
@@ -49,11 +47,6 @@ public:
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(-1, -1, -1, 250);
-        pushButton_5 = new QPushButton(Form);
-        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
-
-        verticalLayout->addWidget(pushButton_5);
-
         pushButton_7 = new QPushButton(Form);
         pushButton_7->setObjectName(QStringLiteral("pushButton_7"));
 
@@ -63,11 +56,6 @@ public:
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
 
         verticalLayout->addWidget(pushButton_2);
-
-        pushButton_4 = new QPushButton(Form);
-        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
-
-        verticalLayout->addWidget(pushButton_4);
 
         pushButton_3 = new QPushButton(Form);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
@@ -98,15 +86,11 @@ public:
         Form->setWindowTitle(QApplication::translate("Form",
                                                      "\350\207\252\345\256\232\344\271\211\346\265\213\350\257\225\346\226\271\346\241\210",
                                                      nullptr));
-        pushButton_5->setText(QApplication::translate("Form", "\345\210\267\346\226\260", nullptr));
         pushButton_7->setText(
                 QApplication::translate("Form", "\346\226\260\345\273\272\346\226\207\344\273\266\345\244\271",
                                         nullptr));
         pushButton_2->setText(
-                QApplication::translate("Form", "\346\267\273\345\212\240\346\226\271\346\241\210", nullptr));
-        pushButton_4->setText(QApplication::translate("Form",
-                                                      "\346\237\245\347\234\213\351\200\211\344\270\255\346\226\271\346\241\210",
-                                                      nullptr));
+                QApplication::translate("Form", "\346\226\260\345\273\272\346\226\271\346\241\210", nullptr));
         pushButton_3->setText(QApplication::translate("Form",
                                                       "\345\210\240\351\231\244\351\200\211\344\270\255\346\226\271\346\241\210",
                                                       nullptr));
@@ -121,7 +105,7 @@ public:
 
 namespace Ui
 {
-    class CheckDialogForm : public CheckDialogUi_Form
+    class CheckDialogForm : public CheckDialogFormUi_Form
     {
     };
 } // namespace Ui

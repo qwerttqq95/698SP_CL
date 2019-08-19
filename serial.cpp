@@ -5,7 +5,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QList>
 #include <QDebug>
-
+#include "XMLFile/tinyxml2.h"
 using namespace std;
 #pragma comment (lib, "ws2_32")
 #pragma comment (lib, "winmm")

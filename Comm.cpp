@@ -7,6 +7,7 @@
 #include <mainwindow.h>
 #include <windows.h>
 #include<vector>
+#include <XMLFile/tinyxml2.h>
 #include "io.h"
 
 #define PPPINITFCS16 0xffff
@@ -400,4 +401,16 @@ QString return_current_time()
     strftime(tmp, sizeof(tmp), "%Y%m%d%H%M%S00", localtime(&timep));
     QString x = tmp;
 
+}
+
+QString re_rever_add()
+{
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile("config.xml");
+    tinyxml2::XMLElement *root = doc.RootElement();
+    tinyxml2::XMLElement *first_child = root->FirstChildElement("revert_add");
+    const char *content;
+    content = first_child->GetText();
+    QString add = QString::fromLocal8Bit(content);
+    return add;
 }
