@@ -41,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(clear_view()));
+    connect(ui->actionC, SIGNAL(triggered()), this, SLOT(op_analy()));
     setWindowState(Qt::WindowMaximized);
     QAction *attach4520;
     attach4520 = new QAction();
@@ -49,7 +50,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menu_4->addAction(attach4520);
     connect(attach4520, SIGNAL(triggered()), this, SLOT(open_attach()));
     Custom = new Custom_APDU();
+    ui->mdiArea->addSubWindow(Custom, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
 
+    connect(Custom, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
+
+    MeterArchive = new MeterArchives();
+    ui->mdiArea->addSubWindow(MeterArchive, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+    connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
+            Qt::UniqueConnection);
+    connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
+            show_meter_message(QList<QString>)));
+    QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
+    for (int j = 0; j < p.size(); j++)
+    {
+        p[j]->widget()->showMinimized();
+    }
     QAction *shijian_init;
     shijian_init = new QAction();
     shijian_init->setObjectName(QStringLiteral("shijian_init"));
@@ -79,6 +94,9 @@ MainWindow::MainWindow(QWidget *parent) :
     serial->show();
     Communication_parameters();
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(add_change_event(QString)));
+    connect(ui->tableWidget, SIGNAL(doubleClicked(
+                                            const QModelIndex)), this, SLOT(double_click_analysis(
+                                                                                    const QModelIndex)));
 }
 
 void MainWindow::function()
@@ -132,15 +150,14 @@ void MainWindow::move_Cursor()
 
 void MainWindow::open_MeterArchives()
 {
-    MeterArchive = new MeterArchives();
-    connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
-            Qt::UniqueConnection);
-    connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
-            show_meter_message(QList<QString>)));
-    ui->mdiArea->addSubWindow(MeterArchive);
+
+
     MeterArchive->show();
     QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
     p->widget()->showMaximized();
+//    QList<QMdiSubWindow *> qw = ui->mdiArea->subWindowList();
+
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -413,8 +430,8 @@ void MainWindow::serial_config()
 void MainWindow::custom()
 {
 
-    connect(Custom, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
     Custom->show();
+
 }
 
 void MainWindow::show_message_send(QList<QString> a)
@@ -592,13 +609,25 @@ void MainWindow::add_change_event(QString a)
             re_add = b[i] + re_add;
         }
         tinyxml2::XMLElement *first_child2 = root->FirstChildElement("revert_add");
-        qDebug() << "a.size()" << re_add;
+//        qDebug() << "a.size()" << re_add;
         const char *content3 = re_add.toLocal8Bit();
         first_child2->SetText(content3);
         doc.SaveFile("config.xml");
-    } else
-        qDebug() << a.size();
+    }
+}
 
+void MainWindow::double_click_analysis(const QModelIndex &index)
+{
+    auto m = index.row();
+    auto message = index.sibling(m, 1).data().toString();
+    analy = new Analysis(message);
+    analy->show();
+}
+
+void MainWindow::op_analy()
+{
+    analy = new Analysis();
+    analy->show();
 }
 
 

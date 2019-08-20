@@ -15,8 +15,15 @@ Q_OBJECT
 public:
     explicit Analysis(QString message = "", QWidget *parent = nullptr);
 
+    QString text;
+
+
 private:
     Ui::AnalysisDialog *ui;
+
+public slots:
+
+    void removehead();
 };
 
 

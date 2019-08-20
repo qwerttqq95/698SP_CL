@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include "serial.h"
 #include "MeterArchives.h"
+#include "Analysis.h"
 #include <QList>
 #include <QDebug>
 #include <QString>
@@ -131,6 +132,7 @@ private:
     Custom_APDU *Custom;
     MeterArchives *MeterArchive;
     Check *check;
+    Analysis *analy;
 
 signals:
 
@@ -169,6 +171,10 @@ public slots:
     void clear_view();
 
     void add_change_event(QString);
+
+    void double_click_analysis(const QModelIndex &index);
+
+    void op_analy();
 
 };
 
