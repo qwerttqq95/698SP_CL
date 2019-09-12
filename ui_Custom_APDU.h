@@ -12,65 +12,75 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTextEdit>
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
 
-class myDialogUi_Dialog2
+class myDialogUi_Dialog
 {
 public:
-    QTextEdit *textEdit;
+    QVBoxLayout *verticalLayout;
     QLabel *label;
-    QWidget *layoutWidget;
+    QTextEdit *textEdit;
     QHBoxLayout *horizontalLayout;
+    QSpacerItem *horizontalSpacer;
     QPushButton *pushButton;
-    QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *Dialog)
     {
         if (Dialog->objectName().isEmpty())
             Dialog->setObjectName(QStringLiteral("Dialog"));
         Dialog->resize(663, 381);
-        textEdit = new QTextEdit(Dialog);
-        textEdit->setObjectName(QStringLiteral("textEdit"));
-        textEdit->setGeometry(QRect(20, 30, 621, 301));
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(textEdit->sizePolicy().hasHeightForWidth());
-        textEdit->setSizePolicy(sizePolicy);
-        textEdit->setAutoFillBackground(true);
-        textEdit->setAcceptRichText(false);
+        verticalLayout = new QVBoxLayout(Dialog);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label = new QLabel(Dialog);
         label->setObjectName(QStringLiteral("label"));
-        label->setGeometry(QRect(20, 16, 54, 12));
-        layoutWidget = new QWidget(Dialog);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(470, 340, 158, 25));
-        horizontalLayout = new QHBoxLayout(layoutWidget);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
+        label->setSizePolicy(sizePolicy);
+
+        verticalLayout->addWidget(label);
+
+        textEdit = new QTextEdit(Dialog);
+        textEdit->setObjectName(QStringLiteral("textEdit"));
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(textEdit->sizePolicy().hasHeightForWidth());
+        textEdit->setSizePolicy(sizePolicy1);
+        textEdit->setAutoFillBackground(true);
+        textEdit->setAcceptRichText(false);
+
+        verticalLayout->addWidget(textEdit);
+
+        horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        pushButton = new QPushButton(layoutWidget);
+        horizontalSpacer = new QSpacerItem(1300, 20, QSizePolicy::Preferred, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        pushButton = new QPushButton(Dialog);
         pushButton->setObjectName(QStringLiteral("pushButton"));
+        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy2);
 
         horizontalLayout->addWidget(pushButton);
 
-        buttonBox = new QDialogButtonBox(layoutWidget);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel);
-        buttonBox->setCenterButtons(false);
 
-        horizontalLayout->addWidget(buttonBox);
+        verticalLayout->addLayout(horizontalLayout);
 
 
         retranslateUi(Dialog);
-        QObject::connect(buttonBox, SIGNAL(clicked(QAbstractButton * )), Dialog, SLOT(close()));
 
         QMetaObject::connectSlotsByName(Dialog);
     } // setupUi
@@ -87,7 +97,7 @@ public:
 };
 
 namespace Ui {
-    class myDialog : public myDialogUi_Dialog2
+    class myDialog : public myDialogUi_Dialog
     {
     };
 } // namespace Ui

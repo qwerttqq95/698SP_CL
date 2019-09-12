@@ -12,6 +12,7 @@
 #include <time.h>
 #include <fstream>
 #include <Check.h>
+#include "QMdiSubWindow"
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -67,6 +68,8 @@ Q_OBJECT
 public:
     int current = 0;
     int times = 0;
+    QMdiSubWindow *Custom_point;
+    QMdiSubWindow *MeterArchive_point;
 
     explicit MainWindow(QWidget *parent = nullptr);
 

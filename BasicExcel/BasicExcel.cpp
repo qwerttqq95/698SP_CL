@@ -4847,7 +4847,6 @@ namespace YExcel
         {
             workbook_ = Workbook();
             worksheets_.clear();
-
             vector<char> data;
             file_.ReadFile("Workbook", data);
             Read(&*(data.begin()), data.size());

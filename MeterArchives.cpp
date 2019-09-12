@@ -6,6 +6,7 @@
 #include "QScrollBar"
 #include <typeinfo.h>
 #include <XMLFile/tinyxml2.h>
+#include <stringapiset.h>
 
 
 extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
@@ -13,6 +14,22 @@ extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
 extern VALUE_LEFT Data_deal(QList<QString> a);
 
 extern QString re_rever_add();
+
+
+char *UTF8ToUnicode(char *szUTF8)
+{
+    int wcscLen = ::MultiByteToWideChar(CP_UTF8, NULL, szUTF8, strlen(szUTF8), NULL, 0);//得到所需空间的大小
+    wchar_t *wszcString = new wchar_t[wcscLen + 1];//给'\0'分配空间
+    ::MultiByteToWideChar(CP_UTF8, NULL, szUTF8, strlen(szUTF8), wszcString, wcscLen);   //转换
+    wszcString[wcscLen] = '\0';
+    char *m_char;
+    int len = WideCharToMultiByte(CP_ACP, 0, wszcString, wcslen(wszcString), NULL, 0, NULL, NULL);
+    m_char = new char[len + 1];
+    WideCharToMultiByte(CP_ACP, 0, wszcString, wcslen(wszcString), m_char, len, NULL, NULL);
+    m_char[len] = '\0';
+    return m_char;
+}
+
 
 MeterArchives::MeterArchives(QWidget *parent) :
         QDialog(parent),
@@ -463,12 +480,16 @@ void MeterArchives::output()
 void MeterArchives::input()
 {
     QString
-            filename = QFileDialog::getOpenFileName(nullptr, "open", ".", "*.*");
+            filename = QFileDialog::getOpenFileName(nullptr, "open", ".", "*.xls");
     YExcel::BasicExcel excelTermInfo;
-    if (!excelTermInfo.Load(filename.toStdString().c_str()))
+    const wchar_t *wstr = reinterpret_cast<const wchar_t *>(filename.utf16());
+    if (!excelTermInfo.Load(wstr))
     {
+        qDebug() << "dont know chinese? " << filename.toStdString().c_str();
+        qDebug() << wstr;
         return;
     }
+
 
     clearlist();
     YExcel::BasicExcelWorksheet *pSheet = excelTermInfo.GetWorksheet((size_t) 0);

@@ -10,7 +10,7 @@
 #include <QtWidgets/QInputDialog>
 #include "XMLFile/tinyxml2.h"
 #include <QSize>
-#include "QMdiSubWindow"
+
 
 using namespace std;
 
@@ -50,12 +50,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menu_4->addAction(attach4520);
     connect(attach4520, SIGNAL(triggered()), this, SLOT(open_attach()));
     Custom = new Custom_APDU();
-    ui->mdiArea->addSubWindow(Custom, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+    Custom_point = ui->mdiArea->addSubWindow(Custom, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
 
     connect(Custom, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
 
     MeterArchive = new MeterArchives();
-    ui->mdiArea->addSubWindow(MeterArchive, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+    MeterArchive_point = ui->mdiArea->addSubWindow(MeterArchive,
+                                                   Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
@@ -150,14 +151,9 @@ void MainWindow::move_Cursor()
 
 void MainWindow::open_MeterArchives()
 {
-
-
-    MeterArchive->show();
+    ui->mdiArea->setActiveSubWindow(MeterArchive_point);
     QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
     p->widget()->showMaximized();
-//    QList<QMdiSubWindow *> qw = ui->mdiArea->subWindowList();
-
-
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -429,9 +425,11 @@ void MainWindow::serial_config()
 
 void MainWindow::custom()
 {
-
-    Custom->show();
-
+//    Custom->show();
+//    Custom->activateWindow();
+    ui->mdiArea->setActiveSubWindow(Custom_point);
+    QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
+    p->widget()->showMaximized();
 }
 
 void MainWindow::show_message_send(QList<QString> a)
