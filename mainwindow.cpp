@@ -31,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle("698SP V1.0");
+    setWindowTitle("698SP V1.1");
     connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config()));
     connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
@@ -174,8 +174,8 @@ QString MainWindow::analysis(QString a)
         else
             list.removeFirst();
     }
-    int message_len = (list[2] + list[1]).toInt(nullptr, 16);  //报文长度
-    int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
+//    int message_len = (list[2] + list[1]).toInt(nullptr, 16);  //报文长度
+//    int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
     int SA_len = list[4].toInt(nullptr, 16) & 0xF;
     QString
             add = "";

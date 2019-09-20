@@ -5,11 +5,10 @@
 #include <QtWidgets/QMessageBox>
 #include <QList>
 #include <QDebug>
-#include "XMLFile/tinyxml2.h"
+
 using namespace std;
 #pragma comment (lib, "ws2_32")
 #pragma comment (lib, "winmm")
-#define NAME_LEN 500
 
 extern int Stringlist2Hex_char(QString &str, char *pOut);
 
@@ -34,10 +33,17 @@ Serial::Serial(QWidget *parent) :
     connect(this, SIGNAL(send_write(QList<QString>)), this, SLOT(write(QList<QString>)));
     QList<QString> PortList;
     PortList = getEnableCommPort(PortList);
-    for (int i = 0; i < PortList.size(); i++)
+    for (const auto &i : PortList)
     {
-        ui->comboBox->addItem(PortList[i]);
+        ui->comboBox->addItem(i);
     }
+    doc.LoadFile("config.xml");
+    root = doc.RootElement();
+    tinyxml2::XMLElement *first_child1 = root->FirstChildElement("port");
+    const char *port;
+    port = first_child1->GetText();
+    QString COM = (QString) port;
+    ui->lineEdit->setText(COM);
 }
 
 void Serial::creat_process()
@@ -48,10 +54,10 @@ void Serial::creat_process()
         {
             run_flag = true;
             ui->pushButton->setText("关闭");
-            ui->comboBox->setDisabled(1);
-            ui->comboBox_2->setDisabled(1);
-            ui->lineEdit->setDisabled(1);
-            ui->radioButton_2->setDisabled(1);
+            ui->comboBox->setDisabled(true);
+            ui->comboBox_2->setDisabled(true);
+            ui->lineEdit->setDisabled(true);
+            ui->radioButton_2->setDisabled(true);
             QString str = ui->comboBox->currentText();
             char *ch;
             QByteArray ba = str.toLatin1();
@@ -60,20 +66,25 @@ void Serial::creat_process()
             std::thread t1(&Serial::open_serial, this, s1);
             t1.detach();
             close();
-            internet_or_serial = 1;
+            internet_or_serial = true;
         } else
         {
             ui->pushButton->setText("打开");
-            ui->comboBox->setDisabled(0);
-            ui->comboBox_2->setDisabled(0);
+            ui->comboBox->setDisabled(false);
+            ui->comboBox_2->setDisabled(false);
 
-            ui->lineEdit->setDisabled(0);
-            ui->radioButton_2->setDisabled(0);
+            ui->lineEdit->setDisabled(false);
+            ui->radioButton_2->setDisabled(false);
             CloseSerial();
         }
 
     } else //以太网
     {
+        qDebug()<<"eth";
+        tinyxml2::XMLElement *first_child1 = root->FirstChildElement("port");
+        int com = ui->lineEdit->text().toInt();
+        first_child1->SetText(com);
+        doc.SaveFile("config.xml");
         if (ui->pushButton->text() == "打开")
         {
             run_flag = true;
@@ -81,27 +92,27 @@ void Serial::creat_process()
             std::thread t2(&Serial::build_net, this, ui->lineEdit->text().toInt());
             t2.detach();
             close();
-            internet_or_serial = 0;
-            ui->comboBox->setDisabled(1);
-            ui->comboBox_2->setDisabled(1);
-            ui->lineEdit->setDisabled(1);
-            ui->radioButton->setDisabled(1);
+            internet_or_serial = false;
+            ui->comboBox->setDisabled(true);
+            ui->comboBox_2->setDisabled(true);
+            ui->lineEdit->setDisabled(true);
+            ui->radioButton->setDisabled(true);
 
         } else
         {
             ui->pushButton->setText("打开");
-            ui->comboBox->setDisabled(0);
-            ui->comboBox_2->setDisabled(0);
-            ui->lineEdit->setDisabled(0);
-            ui->radioButton_2->setDisabled(0);
-            ui->radioButton->setDisabled(0);
+            ui->comboBox->setDisabled(false);
+            ui->comboBox_2->setDisabled(false);
+            ui->lineEdit->setDisabled(false);
+            ui->radioButton_2->setDisabled(false);
+            ui->radioButton->setDisabled(false);
             CloseSerial();
         }
     }
 }
 
 
-bool Serial::open_serial(std::basic_string<TCHAR> s1)
+bool Serial::open_serial(const std::basic_string<TCHAR> &s1)
 {
     char str[1000] = {0};
     DWORD wCount;//读取的字节数
@@ -112,10 +123,10 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1)
     hCom = CreateFile(a3,
                       GENERIC_READ | GENERIC_WRITE, //允许读和写
                       0, //独占方式
-                      NULL,
+                      nullptr,
                       OPEN_EXISTING, //打开而不是创建
                       0, //同步方式
-                      NULL);
+                      nullptr);
     SetupComm(hCom, 1024, 1024); //输入缓冲区和输出缓冲区的大小都是1024
     if (hCom == (HANDLE) -1)
     {
@@ -143,7 +154,7 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1)
     emit send_write({add, ""});
     PurgeComm(hCom, PURGE_TXABORT |
                     PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
-    string temp1 = "";
+    string temp1;
     int times = 0;
     while (run_flag)
     {
@@ -154,18 +165,18 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1)
             return FALSE;
         } else
         {
-            string output = "";
+            string output;
             char temp[10] = {0};
             for (int i = 0; i < wCount; i++)
             {
                 sprintf(temp, "%02X ", (BYTE) str[i]);
                 output = output + temp;
             }
-            if (output == "")
+            if (output.empty())
             {
                 continue;
             }
-            if (temp1 != "")
+            if (!temp1.empty())
             {
                 output = temp1 + output;
                 times += 1;
@@ -209,11 +220,12 @@ bool Serial::open_serial(std::basic_string<TCHAR> s1)
     return 0;
 }
 
-bool Serial::write(QList<QString> add)
+bool Serial::write(const QList<QString> &add)
 {
 
     std::thread t3(&Serial::write_, this, add);
     t3.detach();
+    return 1;
 }
 
 bool Serial::write_(QList<QString> add) //发送
@@ -232,10 +244,11 @@ bool Serial::write_(QList<QString> add) //发送
         DWORD dwBytesWrite = nApduLen;
         cout << "Send: " << StringAddSpace(new_add) << endl;
         emit send_message(add);
-        bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, NULL);
+        bWriteStat = WriteFile(hCom, Apdu, dwBytesWrite, &dwBytesWrite, nullptr);
         if (!bWriteStat)
         {
             cout << "Write data fail!!" << endl;
+            return false;
         }
 
     } else  //以太网
@@ -256,7 +269,7 @@ bool Serial::build_net(int com)
     WSAStartup(MAKEWORD(2, 2), &wsaData);
     //这个是服务器的socket，用来绑定网卡来监听
     SOCKET s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
-    sockaddr_in addr;
+    sockaddr_in addr{};
     addr.sin_addr.S_un.S_addr = inet_addr("0.0.0.0");
     addr.sin_port = htons(com);
     addr.sin_family = PF_INET;
@@ -269,11 +282,21 @@ bool Serial::build_net(int com)
     clientSock = ::accept(s, &clientAddr, &nSize);
     while (run_flag)
     {
-//        cout << "running eth\n";
+        cout << "running eth\n";
         char buff[1400] = {0};
-        int i = 1;
+        int i;
         i = recv(clientSock, buff, 1400, 0);
-//        qDebug() << "i: "<<i;
+//        qDebug() << "i: " << i;
+        if (i == -1)
+        {
+            if (IsSocketClosed(clientSock) and run_flag)
+            {
+                qDebug() << "try to reconnect";
+                clientSock = ::accept(s, &clientAddr, &nSize);
+                continue;
+            } else
+                continue;
+        }
         if (i == 0)
         {
 //            qDebug() << "i=0";//终端下线
@@ -285,14 +308,22 @@ bool Serial::build_net(int com)
         {
             if (buff[ti] == '\000')
             {
+//                qDebug() << "ti: " << ti;
                 qwe += 1;
+                if (ti == 0)
+                { break; }
+
                 ti -= 1;
             } else
+            {
+//                qDebug() << "break out";
                 break;
-            continue;
+            }
         }
+        if (ti == 0)
+        { continue; }
         char a[100] = {0};
-        string output = "";
+        string output = string("");
         for (int x = 0; x < 1400 - qwe; x++)
         {
             sprintf(a, "%02X ", (BYTE) buff[x]);
@@ -301,20 +332,40 @@ bool Serial::build_net(int com)
         if (i != -1)
         {
             cout << "Receive from client :" << output << endl;
-
             emit receive_message(QString::fromStdString(output));
         }
     }
     qDebug() << "qiute eth";
+    qDebug() << "runflag " << run_flag;
     closesocket(clientSock);
     closesocket(s);
     WSACleanup();
     return true;
 }
 
+
+BOOL Serial::IsSocketClosed(SOCKET clientSocket)
+{
+    bool ret = false;
+    HANDLE closeEvent = WSACreateEvent();
+    WSAEventSelect(clientSocket, closeEvent, FD_CLOSE);
+
+    DWORD dwRet = WaitForSingleObject(closeEvent, 0);
+
+    if (dwRet == WSA_WAIT_EVENT_0)
+        ret = true;
+    else if (dwRet == WSA_WAIT_TIMEOUT)
+        ret = false;
+
+    WSACloseEvent(closeEvent);
+    qDebug() << "ret " << ret;
+    return ret;
+}
+
 BOOL Serial::CloseSerial()
 {
     run_flag = false;
+    return true;
 }
 
 QStringList Serial::getEnableCommPort(QList<QString> &PortList)
@@ -333,7 +384,7 @@ QStringList Serial::getEnableCommPort(QList<QString> &PortList)
         {
             DWORD dwCount = MAX_PATH;
             DWORD dwVCount = 20;
-            lRes = RegEnumValue(hkey, dwIndex++, tchKey, &dwCount, NULL, &dwType, (LPBYTE) tchValue, &dwVCount);
+            lRes = RegEnumValue(hkey, dwIndex++, tchKey, &dwCount, nullptr, &dwType, (LPBYTE) tchValue, &dwVCount);
             if (lRes == ERROR_SUCCESS)
             {
                 if ((dwVCount > 0) && (dwCount > 0))
@@ -352,13 +403,13 @@ QStringList Serial::getEnableCommPort(QList<QString> &PortList)
 
 
 Serial::~Serial()
-{}
+= default;
 
 void Serial::warming()
 {
     QMessageBox::warning(this, "ERROR", "串口打开失败!", QMessageBox::Ok);
     ui->pushButton->setText("打开");
-    ui->comboBox->setDisabled(0);
-    ui->comboBox_2->setDisabled(0);
+    ui->comboBox->setDisabled(false);
+    ui->comboBox_2->setDisabled(false);
 }
 

@@ -21,8 +21,8 @@ void Analysis::removehead()
         QStringList list = a.split(' ', QString::SkipEmptyParts);
         int message_len = (list[2] + list[1]).toInt(nullptr, 16);  //报文长度
         ui->textEdit_2->append("报文长度: " + QString::number(message_len));
-        int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
-        int SA_len = list[4].toInt(nullptr, 16) & 0xF;
+//        int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
+//        int SA_len = list[4].toInt(nullptr, 16) & 0xF;
     }
 
 }

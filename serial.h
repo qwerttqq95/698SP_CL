@@ -5,7 +5,7 @@
 #include <windows.h>
 
 #include <process.h>
-#include "TChar.h"
+#include "tchar.h"
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <iterator>
 #include <cctype>
+#include "XMLFile/tinyxml2.h"
 
 #include <stdio.h>
 #include <QString>
@@ -26,12 +27,14 @@ public:
     bool run_flag;
     bool internet_or_serial;
     SOCKET clientSock;
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLElement *root;
 
     explicit Serial(QWidget *parent = nullptr);
 
     ~Serial() override;
 
-    bool open_serial(std::basic_string<TCHAR>);
+    bool open_serial(const std::basic_string<TCHAR>&);
 
     QStringList getEnableCommPort(QList<QString> &PortList);
 
@@ -41,8 +44,9 @@ public:
 
     bool write_(QList<QString>);
 
+    BOOL IsSocketClosed(SOCKET clientSocket);
 
-    HANDLE hCom;
+    HANDLE hCom{};
 
 
 private:
@@ -51,7 +55,7 @@ private:
 
 public slots:
 
-    bool write(QList<QString>);
+    bool write(const QList<QString>&);
 
     void creat_process();
 
@@ -66,6 +70,7 @@ signals:
     void open_fail_message();
 
     void send_write(QList<QString>);
+
 
 };
 

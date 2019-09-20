@@ -297,7 +297,7 @@ int Stringlist2Hex(QString &str, BYTE *pOut)
     QList<QString> str_list;
     str_list = StringAddSpace(str).split(' ');
     int len = str_list.length();
-    for (int i = 0, j = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         int qwe = str_list[i].toInt(nullptr, 16);
         pOut[i] = (BYTE) qwe;
@@ -310,7 +310,7 @@ int Stringlist2Hex_char(QString &str, char *pOut)
     QList<QString> str_list;
     str_list = StringAddSpace(str).split(' ');
     int len = str_list.length();
-    for (int i = 0, j = 0; i < len; i++)
+    for (int i = 0; i < len; i++)
     {
         int qwe = str_list[i].toInt(nullptr, 16);
         pOut[i] = qwe;
@@ -326,12 +326,12 @@ VALUE_LEFT Data_deal(QList<QString> a)
     {
         case DATA_ARRAY:
         {
-            int b = (a.takeFirst()).toInt(nullptr, 16);
+            (a.takeFirst()).toInt(nullptr, 16);
             return Data_deal(a);
         }
         case DATA_STRUCT :
         {
-            int b = (a.takeFirst()).toInt(nullptr, 16);
+            (a.takeFirst()).toInt(nullptr, 16);
             return Data_deal(a);
         }
         case DATA_OCT_STRING:
@@ -390,18 +390,21 @@ VALUE_LEFT Data_deal(QList<QString> a)
             return m;
         }
     }
+    m.value = "";
+    m.left = {""};
+    return m;
 }
 
-
-QString return_current_time()
-{
-    time_t timep;
-    time(&timep);
-    char tmp[64];
-    strftime(tmp, sizeof(tmp), "%Y%m%d%H%M%S00", localtime(&timep));
-    QString x = tmp;
-
-}
+//
+//QString return_current_time()
+//{
+//    time_t timep;
+//    time(&timep);
+//    char tmp[64];
+//    strftime(tmp, sizeof(tmp), "%Y%m%d%H%M%S00", localtime(&timep));
+//    QString x = tmp;
+//
+//}
 
 QString re_rever_add()
 {

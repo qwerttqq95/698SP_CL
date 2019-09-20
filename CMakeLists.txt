@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(698SP_CL)
+
 set(Demo_VERSION_MAJOR 1)
 set(Demo_VERSION_MINOR 0)
 set(CMAKE_CXX_STANDARD 14)
@@ -18,6 +19,7 @@ set(QRC_FILES)
 set(QRC_SOURCE_FILES logo.qrc)
 qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 file(GLOB SourceFiles logo.rc)
+
 #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 #set(CMAKE_EXE_LINKER_FLAGS -Wl,-subsystem,windows)
 #set(CMAKE_EXE_LINKER_FLAGS -mwindows)
@@ -25,4 +27,6 @@ add_executable(698SP_CL ${SOURCE} ${QRC_FILES} ${SourceFiles})
 add_subdirectory(BasicExcel)
 add_subdirectory(XMLFile)
 target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML)
+#add_definitions(-Wall)
+
 qt5_use_modules(698SP_CL Core Widgets Gui)
