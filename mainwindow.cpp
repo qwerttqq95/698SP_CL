@@ -10,13 +10,16 @@
 #include <QtWidgets/QInputDialog>
 #include "XMLFile/tinyxml2.h"
 #include <QSize>
-
+#include <QEvent>
+#include <QKeyEvent>
+#include <QApplication>
+#include <QClipboard>
 
 using namespace std;
 
 extern QString DARType(int);
 
-extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
+extern QString BuildMessage(QString apdu,  const QString& SA,  const QString& ctrl_zone);
 
 extern QString StringAddSpace(QString &input);
 
@@ -26,12 +29,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     serial = new Serial();
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-    ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle("698SP V1.1");
+    setWindowTitle("698SP v1.2");
     connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config()));
     connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
@@ -98,6 +101,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tableWidget, SIGNAL(doubleClicked(
                                             const QModelIndex)), this, SLOT(double_click_analysis(
                                                                                     const QModelIndex)));
+    connect(ui->tableWidget, SIGNAL(itemSelectionChanged()), this, SLOT(copy_message()));
 }
 
 void MainWindow::function()
@@ -177,8 +181,7 @@ QString MainWindow::analysis(QString a)
 //    int message_len = (list[2] + list[1]).toInt(nullptr, 16);  //报文长度
 //    int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
     int SA_len = list[4].toInt(nullptr, 16) & 0xF;
-    QString
-            add = "";
+    QString add = "";
     for (int i = 0; i <= SA_len; i++)
     {
         add = list[5 + i] + add;
@@ -263,7 +266,7 @@ QString MainWindow::analysis(QString a)
                         emit deal_with_meter(n.DATA);
                     }
 
-                    emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析
+//                    emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析
                 }
                     break;
                 case 0x5:
@@ -346,9 +349,8 @@ QString MainWindow::analysis(QString a)
                     {
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
-                    QString
-                            APDU = "0801" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "上报响应"});
+                    QString APDU = "0801" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
+                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "8801上报响应"});
                     n.GetResultType = list[apdu_0 + 8];
                     return "上报消息";
                 }
@@ -362,9 +364,8 @@ QString MainWindow::analysis(QString a)
                     {
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
-                    QString
-                            APDU = "0802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "上报响应"});
+                    QString APDU = "0802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
+                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "8802上报响应"});
                     n.RCSD = list[apdu_0 + 8];
                     return "上报消息";
 
@@ -404,7 +405,8 @@ void MainWindow::send_find_add()
 {
     QString
             add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
-    emit serial->send_write({add, "读地址"});                   ////发送
+    emit
+    serial->send_write({add, "读地址"});                   ////发送
 }
 
 MainWindow::~MainWindow()
@@ -414,7 +416,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::about()
 {
-    QMessageBox::information(this, "关于", "698SP CLION V1.0 \n QT版本: 5.11.3", QMessageBox::Ok);
+    QMessageBox::information(this, "关于", "698SP CLION V1.2 \n QT版本: 5.11.3", QMessageBox::Ok);
 }
 
 void MainWindow::serial_config()
@@ -457,16 +459,14 @@ void MainWindow::show_message_receive(QString a)
     time(&timep);
     char tmp[64];
     strftime(tmp, sizeof(tmp), "%H:%M:%S", localtime(&timep));
-    QString
-            x = tmp;
+    QString x = tmp;
     ui->tableWidget->insertRow(current);
     ui->tableWidget->setItem(current, 0, new QTableWidgetItem("收到:"));
-    QString
-            te = analysis(a);
+    QString te = analysis(a);
     ui->tableWidget->setItem(current, 1, new QTableWidgetItem(a));
     ui->tableWidget->setItem(current, 2, new QTableWidgetItem(te));
     ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
-    ui->tableWidget->item(current, 1)->setToolTip(a);
+//    ui->tableWidget->item(current, 1)->setToolTip(a);
     current += 1;
     move_Cursor();
 
@@ -616,16 +616,31 @@ void MainWindow::add_change_event(QString a)
 
 void MainWindow::double_click_analysis(const QModelIndex &index)
 {
-    auto m = index.row();
-    auto message = index.sibling(m, 1).data().toString();
-    analy = new Analysis(message);
-    analy->show();
+//    if (QMouseEvent->button() == Qt::LeftButton)
+    {
+        auto m = index.row();
+        auto message = index.sibling(m, 1).data().toString();
+        analy = new Analysis(message);
+        analy->show();
+    }
 }
 
 void MainWindow::op_analy()
 {
     analy = new Analysis();
     analy->show();
+}
+
+void MainWindow::copy_message()
+{
+    QList<QTableWidgetItem *> message_list = ui->tableWidget->selectedItems();
+    QString copy_board = "";
+            foreach(QTableWidgetItem *item, message_list)
+        {
+            copy_board.append(item->text() + '\n');
+        }
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(copy_board);
 }
 
 

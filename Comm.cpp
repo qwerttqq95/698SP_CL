@@ -1,14 +1,16 @@
 #include <string>
-
 #include <QString>
 #include <QtCore/QStringList>
 #include <QDebug>
 #include <MeterArchives.h>
 #include <mainwindow.h>
 #include <windows.h>
-#include<vector>
-#include <XMLFile/tinyxml2.h>
+#include <vector>
 #include "io.h"
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+
 
 #define PPPINITFCS16 0xffff
 
@@ -156,22 +158,33 @@ void BtoD(int a, int *b)
 
 QString DARType(int a)
 {
-    switch (a)
+    QSqlDatabase database;
+    database = QSqlDatabase::addDatabase("QSQLITE");
+    database.setDatabaseName("Database.db");
+    if (!database.open())
     {
-        case 0:
-            return "成功";
-        case 8:
-            return "越界";
-        case 15:
-            return "密码错误/未授权";
-            // 68 1a 00 c3 05 56 34 12 56 34 12 10 9e 98 87 01 1c 81 03 03 00 00 00 00 00 c4 80 16
-        default:
-            return "未知";
+        qDebug() << "Error: Failed to connect database." << database.lastError();
     }
+    QSqlQuery sql_query;
+    sql_query.exec("select * from dar where Number= " + QString::number(a));
+    if (!sql_query.exec())
+    {
+        qDebug() << sql_query.lastError();
+    } else
+    {
+        sql_query.next();
+        QString detail = sql_query.value(0).toString();
+        qDebug() << QString("detail:%1").arg(detail);
+        return detail;
+    }
+
 }
 
-QString BuildMessage(QString apdu, QString SA, QString ctrl_zone)
+QString BuildMessage(QString apdu, const QString& SA, const QString& ctrl_zone)
 {
+    qDebug() << "apdu:"<<apdu;
+    qDebug() << "SA:"<<SA;
+    qDebug() << "ctrl_zone:"<<ctrl_zone;
     apdu.remove(' ');
 //    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
@@ -180,7 +193,6 @@ QString BuildMessage(QString apdu, QString SA, QString ctrl_zone)
         qDebug() << "BuildMessage 1 error";
         return "0";
     }
-
     QString SA_sign = QString("%1").arg(len);
     int apdu_len = apdu.length() / 2;
     int Total_length = 10 + len + apdu_len;

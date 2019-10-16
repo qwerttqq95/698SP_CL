@@ -80,7 +80,7 @@ void Serial::creat_process()
 
     } else //以太网
     {
-        qDebug()<<"eth";
+        qDebug() << "以太网状态";
         tinyxml2::XMLElement *first_child1 = root->FirstChildElement("port");
         int com = ui->lineEdit->text().toInt();
         first_child1->SetText(com);
@@ -180,7 +180,7 @@ bool Serial::open_serial(const std::basic_string<TCHAR> &s1)
             {
                 output = temp1 + output;
                 times += 1;
-                if (times > 2500)
+                if (times > 4000)
                 {
                     temp1 = "";
                     times = 0;
@@ -217,7 +217,7 @@ bool Serial::open_serial(const std::basic_string<TCHAR> &s1)
     }
     cout << "quit cir\n";
     CloseHandle(hCom);
-    return 0;
+    return false;
 }
 
 bool Serial::write(const QList<QString> &add)
@@ -225,7 +225,7 @@ bool Serial::write(const QList<QString> &add)
 
     std::thread t3(&Serial::write_, this, add);
     t3.detach();
-    return 1;
+    return true;
 }
 
 bool Serial::write_(QList<QString> add) //发送
@@ -277,15 +277,17 @@ bool Serial::build_net(int com)
     listen(s, 1);
     SOCKADDR clientAddr;
     int nSize = sizeof(SOCKADDR);
-    int recvTimeout = 1000; //3s
+    int recvTimeout = 4000; 
     setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char *) &recvTimeout, sizeof(int));
     clientSock = ::accept(s, &clientAddr, &nSize);
+    int is_head = 1;
+    QStringList list_backup;
     while (run_flag)
     {
-        cout << "running eth\n";
-        char buff[1400] = {0};
+//        cout << "running eth\n";
+        char buff[4000] = {0};
         int i;
-        i = recv(clientSock, buff, 1400, 0);
+        i = recv(clientSock, buff, 4000, 0);
 //        qDebug() << "i: " << i;
         if (i == -1)
         {
@@ -302,7 +304,7 @@ bool Serial::build_net(int com)
 //            qDebug() << "i=0";//终端下线
             break;
         }
-        int ti = 1400 - 1;
+        int ti = 4000 - 1;
         int qwe = 0;
         while (true)
         {
@@ -324,15 +326,38 @@ bool Serial::build_net(int com)
         { continue; }
         char a[100] = {0};
         string output = string("");
-        for (int x = 0; x < 1400 - qwe; x++)
+        for (int x = 0; x < 4000 - qwe; x++)
         {
             sprintf(a, "%02X ", (BYTE) buff[x]);
             output = output + a;
         }
-        if (i != -1)
+        QStringList list = QString::fromStdString(output).split(' ', QString::SkipEmptyParts);
+        if (is_head == 1)
         {
-            cout << "Receive from client :" << output << endl;
-            emit receive_message(QString::fromStdString(output));
+            judge:
+            int message_len = (list[2] + list[1]).toInt(nullptr, 16);
+            qDebug() << "message_len " << message_len;
+            qDebug() << "list.size() " << list.size();
+
+            if (list[0] == "68" and list.endsWith("16") and message_len + 2 == list.size())
+            {
+                auto full = list.join(" ");
+                is_head = 1;
+                qDebug() << "Receive from client :" << full << endl;
+                receive_message(full);
+
+            } else if (list[0] == "68")
+            {
+                qDebug() << "need more"<<list;
+                list_backup = list;
+                is_head = 0;
+            }
+        } else
+        {
+            qDebug() << "detach"<<list;
+            list = list_backup +  list ;
+            is_head = 1;
+            goto judge;
         }
     }
     qDebug() << "qiute eth";
@@ -358,7 +383,7 @@ BOOL Serial::IsSocketClosed(SOCKET clientSocket)
         ret = false;
 
     WSACloseEvent(closeEvent);
-    qDebug() << "ret " << ret;
+//    qDebug() << "ret " << ret;
     return ret;
 }
 

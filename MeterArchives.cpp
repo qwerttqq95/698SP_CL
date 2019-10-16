@@ -9,7 +9,7 @@
 #include <stringapiset.h>
 
 
-extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
+extern QString BuildMessage(QString apdu,  const QString& SA,  const QString& ctrl_zone);
 
 extern VALUE_LEFT Data_deal(QList<QString> a);
 
@@ -62,11 +62,8 @@ void MeterArchives::show_add()
 
 void MeterArchives::Get_6000200()
 {
-    QString
-            text = "0501006000020000";
     QString add = re_rever_add();
-    QString
-            re_message = BuildMessage(text, add, "43");
+    QString re_message = BuildMessage("0501006000020000", add, "43");
     emit send_write({re_message, "查询表档案"});
 }
 

@@ -1,6 +1,6 @@
 #include "Analysis.h"
 
-Analysis::Analysis(QString message, QWidget *parent) : QDialog(parent), ui(new Ui::AnalysisDialog)
+Analysis::Analysis(const QString& message, QWidget *parent) : QDialog(parent), ui(new Ui::AnalysisDialog)
 {
     ui->setupUi(this);
     ui->splitter->setStretchFactor(0, 1);

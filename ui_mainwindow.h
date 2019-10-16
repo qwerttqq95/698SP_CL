@@ -14,7 +14,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
-#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -94,8 +93,6 @@ public:
     QAction *actionbiaodangan;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
-    QGroupBox *groupBox;
-    QHBoxLayout *horizontalLayout_3;
     QHBoxLayout *horizontalLayout;
     QHBoxLayout *horizontalLayout_2;
     QLabel *label;
@@ -265,37 +262,25 @@ public:
         verticalLayout->setSpacing(6);
         verticalLayout->setContentsMargins(11, 11, 11, 11);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        groupBox = new QGroupBox(centralwidget);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(15);
-        sizePolicy.setVerticalStretch(22);
-        sizePolicy.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
-        groupBox->setSizePolicy(sizePolicy);
-        groupBox->setMinimumSize(QSize(13, 55));
-        groupBox->setBaseSize(QSize(18, 42));
-        horizontalLayout_3 = new QHBoxLayout(groupBox);
-        horizontalLayout_3->setSpacing(6);
-        horizontalLayout_3->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(6);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        label = new QLabel(groupBox);
+        horizontalLayout_2->setContentsMargins(12, -1, 0, -1);
+        label = new QLabel(centralwidget);
         label->setObjectName(QStringLiteral("label"));
 
         horizontalLayout_2->addWidget(label);
 
-        lineEdit = new QLineEdit(groupBox);
+        lineEdit = new QLineEdit(centralwidget);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
-        lineEdit->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
+        lineEdit->setSizePolicy(sizePolicy);
         lineEdit->setMinimumSize(QSize(82, 0));
         lineEdit->setMaximumSize(QSize(77, 16777215));
         lineEdit->setSizeIncrement(QSize(0, 0));
@@ -313,13 +298,13 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        pushButton = new QPushButton(groupBox);
+        pushButton = new QPushButton(centralwidget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        QSizePolicy sizePolicy2(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(33);
-        sizePolicy2.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
-        pushButton->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(33);
+        sizePolicy1.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
+        pushButton->setSizePolicy(sizePolicy1);
         pushButton->setMinimumSize(QSize(0, 20));
         pushButton->setMaximumSize(QSize(16777215, 16777203));
         pushButton->setSizeIncrement(QSize(0, 21));
@@ -329,10 +314,7 @@ public:
         horizontalLayout->addWidget(pushButton);
 
 
-        horizontalLayout_3->addLayout(horizontalLayout);
-
-
-        verticalLayout->addWidget(groupBox);
+        verticalLayout->addLayout(horizontalLayout);
 
         splitter = new QSplitter(centralwidget);
         splitter->setObjectName(QStringLiteral("splitter"));
@@ -345,10 +327,12 @@ public:
         frame_2->setObjectName(QStringLiteral("frame_2"));
         frame_2->setFrameShape(QFrame::StyledPanel);
         frame_2->setFrameShadow(QFrame::Raised);
+        frame_2->setLineWidth(1);
         horizontalLayout_5 = new QHBoxLayout(frame_2);
         horizontalLayout_5->setSpacing(6);
         horizontalLayout_5->setContentsMargins(11, 11, 11, 11);
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        horizontalLayout_5->setContentsMargins(9, 0, -1, -1);
         mdiArea = new QMdiArea(frame_2);
         mdiArea->setObjectName(QStringLiteral("mdiArea"));
         mdiArea->setFrameShape(QFrame::StyledPanel);
@@ -390,10 +374,15 @@ public:
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget->setProperty("showDropIndicator", QVariant(false));
         tableWidget->setAlternatingRowColors(true);
-        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        tableWidget->setSelectionBehavior(QAbstractItemView::SelectItems);
         tableWidget->setTextElideMode(Qt::ElideLeft);
         tableWidget->setGridStyle(Qt::CustomDashLine);
+        tableWidget->setCornerButtonEnabled(false);
         tableWidget->horizontalHeader()->setVisible(false);
+        tableWidget->horizontalHeader()->setCascadingSectionResizes(false);
+        tableWidget->horizontalHeader()->setDefaultSectionSize(50);
+        tableWidget->horizontalHeader()->setStretchLastSection(false);
         tableWidget->verticalHeader()->setVisible(false);
 
         horizontalLayout_4->addWidget(tableWidget);
@@ -526,7 +515,6 @@ public:
         menu_12->addAction(actionbiaodangan);
 
         retranslateUi(MainWindow);
-        QObject::connect(pushButton, SIGNAL(clicked()), tableWidget, SLOT(clear()));
 
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
@@ -592,14 +580,10 @@ public:
         action_24->setText(QApplication::translate("MainWindow", "\345\215\225\345\234\260\345\235\200\350\267\263\351\227\270(\347\254\2542\350\275\256)", nullptr));
         actiononline->setText(QApplication::translate("MainWindow", "\346\265\213\350\257\225", nullptr));
         action_25->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\344\270\213\345\217\221", nullptr));
-        actionbiaodangan->setText(
-                QApplication::translate("MainWindow", "\350\241\250\346\241\243\346\241\210\350\256\276\347\275\256",
-                                        nullptr));
-        groupBox->setTitle(QApplication::translate("MainWindow", "\344\277\241\346\201\257:", nullptr));
+        actionbiaodangan->setText(QApplication::translate("MainWindow", "\350\241\250\346\241\243\346\241\210\350\256\276\347\275\256", nullptr));
         label->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\345\234\260\345\235\200:", nullptr));
         lineEdit->setText(QApplication::translate("MainWindow", "111111111111", nullptr));
-        pushButton->setText(
-                QApplication::translate("MainWindow", "\346\270\205\347\251\272\346\230\276\347\244\272", nullptr));
+        pushButton->setText(QApplication::translate("MainWindow", "\346\270\205\347\251\272\346\230\276\347\244\272", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "New Column", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);

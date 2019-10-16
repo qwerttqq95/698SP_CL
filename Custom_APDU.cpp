@@ -4,7 +4,7 @@
 #include <QString>
 #include <XMLFile/tinyxml2.h>
 
-extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
+extern QString BuildMessage(QString apdu, const QString& SA, const QString& ctrl_zone);
 
 extern QString re_rever_add();
 

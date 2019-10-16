@@ -86,6 +86,7 @@ public:
 
     QString revert_add;
 
+
     typedef struct
     {
         QString PIIDACD;
@@ -178,6 +179,8 @@ public slots:
     void double_click_analysis(const QModelIndex &index);
 
     void op_analy();
+
+    void copy_message();
 
 };
 

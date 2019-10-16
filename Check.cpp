@@ -7,9 +7,8 @@
 #include <QtWidgets/QMessageBox>
 #include <fstream>
 #include <ui_Check.h>
-#include <utility>
 
-extern QString BuildMessage(QString apdu, QString SA, QString ctrl_zone);
+extern QString BuildMessage(QString apdu, const QString& SA, const QString& ctrl_zone);
 
 extern QString re_rever_add();
 
