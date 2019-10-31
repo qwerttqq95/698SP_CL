@@ -267,7 +267,6 @@ bool Serial::build_net(int com)
 {
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
-    //这个是服务器的socket，用来绑定网卡来监听
     SOCKET s = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
     sockaddr_in addr{};
     addr.sin_addr.S_un.S_addr = inet_addr("0.0.0.0");
@@ -284,11 +283,9 @@ bool Serial::build_net(int com)
     QStringList list_backup;
     while (run_flag)
     {
-//        cout << "running eth\n";
         char buff[4000] = {0};
         int i;
         i = recv(clientSock, buff, 4000, 0);
-//        qDebug() << "i: " << i;
         if (i == -1)
         {
             if (IsSocketClosed(clientSock) and run_flag)
@@ -304,29 +301,9 @@ bool Serial::build_net(int com)
 //            qDebug() << "i=0";//终端下线
             break;
         }
-        int ti = 4000 - 1;
-        int qwe = 0;
-        while (true)
-        {
-            if (buff[ti] == '\000')
-            {
-//                qDebug() << "ti: " << ti;
-                qwe += 1;
-                if (ti == 0)
-                { break; }
-
-                ti -= 1;
-            } else
-            {
-//                qDebug() << "break out";
-                break;
-            }
-        }
-        if (ti == 0)
-        { continue; }
-        char a[100] = {0};
+        char a[4] = {0};
         string output = string("");
-        for (int x = 0; x < 4000 - qwe; x++)
+        for (int x = 0; x <i; x++)
         {
             sprintf(a, "%02X ", (BYTE) buff[x]);
             output = output + a;

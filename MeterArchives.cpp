@@ -6,29 +6,12 @@
 #include "QScrollBar"
 #include <typeinfo.h>
 #include <XMLFile/tinyxml2.h>
-#include <stringapiset.h>
 
-
-extern QString BuildMessage(QString apdu,  const QString& SA,  const QString& ctrl_zone);
+extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
 
 extern VALUE_LEFT Data_deal(QList<QString> a);
 
 extern QString re_rever_add();
-
-
-char *UTF8ToUnicode(char *szUTF8)
-{
-    int wcscLen = ::MultiByteToWideChar(CP_UTF8, 0, szUTF8, strlen(szUTF8), NULL, 0);//得到所需空间的大小
-    wchar_t *wszcString = new wchar_t[wcscLen + 1];//给'\0'分配空间
-    ::MultiByteToWideChar(CP_UTF8, 0, szUTF8, strlen(szUTF8), wszcString, wcscLen);   //转换
-    wszcString[wcscLen] = '\0';
-    char *m_char;
-    int len = WideCharToMultiByte(CP_ACP, 0, wszcString, wcslen(wszcString), NULL, 0, NULL, NULL);
-    m_char = new char[len + 1];
-    WideCharToMultiByte(CP_ACP, 0, wszcString, wcslen(wszcString), m_char, len, NULL, NULL);
-    m_char[len] = '\0';
-    return m_char;
-}
 
 
 MeterArchives::MeterArchives(QWidget *parent) :
@@ -70,10 +53,8 @@ void MeterArchives::Get_6000200()
 void MeterArchives::clear_6000200()
 {
     QString add = re_rever_add();
-    QString
-            text = "070101600086000000";
-    QString
-            re_message = BuildMessage(text, add, "43");
+    QString text("070101600086000000");
+    QString re_message = BuildMessage(text, add, "43");
     emit send_write({re_message, "清空表档案"});
 }
 
@@ -84,7 +65,6 @@ void MeterArchives::clearlist()
     {
         ui->tableWidget->removeRow(row);
     }
-
 }
 
 void MeterArchives::add_new(QList<QString> a)
@@ -97,10 +77,7 @@ void MeterArchives::add_new(QList<QString> a)
     n.port = a.takeFirst();
     n.password = a.takeFirst();
     n.fee_count = a.takeFirst();
-    int q = a.takeFirst().toInt(nullptr, 10);
-    char st[3];
-    sprintf(st, "%02X", q);
-    n.user_style = (QString) st;
+    n.user_style = a.takeFirst();
     n.connect_way = a.takeFirst();
     n.Rated_Voltage = a.takeFirst();
     n.Rated_Electric_current = a.takeFirst();
@@ -123,7 +100,7 @@ void MeterArchives::add_new(QList<QString> a)
     ui->tableWidget->item(row_count, 4)->setToolTip("未知 (0)\n"
                                                     "DL/T 645-1997 （1）\n"
                                                     "DL/T 645—2007 （2）\n"
-                                                    "DL/T 698.45 （3）\n"
+                                                    "DL/T 698.45   （3）\n"
                                                     "CJ/T 188—2004 （4）");
     ui->tableWidget->setItem(row_count, 5, new QTableWidgetItem(n.port));
     ui->tableWidget->setItem(row_count, 6, new QTableWidgetItem(n.password));
@@ -171,7 +148,7 @@ void MeterArchives::show_meter_message(QList<QString> a)
         m = Data_deal(m.left);
         n.fee_count = m.value;
         m = Data_deal(m.left);
-        n.user_style = m.value;
+        n.user_style = QString::number(m.value.toInt(nullptr,16),10);
         m = Data_deal(m.left);
         n.connect_way = m.value;
         m = Data_deal(m.left);
@@ -203,13 +180,12 @@ void MeterArchives::show_meter_message(QList<QString> a)
         ui->tableWidget->item(row_count, 4)->setToolTip("未知 (0)\n"
                                                         "DL/T 645-1997 （1）\n"
                                                         "DL/T 645—2007 （2）\n"
-                                                        "DL/T 698.45 （3）\n"
+                                                        "DL/T 698.45   （3）\n"
                                                         "CJ/T 188—2004 （4）");
         ui->tableWidget->setItem(row_count, 5, new QTableWidgetItem(n.port));
         ui->tableWidget->setItem(row_count, 6, new QTableWidgetItem(n.password));
         ui->tableWidget->setItem(row_count, 7, new QTableWidgetItem(n.fee_count));
         ui->tableWidget->setItem(row_count, 8, new QTableWidgetItem(n.user_style));
-        ui->tableWidget->item(row_count, 8)->setToolTip(QString::number(n.user_style.toInt(nullptr, 16)));
         ui->tableWidget->setItem(row_count, 9, new QTableWidgetItem(n.connect_way));
         ui->tableWidget->item(row_count, 9)->setToolTip("未知 （0）\n"
                                                         "单相 （1）\n"
@@ -310,7 +286,7 @@ void MeterArchives::send()
             qDebug() << "message 6:" << message;
             n.user_style = ui->tableWidget->item(i, 8)->text();
             char c[3];
-            sprintf(c, "%02x", n.user_style.toInt(nullptr, 16));
+            sprintf(c, "%02x", n.user_style.toInt(nullptr, 10));
             message.append("11" + (QString) c);
             qDebug() << "message 7:" << message;
             n.connect_way = ui->tableWidget->item(i, 9)->text();
@@ -476,14 +452,19 @@ void MeterArchives::output()
 
 void MeterArchives::input()
 {
-    QString
-            filename = QFileDialog::getOpenFileName(nullptr, "open", ".", "*.xls");
+    QString filename = QFileDialog::getOpenFileName(nullptr, "open", ".", "*.xls");
     YExcel::BasicExcel excelTermInfo;
-    const wchar_t *wstr = reinterpret_cast<const wchar_t *>(filename.utf16());
-    if (!excelTermInfo.Load(wstr))
+
+    wchar_t szBuf[1024];
+    wcscpy_s(reinterpret_cast<wchar_t*>(szBuf),
+             sizeof(szBuf) / sizeof(wchar_t),
+             reinterpret_cast<const wchar_t*>(filename.utf16()));
+
+    const wchar_t *wstr = szBuf;
+    if (!excelTermInfo.Load(szBuf))
     {
-        qDebug() << "dont know chinese? " << filename.toStdString().c_str();
-        qDebug() << wstr;
+        qDebug() << "dont know chinese? " << filename;
+        QMessageBox::warning(nullptr,"Warming","Open failed");
         return;
     }
     clearlist();

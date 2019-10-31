@@ -1,213 +1,213 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>Form</class>
-    <widget class="QWidget" name="Form">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>934</width>
-                <height>390</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>表档案设置</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
-            <item>
-                <widget class="QTableWidget" name="tableWidget">
-                    <property name="horizontalScrollBarPolicy">
-                        <enum>Qt::ScrollBarAsNeeded</enum>
-                    </property>
-                    <property name="sizeAdjustPolicy">
-                        <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
-                    </property>
-                    <property name="editTriggers">
-                        <set>QAbstractItemView::DoubleClicked</set>
-                    </property>
-                    <property name="selectionMode">
-                        <enum>QAbstractItemView::NoSelection</enum>
-                    </property>
-                    <property name="selectionBehavior">
-                        <enum>QAbstractItemView::SelectRows</enum>
-                    </property>
-                    <attribute name="horizontalHeaderDefaultSectionSize">
-                        <number>56</number>
-                    </attribute>
-                    <attribute name="verticalHeaderVisible">
-                        <bool>false</bool>
-                    </attribute>
-                    <column>
-                        <property name="text">
-                            <string>check</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>序号</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>表地址</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>波特率</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>规约类型</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>端口号</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>通讯密码</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>费率个数</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>用户类型(HEX)</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>接线方式</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>额定电压(-1)</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>额定电流(-1)</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>采集器地址</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>资产号</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>PT</string>
-                        </property>
-                    </column>
-                    <column>
-                        <property name="text">
-                            <string>CT</string>
-                        </property>
-                    </column>
-                </widget>
-            </item>
-            <item>
-                <layout class="QHBoxLayout" name="horizontalLayout">
-                    <item>
-                        <widget class="QCheckBox" name="checkBox">
-                            <property name="text">
-                                <string>全选</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton">
-                            <property name="text">
-                                <string>添加</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_2">
-                            <property name="text">
-                                <string>删除</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_3">
-                            <property name="text">
-                                <string>下发</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_5">
-                            <property name="text">
-                                <string>查询</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_6">
-                            <property name="text">
-                                <string>清空当前列表</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_8">
-                            <property name="text">
-                                <string>清空表档案</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="Line" name="line">
-                            <property name="orientation">
-                                <enum>Qt::Vertical</enum>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_4">
-                            <property name="text">
-                                <string>导入</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="pushButton_7">
-                            <property name="text">
-                                <string>导出</string>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <spacer name="horizontalSpacer">
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                                <size>
-                                    <width>40</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </item>
-                </layout>
-            </item>
-        </layout>
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>934</width>
+    <height>390</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>表档案设置</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="horizontalScrollBarPolicy">
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="sizeAdjustPolicy">
+      <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>
+     </property>
+     <property name="editTriggers">
+      <set>QAbstractItemView::DoubleClicked</set>
+     </property>
+     <property name="selectionMode">
+      <enum>QAbstractItemView::NoSelection</enum>
+     </property>
+     <property name="selectionBehavior">
+      <enum>QAbstractItemView::SelectRows</enum>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>56</number>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>check</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>序号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>表地址</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>波特率</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>规约类型</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>端口号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>通讯密码</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>费率个数</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>用户类型</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>接线方式</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>额定电压(-1)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>额定电流(-1)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>采集器地址</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>资产号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>PT</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>CT</string>
+      </property>
+     </column>
     </widget>
-    <resources/>
-    <connections/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QCheckBox" name="checkBox">
+       <property name="text">
+        <string>全选</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>添加</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>删除</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>下发</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_5">
+       <property name="text">
+        <string>查询</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_6">
+       <property name="text">
+        <string>清空当前列表</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_8">
+       <property name="text">
+        <string>清空表档案</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_4">
+       <property name="text">
+        <string>导入</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_7">
+       <property name="text">
+        <string>导出</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

@@ -91,6 +91,7 @@ public:
     QAction *actiononline;
     QAction *action_25;
     QAction *actionbiaodangan;
+    QAction *actionshangbao;
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
@@ -115,6 +116,7 @@ public:
     QMenu *menu_6;
     QMenu *menu_7;
     QMenu *menu_3;
+    QMenu *menu_13;
     QMenu *menu_4;
     QMenu *menu_5;
     QMenu *menu_10;
@@ -256,6 +258,9 @@ public:
         action_25->setCheckable(true);
         actionbiaodangan = new QAction(MainWindow);
         actionbiaodangan->setObjectName(QStringLiteral("actionbiaodangan"));
+        actionshangbao = new QAction(MainWindow);
+        actionshangbao->setObjectName(QStringLiteral("actionshangbao"));
+        actionshangbao->setCheckable(true);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         verticalLayout = new QVBoxLayout(centralwidget);
@@ -421,6 +426,8 @@ public:
         menu_3 = new QMenu(menu_6);
         menu_3->setObjectName(QStringLiteral("menu_3"));
         menu_3->setEnabled(false);
+        menu_13 = new QMenu(menu_2);
+        menu_13->setObjectName(QStringLiteral("menu_13"));
         menu_4 = new QMenu(menubar);
         menu_4->setObjectName(QStringLiteral("menu_4"));
         menu_4->setEnabled(true);
@@ -461,6 +468,7 @@ public:
         menu_2->addAction(menu_6->menuAction());
         menu_2->addAction(actionSichuan);
         menu_2->addSeparator();
+        menu_2->addAction(menu_13->menuAction());
         menu_2->addAction(actionSdf);
         menu_8->addAction(actionSh);
         menu_8->addAction(actionRi);
@@ -472,6 +480,7 @@ public:
         menu_7->addAction(action0201_2);
         menu_3->addAction(action0020l);
         menu_3->addAction(action0201l);
+        menu_13->addAction(actionshangbao);
         menu_4->addAction(actionC);
         menu_4->addAction(actionAPDUzu);
         menu_5->addAction(actionShuju);
@@ -581,6 +590,7 @@ public:
         actiononline->setText(QApplication::translate("MainWindow", "\346\265\213\350\257\225", nullptr));
         action_25->setText(QApplication::translate("MainWindow", "\345\201\234\346\255\242\344\270\213\345\217\221", nullptr));
         actionbiaodangan->setText(QApplication::translate("MainWindow", "\350\241\250\346\241\243\346\241\210\350\256\276\347\275\256", nullptr));
+        actionshangbao->setText(QApplication::translate("MainWindow", "\344\270\212\346\212\245\344\270\215\345\233\236\345\223\215\345\272\224", nullptr));
         label->setText(QApplication::translate("MainWindow", "\347\273\210\347\253\257\345\234\260\345\235\200:", nullptr));
         lineEdit->setText(QApplication::translate("MainWindow", "111111111111", nullptr));
         pushButton->setText(QApplication::translate("MainWindow", "\346\270\205\347\251\272\346\230\276\347\244\272", nullptr));
@@ -599,6 +609,7 @@ public:
         menu_6->setTitle(QApplication::translate("MainWindow", "\346\265\231\346\261\237", nullptr));
         menu_7->setTitle(QApplication::translate("MainWindow", "\345\256\236\346\227\266\346\225\260\346\215\256", nullptr));
         menu_3->setTitle(QApplication::translate("MainWindow", "\345\206\273\347\273\223\346\233\262\347\272\277\346\225\260\346\215\256", nullptr));
+        menu_13->setTitle(QApplication::translate("MainWindow", "\351\253\230\347\272\247", nullptr));
         menu_4->setTitle(QApplication::translate("MainWindow", "\345\267\245\345\205\267", nullptr));
         menu_5->setTitle(QApplication::translate("MainWindow", "\345\244\215\344\275\215", nullptr));
         menu_10->setTitle(QApplication::translate("MainWindow", "\346\216\247\345\210\266(\350\204\211\345\206\262)", nullptr));

@@ -46,6 +46,7 @@ namespace YCompoundFiles
         size_t filenameLength = wcslen(filename);
 #endif
         filename_.resize(filenameLength + 1, 0);
+        setlocale(LC_ALL,"chs");
         wcstombs(&*(filename_.begin()), filename, filenameLength);
 
         file_.open(&*(filename_.begin()), mode | ios_base::binary);

@@ -376,10 +376,17 @@
      <addaction name="actionRi_2"/>
      <addaction name="menu_3"/>
     </widget>
+    <widget class="QMenu" name="menu_13">
+     <property name="title">
+      <string>高级</string>
+     </property>
+     <addaction name="actionshangbao"/>
+    </widget>
     <addaction name="menu_8"/>
     <addaction name="menu_6"/>
     <addaction name="actionSichuan"/>
     <addaction name="separator"/>
+    <addaction name="menu_13"/>
     <addaction name="actionSdf"/>
    </widget>
    <widget class="QMenu" name="menu_4">
@@ -795,6 +802,14 @@
   <action name="actionbiaodangan">
    <property name="text">
     <string>表档案设置</string>
+   </property>
+  </action>
+  <action name="actionshangbao">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>上报不回响应</string>
    </property>
   </action>
  </widget>

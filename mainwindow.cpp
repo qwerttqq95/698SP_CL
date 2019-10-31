@@ -19,7 +19,7 @@ using namespace std;
 
 extern QString DARType(int);
 
-extern QString BuildMessage(QString apdu,  const QString& SA,  const QString& ctrl_zone);
+extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString StringAddSpace(QString &input);
 
@@ -34,11 +34,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle("698SP v1.2");
-    connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about()));
-    connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config()));
+    setWindowTitle("698SP v1.3");
+    connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about())); //关于
+    connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config())); //打开参数设置
     connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
-    connect(ui->action, SIGNAL(triggered()), this, SLOT(send_find_add()));
+    connect(ui->action, SIGNAL(triggered()), this, SLOT(send_find_add()));//广播读地址
     connect(serial, SIGNAL(send_message(QList<QString>)), this, SLOT(show_message_send(QList<QString>)));
     connect(serial, SIGNAL(receive_message(QString)), this, SLOT(show_message_receive(QString)));
     connect(ui->actionbiaodangan, SIGNAL(triggered()), this, SLOT(open_MeterArchives()));
@@ -63,11 +63,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
-            show_meter_message(QList<QString>)));
+                                                                                 show_meter_message(QList<QString>)));
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
-    for (int j = 0; j < p.size(); j++)
+    for (auto & j : p)
     {
-        p[j]->widget()->showMinimized();
+        j->widget()->showMinimized();
     }
     QAction *shijian_init;
     shijian_init = new QAction();
@@ -350,8 +350,11 @@ QString MainWindow::analysis(QString a)
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
                     QString APDU = "0801" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "8801上报响应"});
-                    n.GetResultType = list[apdu_0 + 8];
+                    if (!ui->actionshangbao->isChecked())
+                    {
+                        serial->send_write({BuildMessage(APDU, revert_add, "03"), "8801上报响应"});
+                        n.GetResultType = list[apdu_0 + 8];
+                    }
                     return "上报消息";
                 }
                 case 0x2: //未处理完
@@ -365,8 +368,11 @@ QString MainWindow::analysis(QString a)
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
                     QString APDU = "0802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    serial->send_write({BuildMessage(APDU, revert_add, "03"), "8802上报响应"});
-                    n.RCSD = list[apdu_0 + 8];
+                    if (!ui->actionshangbao->isChecked())
+                    {
+                        serial->send_write({BuildMessage(APDU, revert_add, "03"), "8802上报响应"});
+                        n.RCSD = list[apdu_0 + 8];
+                    }
                     return "上报消息";
 
                 }
@@ -427,8 +433,6 @@ void MainWindow::serial_config()
 
 void MainWindow::custom()
 {
-//    Custom->show();
-//    Custom->activateWindow();
     ui->mdiArea->setActiveSubWindow(Custom_point);
     QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
     p->widget()->showMaximized();
