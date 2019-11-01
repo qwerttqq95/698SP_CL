@@ -463,8 +463,7 @@ void MeterArchives::input()
     const wchar_t *wstr = szBuf;
     if (!excelTermInfo.Load(szBuf))
     {
-        qDebug() << "dont know chinese? " << filename;
-        QMessageBox::warning(nullptr,"Warming","Open failed");
+        QMessageBox::warning(nullptr,"warming","Open failed");
         return;
     }
     clearlist();

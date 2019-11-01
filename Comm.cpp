@@ -175,9 +175,10 @@ QString DARType(int a)
         sql_query.next();
         QString detail = sql_query.value(0).toString();
         qDebug() << QString("detail:%1").arg(detail);
+        database.close();
         return detail;
     }
-
+    database.close();
 }
 
 QString BuildMessage(QString apdu, const QString& SA, const QString& ctrl_zone)
@@ -232,7 +233,7 @@ int check(QString a)
     {
         return 2;
     }
-    while (1)
+    while (true)
     {
         if (list[0] == "FE")
             list.removeFirst();

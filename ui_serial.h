@@ -146,11 +146,11 @@ public:
         lineEdit = new QLineEdit(layoutWidget1);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         lineEdit->setEnabled(true);
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
-        lineEdit->setSizePolicy(sizePolicy2);
+        sizePolicy1.setHeightForWidth(lineEdit->sizePolicy().hasHeightForWidth());
+        lineEdit->setSizePolicy(sizePolicy1);
+        lineEdit->setMinimumSize(QSize(60, 0));
+        lineEdit->setMaximumSize(QSize(91, 16777215));
+        lineEdit->setAlignment(Qt::AlignCenter);
 
         horizontalLayout_2->addWidget(lineEdit);
 
@@ -186,18 +186,14 @@ public:
         comboBox_2->setItemText(0, QApplication::translate("Dialog", "2400", nullptr));
         comboBox_2->setItemText(1, QApplication::translate("Dialog", "9600", nullptr));
 
-        radioButton_2->setText(QApplication::translate("Dialog",
-                                                       "\344\273\245\345\244\252\347\275\221\347\253\257\345\217\243\345\217\267:",
-                                                       nullptr));
+        radioButton_2->setText(QApplication::translate("Dialog", "\344\273\245\345\244\252\347\275\221\347\253\257\345\217\243\345\217\267:", nullptr));
         lineEdit->setText(QApplication::translate("Dialog", "20001", nullptr));
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class Dialog : public DialogUi_Dialog
-    {
-    };
+    class Dialog: public DialogUi_Dialog {};
 } // namespace Ui
 
 QT_END_NAMESPACE

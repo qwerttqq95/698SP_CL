@@ -197,7 +197,10 @@
            </brush>
           </property>
           <property name="viewMode">
-           <enum>QMdiArea::SubWindowView</enum>
+           <enum>QMdiArea::TabbedView</enum>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
           </property>
          </widget>
         </item>

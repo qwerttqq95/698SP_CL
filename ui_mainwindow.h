@@ -345,7 +345,8 @@ public:
         QBrush brush(QColor(160, 160, 160, 255));
         brush.setStyle(Qt::NoBrush);
         mdiArea->setBackground(brush);
-        mdiArea->setViewMode(QMdiArea::SubWindowView);
+        mdiArea->setViewMode(QMdiArea::TabbedView);
+        mdiArea->setTabShape(QTabWidget::Rounded);
 
         horizontalLayout_5->addWidget(mdiArea);
 
