@@ -13,6 +13,7 @@
 #include <fstream>
 #include <Check.h>
 #include "QMdiSubWindow"
+#include "_4_Parametric_variable.h"
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -70,6 +71,7 @@ public:
     int times = 0;
     QMdiSubWindow *Custom_point;
     QMdiSubWindow *MeterArchive_point;
+    QMdiSubWindow *Parametric_variable_point;
 
     explicit MainWindow(QWidget *parent = nullptr);
 
@@ -137,6 +139,7 @@ private:
     MeterArchives *MeterArchive;
     Check *check;
     Analysis *analy;
+    _4_Parametric_variable *Parametric_variable;
 
 signals:
 

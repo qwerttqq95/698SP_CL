@@ -11,7 +11,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QClipboard>
-#include "_4_Parametric_variable.h"
+
 
 using namespace std;
 
@@ -66,11 +66,19 @@ MainWindow::MainWindow(QWidget *parent) :
             show_meter_message(QList<QString>)));
 
 
+    Parametric_variable = new _4_Parametric_variable();
+    Parametric_variable_point = ui->mdiArea->addSubWindow(Parametric_variable,Qt::WindowMinimizeButtonHint);
+    Parametric_variable_point->widget()->showMaximized();
+
+
+
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
     for (auto &j : p)
     {
         j->widget()->showMaximized();
     }
+
+
     QAction *shijian_init;
     shijian_init = new QAction();
     shijian_init->setObjectName(QStringLiteral("shijian_init"));

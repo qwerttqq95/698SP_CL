@@ -11,12 +11,10 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QSplitter>
-#include <QtWidgets/QTreeView>
-#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -26,56 +24,45 @@ class _4_Parametric_variableUi_Form
 public:
     QHBoxLayout *horizontalLayout;
     QSplitter *splitter;
-    QFrame *frame;
-    QVBoxLayout *verticalLayout;
-    QTreeView *treeView;
-    QFrame *frame_2;
-    QVBoxLayout *verticalLayout_2;
-    QTreeView *treeView_2;
+    QTreeWidget *treeWidget;
+    QTreeWidget *treeWidget_2;
 
     void setupUi(QWidget *Form)
     {
         if (Form->objectName().isEmpty())
             Form->setObjectName(QStringLiteral("Form"));
-        Form->resize(653, 506);
         horizontalLayout = new QHBoxLayout(Form);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         splitter = new QSplitter(Form);
         splitter->setObjectName(QStringLiteral("splitter"));
-        splitter->setLineWidth(0);
         splitter->setOrientation(Qt::Horizontal);
-        splitter->setOpaqueResize(true);
-        splitter->setHandleWidth(0);
-        splitter->setChildrenCollapsible(true);
-        frame = new QFrame(splitter);
-        frame->setObjectName(QStringLiteral("frame"));
-        frame->setFrameShape(QFrame::NoFrame);
-        frame->setFrameShadow(QFrame::Raised);
-        verticalLayout = new QVBoxLayout(frame);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setSizeConstraint(QLayout::SetDefaultConstraint);
-        treeView = new QTreeView(frame);
-        treeView->setObjectName(QStringLiteral("treeView"));
-        treeView->setFrameShape(QFrame::StyledPanel);
-        treeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-        verticalLayout->addWidget(treeView);
-
-        splitter->addWidget(frame);
-        frame_2 = new QFrame(splitter);
-        frame_2->setObjectName(QStringLiteral("frame_2"));
-        frame_2->setFrameShape(QFrame::StyledPanel);
-        frame_2->setFrameShadow(QFrame::Raised);
-        verticalLayout_2 = new QVBoxLayout(frame_2);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        treeView_2 = new QTreeView(frame_2);
-        treeView_2->setObjectName(QStringLiteral("treeView_2"));
-        treeView_2->setFrameShape(QFrame::StyledPanel);
-        treeView_2->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-        verticalLayout_2->addWidget(treeView_2);
-
-        splitter->addWidget(frame_2);
+        splitter->setChildrenCollapsible(false);
+        treeWidget = new QTreeWidget(splitter);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
+        treeWidget->setHeaderItem(__qtreewidgetitem);
+        treeWidget->setObjectName(QStringLiteral("treeWidget"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(treeWidget->sizePolicy().hasHeightForWidth());
+        treeWidget->setSizePolicy(sizePolicy);
+        treeWidget->setMaximumSize(QSize(275, 16777215));
+        treeWidget->setSizeIncrement(QSize(0, 0));
+        treeWidget->setBaseSize(QSize(0, 0));
+        treeWidget->setProperty("showDropIndicator", QVariant(false));
+        splitter->addWidget(treeWidget);
+        treeWidget->header()->setDefaultSectionSize(25);
+        treeWidget->header()->setHighlightSections(false);
+        treeWidget->header()->setMinimumSectionSize(15);
+        treeWidget->header()->setProperty("showSortIndicator", QVariant(false));
+        treeWidget->header()->setStretchLastSection(false);
+        treeWidget_2 = new QTreeWidget(splitter);
+        QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem();
+        __qtreewidgetitem1->setText(0, QStringLiteral("1"));
+        treeWidget_2->setHeaderItem(__qtreewidgetitem1);
+        treeWidget_2->setObjectName(QStringLiteral("treeWidget_2"));
+        splitter->addWidget(treeWidget_2);
 
         horizontalLayout->addWidget(splitter);
 

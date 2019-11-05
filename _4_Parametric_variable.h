@@ -10,7 +10,9 @@
 #include "ui__4_Parametric_variable.h"
 #include <QDialog>
 #include "QStandardItemModel"
-
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 namespace Ui
 {
