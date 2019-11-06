@@ -330,7 +330,7 @@ public:
         splitter->setOrientation(Qt::Vertical);
         frame_2 = new QFrame(splitter);
         frame_2->setObjectName(QStringLiteral("frame_2"));
-        frame_2->setFrameShape(QFrame::StyledPanel);
+        frame_2->setFrameShape(QFrame::NoFrame);
         frame_2->setFrameShadow(QFrame::Raised);
         frame_2->setLineWidth(1);
         horizontalLayout_5 = new QHBoxLayout(frame_2);
@@ -340,7 +340,7 @@ public:
         horizontalLayout_5->setContentsMargins(9, 0, -1, -1);
         mdiArea = new QMdiArea(frame_2);
         mdiArea->setObjectName(QStringLiteral("mdiArea"));
-        mdiArea->setFrameShape(QFrame::StyledPanel);
+        mdiArea->setFrameShape(QFrame::NoFrame);
         mdiArea->setFrameShadow(QFrame::Sunken);
         QBrush brush(QColor(160, 160, 160, 255));
         brush.setStyle(Qt::NoBrush);
@@ -373,7 +373,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setFrameShape(QFrame::StyledPanel);
+        tableWidget->setFrameShape(QFrame::NoFrame);
         tableWidget->setFrameShadow(QFrame::Sunken);
         tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

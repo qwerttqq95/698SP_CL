@@ -248,7 +248,7 @@ QString MainWindow::analysis(QString a)
             }
             QString
                     APDU = "81" + n.PIIDACD + "80" + n.REQUEST_TIMEDATE_TIME + year + date_times + year + date_times;
-            if (n.REQUEST_TIMEDATE_TIME == "00")
+            if (n.LINK_REQUSET_TYPE == "00")
             {
                 emit
                 serial->send_write({BuildMessage(APDU, revert_add, "01"), "登录响应"});

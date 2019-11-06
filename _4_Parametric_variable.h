@@ -24,10 +24,17 @@ class _4_Parametric_variable : public QDialog
 Q_OBJECT
 public:
     explicit _4_Parametric_variable(QWidget *parent = nullptr);
+    void att();
+    void act();
 
     QStandardItemModel *model;
 private:
     Ui::_4_Parametric_variableForm *ui;
+    QSqlDatabase database;
+
+public slots:
+    void add_item(QTreeWidgetItem *,int);
+    void add_item(QTreeWidgetItem *,QTreeWidgetItem*);
 };
 
 
