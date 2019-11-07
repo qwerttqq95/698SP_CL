@@ -16,6 +16,13 @@ _4_Parametric_variable::_4_Parametric_variable(QWidget *parent) : QDialog(parent
     }
     att();
     act();
+    ui->treeWidget_2->setColumnCount(7);
+    ui->treeWidget_2->setHeaderLabels(QStringList() << "数据名称" << "属性" << "数值" << "数据类型" << "小数" << "单位" << "备注");
+    ui->treeWidget_2->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->treeWidget_4->setColumnCount(7);
+    ui->treeWidget_4->setHeaderLabels(QStringList() << "数据名称" << "属性" << "数值" << "数据类型" << "小数" << "单位" << "备注");
+    ui->treeWidget_4->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    Item_box = {};
 }
 
 void _4_Parametric_variable::att()
@@ -102,9 +109,44 @@ void _4_Parametric_variable::act()
 
 void _4_Parametric_variable::add_item(QTreeWidgetItem *item, int pos)
 {
-    qDebug() << "QTreeWidgetItem *item" << item->text(2) << item->parent()->text(0);
+    deal_box_att(item);
 
 }
+
+void _4_Parametric_variable::deal_box_att(QTreeWidgetItem *item)
+{
+    PARAMETRIC *need_del = nullptr;
+    int i = -1;
+            foreach(auto x, Item_box)
+        {
+            i += 1;
+            if (x.left == item)
+            {
+                flag = true;
+                need_del = &x;
+                break;
+            }
+        }
+    if (!flag)
+    {
+        auto newitem = new QTreeWidgetItem(ui->treeWidget_2);
+        newitem->setText(0, item->parent()->text(0) + " " + item->parent()->text(1));
+        newitem->setText(1, item->text(2));
+        newitem->setCheckState(0, Qt::Checked);
+        PARAMETRIC new_m_itembox;
+        new_m_itembox.left = item;
+        new_m_itembox.right = newitem;
+        Item_box.append(new_m_itembox);
+
+    } else
+    {
+        delete need_del->right;
+        delete need_del;
+        Item_box.removeAt(i);
+        flag = false;
+    }
+}
+
 
 void _4_Parametric_variable::add_item(QTreeWidgetItem *item, QTreeWidgetItem *item2)
 {
@@ -115,10 +157,7 @@ void _4_Parametric_variable::add_item(QTreeWidgetItem *item, QTreeWidgetItem *it
         else
         {
             item->setCheckState(0, Qt::Checked);
-
         }
-
-
     }
 
 }

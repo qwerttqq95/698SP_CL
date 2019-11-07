@@ -16,6 +16,7 @@ Custom_APDU::Custom_APDU(QWidget *parent) :
     setWindowFlags(Qt::WindowStaysOnTopHint | Qt::MSWindowsFixedSizeDialogHint);
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(send()), Qt::UniqueConnection);
     ui->textEdit->setText("05 01 03 40 01 02 00 00");
+
 }
 
 void Custom_APDU::send()

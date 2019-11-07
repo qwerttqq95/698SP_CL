@@ -24,17 +24,32 @@ class _4_Parametric_variable : public QDialog
 Q_OBJECT
 public:
     explicit _4_Parametric_variable(QWidget *parent = nullptr);
+
     void att();
+
     void act();
+
+    typedef struct
+    {
+        QTreeWidgetItem *left;
+        QTreeWidgetItem *right;
+    } PARAMETRIC;
+
+    QList<PARAMETRIC> Item_box;
 
     QStandardItemModel *model;
 private:
     Ui::_4_Parametric_variableForm *ui;
     QSqlDatabase database;
+    bool flag = false;
 
 public slots:
-    void add_item(QTreeWidgetItem *,int);
-    void add_item(QTreeWidgetItem *,QTreeWidgetItem*);
+
+    void add_item(QTreeWidgetItem *, int);
+
+    void add_item(QTreeWidgetItem *, QTreeWidgetItem *);
+
+    void deal_box_att(QTreeWidgetItem *);
 };
 
 
