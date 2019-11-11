@@ -102,8 +102,20 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>读取</string>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>11</width>
+                 <height>16</height>
+                </size>
                </property>
                <property name="autoDefault">
                 <bool>false</bool>
@@ -124,8 +136,65 @@
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>设置</string>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>57</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>取消勾选</string>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_5">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>57</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>清空勾选</string>
                </property>
                <property name="flat">
                 <bool>true</bool>
@@ -149,6 +218,15 @@
            </item>
            <item>
             <widget class="QTreeWidget" name="treeWidget_2">
+             <property name="alternatingRowColors">
+              <bool>true</bool>
+             </property>
+             <property name="textElideMode">
+              <enum>Qt::ElideMiddle</enum>
+             </property>
+             <property name="allColumnsShowFocus">
+              <bool>true</bool>
+             </property>
              <column>
               <property name="text">
                <string notr="true">1</string>

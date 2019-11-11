@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QPushButton>
@@ -32,18 +33,21 @@ public:
     QHBoxLayout *horizontalLayout_4;
     QSplitter *splitter;
     QTreeWidget *treeWidget;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *pushButton;
     QPushButton *pushButton_2;
+    QFrame *line;
+    QPushButton *pushButton_4;
+    QPushButton *pushButton_5;
     QSpacerItem *horizontalSpacer;
     QTreeWidget *treeWidget_2;
     QWidget *tab_2;
     QVBoxLayout *verticalLayout_3;
     QSplitter *splitter_2;
     QTreeWidget *treeWidget_3;
-    QWidget *layoutWidget;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_2;
     QHBoxLayout *horizontalLayout_3;
     QPushButton *pushButton_3;
@@ -86,9 +90,9 @@ public:
         treeWidget->header()->setMinimumSectionSize(15);
         treeWidget->header()->setProperty("showSortIndicator", QVariant(false));
         treeWidget->header()->setStretchLastSection(false);
-        widget = new QWidget(splitter);
-        widget->setObjectName(QStringLiteral("widget"));
-        verticalLayout = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(splitter);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         horizontalLayout_2 = new QHBoxLayout();
@@ -96,25 +100,53 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         horizontalLayout_2->setSizeConstraint(QLayout::SetDefaultConstraint);
         horizontalLayout_2->setContentsMargins(0, -1, 0, -1);
-        pushButton = new QPushButton(widget);
+        pushButton = new QPushButton(layoutWidget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
         QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
         pushButton->setSizePolicy(sizePolicy1);
+        pushButton->setMaximumSize(QSize(40, 16777215));
+        pushButton->setIconSize(QSize(11, 16));
         pushButton->setAutoDefault(false);
         pushButton->setFlat(true);
 
         horizontalLayout_2->addWidget(pushButton);
 
-        pushButton_2 = new QPushButton(widget);
+        pushButton_2 = new QPushButton(layoutWidget);
         pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
         sizePolicy1.setHeightForWidth(pushButton_2->sizePolicy().hasHeightForWidth());
         pushButton_2->setSizePolicy(sizePolicy1);
+        pushButton_2->setMaximumSize(QSize(40, 16777215));
         pushButton_2->setFlat(true);
 
         horizontalLayout_2->addWidget(pushButton_2);
+
+        line = new QFrame(layoutWidget);
+        line->setObjectName(QStringLiteral("line"));
+        line->setFrameShape(QFrame::VLine);
+        line->setFrameShadow(QFrame::Sunken);
+
+        horizontalLayout_2->addWidget(line);
+
+        pushButton_4 = new QPushButton(layoutWidget);
+        pushButton_4->setObjectName(QStringLiteral("pushButton_4"));
+        sizePolicy1.setHeightForWidth(pushButton_4->sizePolicy().hasHeightForWidth());
+        pushButton_4->setSizePolicy(sizePolicy1);
+        pushButton_4->setMaximumSize(QSize(57, 16777215));
+        pushButton_4->setFlat(true);
+
+        horizontalLayout_2->addWidget(pushButton_4);
+
+        pushButton_5 = new QPushButton(layoutWidget);
+        pushButton_5->setObjectName(QStringLiteral("pushButton_5"));
+        sizePolicy1.setHeightForWidth(pushButton_5->sizePolicy().hasHeightForWidth());
+        pushButton_5->setSizePolicy(sizePolicy1);
+        pushButton_5->setMaximumSize(QSize(57, 16777215));
+        pushButton_5->setFlat(true);
+
+        horizontalLayout_2->addWidget(pushButton_5);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -123,15 +155,18 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_2);
 
-        treeWidget_2 = new QTreeWidget(widget);
+        treeWidget_2 = new QTreeWidget(layoutWidget);
         QTreeWidgetItem *__qtreewidgetitem1 = new QTreeWidgetItem();
         __qtreewidgetitem1->setText(0, QStringLiteral("1"));
         treeWidget_2->setHeaderItem(__qtreewidgetitem1);
         treeWidget_2->setObjectName(QStringLiteral("treeWidget_2"));
+        treeWidget_2->setAlternatingRowColors(true);
+        treeWidget_2->setTextElideMode(Qt::ElideMiddle);
+        treeWidget_2->setAllColumnsShowFocus(true);
 
         verticalLayout->addWidget(treeWidget_2);
 
-        splitter->addWidget(widget);
+        splitter->addWidget(layoutWidget);
 
         horizontalLayout_4->addWidget(splitter);
 
@@ -160,9 +195,9 @@ public:
         treeWidget_3->header()->setMinimumSectionSize(15);
         treeWidget_3->header()->setProperty("showSortIndicator", QVariant(false));
         treeWidget_3->header()->setStretchLastSection(false);
-        layoutWidget = new QWidget(splitter_2);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        verticalLayout_2 = new QVBoxLayout(layoutWidget);
+        layoutWidget1 = new QWidget(splitter_2);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        verticalLayout_2 = new QVBoxLayout(layoutWidget1);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
         horizontalLayout_3 = new QHBoxLayout();
@@ -170,7 +205,7 @@ public:
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         horizontalLayout_3->setSizeConstraint(QLayout::SetDefaultConstraint);
         horizontalLayout_3->setContentsMargins(0, -1, 0, -1);
-        pushButton_3 = new QPushButton(layoutWidget);
+        pushButton_3 = new QPushButton(layoutWidget1);
         pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
         sizePolicy1.setHeightForWidth(pushButton_3->sizePolicy().hasHeightForWidth());
         pushButton_3->setSizePolicy(sizePolicy1);
@@ -186,7 +221,7 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_3);
 
-        treeWidget_4 = new QTreeWidget(layoutWidget);
+        treeWidget_4 = new QTreeWidget(layoutWidget1);
         QTreeWidgetItem *__qtreewidgetitem3 = new QTreeWidgetItem();
         __qtreewidgetitem3->setText(0, QStringLiteral("1"));
         treeWidget_4->setHeaderItem(__qtreewidgetitem3);
@@ -194,7 +229,7 @@ public:
 
         verticalLayout_2->addWidget(treeWidget_4);
 
-        splitter_2->addWidget(layoutWidget);
+        splitter_2->addWidget(layoutWidget1);
 
         verticalLayout_3->addWidget(splitter_2);
 
@@ -218,6 +253,8 @@ public:
         Form->setWindowTitle(QApplication::translate("Form", "Form", nullptr));
         pushButton->setText(QApplication::translate("Form", "\350\257\273\345\217\226", nullptr));
         pushButton_2->setText(QApplication::translate("Form", "\350\256\276\347\275\256", nullptr));
+        pushButton_4->setText(QApplication::translate("Form", "\345\217\226\346\266\210\345\213\276\351\200\211", nullptr));
+        pushButton_5->setText(QApplication::translate("Form", "\346\270\205\347\251\272\345\213\276\351\200\211", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QApplication::translate("Form", "\345\261\236\346\200\247", nullptr));
         pushButton_3->setText(QApplication::translate("Form", "\346\223\215\344\275\234", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QApplication::translate("Form", "\346\226\271\346\263\225", nullptr));

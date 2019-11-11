@@ -25,6 +25,8 @@ Q_OBJECT
 public:
     explicit _4_Parametric_variable(QWidget *parent = nullptr);
 
+    void analy_database(QTreeWidgetItem *,QString);
+
     void att();
 
     void act();
@@ -35,21 +37,46 @@ public:
         QTreeWidgetItem *right;
     } PARAMETRIC;
 
-    QList<PARAMETRIC> Item_box;
+    typedef struct
+    {
+        QString ItemName;
+        QString TypeCode;
+    }MENBER_ARRAY;
 
-    QStandardItemModel *model;
+    typedef  struct {
+        QTreeWidgetItem* pre_item;
+        QString num;
+    }MEMBER_PRE;
+
+    QList<PARAMETRIC> Item_box;//左右对应
+
+    QList<MENBER_ARRAY> ARRAY_box;//array处理
+
+    QList<MEMBER_PRE> pre_stat;//array状态
+
 private:
     Ui::_4_Parametric_variableForm *ui;
     QSqlDatabase database;
     bool flag = false;
 
-public slots:
 
-    void add_item(QTreeWidgetItem *, int);
+public slots:
 
     void add_item(QTreeWidgetItem *, QTreeWidgetItem *);
 
     void deal_box_att(QTreeWidgetItem *);
+
+    void deal_box_act(QTreeWidgetItem *);
+
+    static void EditFileFilter(QTreeWidgetItem *, int);
+
+    void itemchanged(QTreeWidgetItem*,QTreeWidgetItem*);
+
+    void check_cancel();
+
+    void list_clear();
+
+
 };
 
 
