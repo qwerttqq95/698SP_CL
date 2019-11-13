@@ -14,6 +14,9 @@
 #include <Check.h>
 #include "QMdiSubWindow"
 #include "_4_Parametric_variable.h"
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -69,9 +72,13 @@ Q_OBJECT
 public:
     int current = 0;
     int times = 0;
+    QSqlDatabase database;
+
     QMdiSubWindow *Custom_point;
     QMdiSubWindow *MeterArchive_point;
     QMdiSubWindow *Parametric_variable_point;
+
+    QString DARType(int);
 
     explicit MainWindow(QWidget *parent = nullptr);
 

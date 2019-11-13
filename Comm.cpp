@@ -7,14 +7,33 @@
 #include <windows.h>
 #include <vector>
 #include "io.h"
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
 
 
 #define PPPINITFCS16 0xffff
 
 using namespace std;
+
+QString binToDec(QString strBin)
+{  //二进制转十进制
+    QString decimal;
+    int nDec = 0, nLen;
+    int i, j, k;
+    nLen = strBin.length();
+    for (i = 0; i < nLen; i++)
+    {
+        if (strBin[nLen - i - 1] == "0")
+            continue;
+        else
+        {
+            k = 1;
+            for (j = 0; j < i; j++)
+                k = k * 2;
+            nDec += k;
+        }
+    }
+    decimal = QString::number(nDec);
+    return decimal;
+}
 
 void getDir(string path, vector<string> &files)
 {
@@ -145,47 +164,102 @@ unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len)
     return (fcs ^ 0xffff);
 }
 
-void BtoD(int a, int *b)
+QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item)
 {
-    *b = 0;
-    while (a--)
+    switch (NoDataType)
     {
-        *b *= 2;
-        *b += getchar() - '0';
+        default:
+            return NULL;
+        case 0://NULL
+        {
+            return "00";
+        }
+        case 1://ARRAY
+        {
+            return QString("%1%2").arg(NoDataType, 2, 16, QLatin1Char('0')).arg(item->text(2).toInt(), 2, 16,
+                                                                                QLatin1Char('0'));
+        }
+        case 2://STRUCTURE
+        {
+            return QString("%1%2").arg(NoDataType, 2, 16, QLatin1Char('0')).arg(item->text(2).toInt(), 2, 16,
+                                                                                QLatin1Char('0'));
+        }
+        case 3://BOOL
+        {
+            return QString("%1%2").arg(NoDataType, 2, 16, QLatin1Char('0')).arg(item->text(2).toInt(), 2, 16,
+                                                                                QLatin1Char('0'));
+        }
+        case 4://bit-string
+        {
+            return QString("%1").arg(NoDataType, 2, 16, QLatin1Char('0')) + "01" +
+                   QString("%1").arg(binToDec(item->text(2)).toInt(), 2, 16, QLatin1Char('0'));
+        }
+        case 9://octet-string
+        {
+            if (item->text(2).contains("."))
+            {
+                QString content("");
+                QString lenth = "04";
+                        foreach(auto x, item->text(2).split("."))
+                    {
+                        content.append(QString("%1").arg(x.toInt(), 2, 16, QLatin1Char('0')));
+                    }
+                return QString("%1").arg(NoDataType, 2, 16, QLatin1Char('0')) + lenth + content;
+            }
+        }
+        case 10://visible-string
+        {
+            QString Data = item->text(2);
+            if (Data == "00")
+            {
+                return "0a00";
+            } else
+            {
+                QString content = item->text(2).toUtf8().toHex();
+                QString lenth = QString("%1").arg(content.length() / 2, 2, 16, QLatin1Char('0'));
+                return QString("%1").arg(NoDataType, 2, 16, QLatin1Char('0')) + lenth + content;
+            }
+        }
+        case 17://unsigned
+        {
+            return QString("%1%2").arg(NoDataType, 2, 16, QLatin1Char('0')).arg(item->text(2).toInt(), 2, 16,
+                                                                                QLatin1Char('0'));
+        }
+        case 18://long-unsigned
+        {
+            return QString("%1%2").arg(NoDataType, 2, 16, QLatin1Char('0')).arg(item->text(2).toInt(), len * 2, 16,
+                                                                                QLatin1Char('0'));
+        }
+        case 22://ENUM
+        {
+            return QString("%1%2").arg(NoDataType, 2, 16, QLatin1Char('0')).arg(item->text(2).toInt(), 2, 16,
+                                                                                QLatin1Char('0'));
+        }
+        case 28://date_time_s
+        {
+            QString date = item->text(2).split(" ")[0];
+            QString data("");
+            QStringList temp = date.split("-");
+            QString Year = QString("%1").arg(temp[0].toInt(), 4, 16, QLatin1Char('0'));
+            QString Mouth = QString("%1").arg(temp[1].toInt(), 2, 16, QLatin1Char('0'));
+            QString Day = QString("%1").arg(temp[2].toInt(), 2, 16, QLatin1Char('0'));
+            QString re = "1c" + Year + Mouth + Day;
+            QStringList times = item->text(2).split(" ")[1].split(":");
+                    foreach(auto x, times)
+                {
+                    re.append(QString("%1").arg(x.toInt(), 2, 16, QLatin1Char('0')));
+                }
+            return re;
+        }
     }
-
 }
 
-QString DARType(int a)
-{
-    QSqlDatabase database;
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("Database.db");
-    if (!database.open())
-    {
-        qDebug() << "Error: Failed to connect database." << database.lastError();
-    }
-    QSqlQuery sql_query;
-    sql_query.exec("select * from dar where Number= " + QString::number(a));
-    if (!sql_query.exec())
-    {
-        qDebug() << sql_query.lastError();
-    } else
-    {
-        sql_query.next();
-        QString detail = sql_query.value(0).toString();
-        qDebug() << QString("detail:%1").arg(detail);
-        database.close();
-        return detail;
-    }
-    database.close();
-}
 
-QString BuildMessage(QString apdu, const QString& SA, const QString& ctrl_zone)
+QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone)
 {
-    qDebug() << "apdu:"<<apdu;
-    qDebug() << "SA:"<<SA;
-    qDebug() << "ctrl_zone:"<<ctrl_zone;
+    qDebug() << "apdu:" << apdu;
+    qDebug() << "SA:" << SA;
+    qDebug() << "ctrl_zone:" << ctrl_zone;
     apdu.remove(' ');
 //    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
@@ -283,7 +357,6 @@ string DtoB(int d)
     string a = x;
     return a;
 }
-
 
 string StringAddSpace(string &input)
 {
@@ -407,17 +480,6 @@ VALUE_LEFT Data_deal(QList<QString> a)
     m.left = {""};
     return m;
 }
-
-//
-//QString return_current_time()
-//{
-//    time_t timep;
-//    time(&timep);
-//    char tmp[64];
-//    strftime(tmp, sizeof(tmp), "%Y%m%d%H%M%S00", localtime(&timep));
-//    QString x = tmp;
-//
-//}
 
 QString re_rever_add()
 {

@@ -30,7 +30,6 @@ void Custom_APDU::send()
         QString add = re_rever_add();
         qDebug() << "发送add" << add;
         re_message = BuildMessage(a, add, "43");
-
     }
     emit send_write({re_message, "自定义APDU"});
 }

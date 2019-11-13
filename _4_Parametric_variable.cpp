@@ -1,18 +1,19 @@
 ///参变量(4)
 
 #include "_4_Parametric_variable.h"
+#include "QMessageBox"
+
+extern QString DealDataType(int NoDataType, int len, QTreeWidgetItem *item);
+
+extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
+
+extern QString re_rever_add();
 
 _4_Parametric_variable::_4_Parametric_variable(QWidget *parent) : QDialog(parent),
                                                                   ui(new Ui::_4_Parametric_variableForm)
 {
     ui->setupUi(this);
     this->setWindowTitle("参变量");
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("Database.db");
-    if (!database.open())
-    {
-        qDebug() << "Error: Failed to connect database." << database.lastError();
-    }
     att();
     act();
     ui->treeWidget_2->setColumnCount(7);
@@ -32,9 +33,10 @@ _4_Parametric_variable::_4_Parametric_variable(QWidget *parent) : QDialog(parent
 
     connect(ui->pushButton_4, SIGNAL(clicked()), this, SLOT(check_cancel()));
     connect(ui->pushButton_5, SIGNAL(clicked()), this, SLOT(list_clear()));
+    connect(ui->pushButton_2, SIGNAL(clicked()), this, SLOT(set()));
 }
 
-void _4_Parametric_variable::att()
+void _4_Parametric_variable::att()//属性框架搭建
 {
     ui->treeWidget->setColumnCount(4);
     ui->treeWidget->setHeaderLabels(QStringList() << "标识" << "名称" << "属性" << "读写");
@@ -75,7 +77,7 @@ void _4_Parametric_variable::att()
             this, SLOT(add_item(QTreeWidgetItem * , QTreeWidgetItem * )));
 }
 
-void _4_Parametric_variable::act()
+void _4_Parametric_variable::act()//动作框架搭建
 {
     ui->treeWidget_3->setColumnCount(3);
     ui->treeWidget_3->setHeaderLabels(QStringList() << "标识" << "名称" << "方法");
@@ -116,7 +118,7 @@ void _4_Parametric_variable::act()
             this, SLOT(add_item(QTreeWidgetItem * , QTreeWidgetItem * )));
 }
 
-void _4_Parametric_variable::deal_box_att(QTreeWidgetItem *item)
+void _4_Parametric_variable::deal_box_att(QTreeWidgetItem *item)//右侧新建属性
 {
     PARAMETRIC *need_del = nullptr;
     int i = -1;
@@ -180,6 +182,7 @@ void _4_Parametric_variable::deal_box_att(QTreeWidgetItem *item)
         new_m_itembox.left = item;
         new_m_itembox.right = newitem;
         Item_box.append(new_m_itembox);
+        newitem->setExpanded(true);
     } else
     {
         delete need_del->right;
@@ -285,7 +288,7 @@ void _4_Parametric_variable::deal_box_act(QTreeWidgetItem *item)
     } else
     {
         delete need_del->right;
-        delete need_del;
+//        delete need_del;
         Item_box.removeAt(i);
         flag = false;
     }
@@ -318,6 +321,7 @@ void _4_Parametric_variable::EditFileFilter(QTreeWidgetItem *item, int column)
 
 
 }
+
 
 void _4_Parametric_variable::itemchanged(QTreeWidgetItem *item, QTreeWidgetItem *item2)
 {
@@ -379,7 +383,7 @@ void _4_Parametric_variable::check_cancel()
 {
             foreach(auto x, Item_box)
         {
-            x.right->setCheckState(0,Qt::Unchecked);
+            x.right->setCheckState(0, Qt::Unchecked);
         }
 }
 
@@ -387,8 +391,66 @@ void _4_Parametric_variable::list_clear()
 {
             foreach(auto x, Item_box)
         {
-            x.left->setCheckState(0,Qt::Unchecked);
+            x.left->setCheckState(0, Qt::Unchecked);
         }
+}
+
+void _4_Parametric_variable::set()
+{
+    QList<QTreeWidgetItem *> current_check = {};
+            foreach(auto x, Item_box)
+        {
+            if (x.right->checkState(0))
+            {
+                current_check.append(x.right);
+            }
+        }
+    if (current_check.size() == 0)
+    {
+        return;
+    }
+    if (current_check.size() == 1)
+    {
+        QTreeWidgetItem *item = current_check.takeFirst();
+        QString OI = item->text(0).split(" ")[0];
+        QString att = QString("%1").arg(item->text(1).toInt(), 2, 16, QLatin1Char('0')) + "00";
+        QSqlQuery sql_query;
+        sql_query.exec("select * from datatype where DataTypeName ='" + item->text(3) + "'");
+        sql_query.next();
+        int TypeId = sql_query.value(0).toInt();
+        if (item->text(2) == "")
+        {
+            QMessageBox::warning(nullptr, "Warming", "数据不能为空");
+            return;
+        }
+        QString DataText = DealDataType(TypeId, sql_query.value(2).toInt(), item);
+        if (DataText == NULL)
+        {
+            QMessageBox::warning(nullptr, "Warming", "数据类型暂不支持");
+            return;
+        }
+        for (int i = 0; i < item->childCount(); i++)
+        {
+            QTreeWidgetItem *itemchild = item->child(i);
+            QSqlQuery sql_query2;
+            sql_query2.exec("select * from datatype where DataTypeName ='" + itemchild->text(3) + "'");
+            sql_query2.next();
+            int TypeIdChild = sql_query2.value(0).toInt();
+            if (itemchild->text(2) == "")
+            {
+                QMessageBox::warning(nullptr, "Warming", "数据不能为空");
+                return;
+            }
+            DataText.append(DealDataType(TypeIdChild, sql_query2.value(2).toInt(), itemchild));
+        }
+        QString APDU = "060100" + OI + att + DataText + "00";
+        qDebug() << "APDU: " << APDU;
+        emit send_write({BuildMessage(APDU, re_rever_add(), "43"), "设置" + OI});
+    } else
+    {
+        QString APDU = "060200";
+
+    }
 }
 
 

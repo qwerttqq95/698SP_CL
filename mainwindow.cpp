@@ -15,8 +15,6 @@
 
 using namespace std;
 
-extern QString DARType(int);
-
 extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString StringAddSpace(QString &input);
@@ -33,6 +31,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
     setWindowTitle("698SP v1.3");
+
+    database = QSqlDatabase::addDatabase("QSQLITE");
+    database.setDatabaseName("Database.db");
+    if (!database.open())
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+    }
+
     connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about())); //关于
     connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config())); //打开参数设置
     connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
@@ -69,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent) :
     Parametric_variable = new _4_Parametric_variable();
     Parametric_variable_point = ui->mdiArea->addSubWindow(Parametric_variable,Qt::WindowMinimizeButtonHint);
     Parametric_variable_point->widget()->showMaximized();
-
+    connect(Parametric_variable, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
 
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
@@ -112,6 +118,8 @@ MainWindow::MainWindow(QWidget *parent) :
                                             const QModelIndex)), this, SLOT(double_click_analysis(
                                                                                     const QModelIndex)));
     connect(ui->tableWidget, SIGNAL(itemSelectionChanged()), this, SLOT(copy_message()));
+
+
 }
 
 void MainWindow::function()
@@ -683,3 +691,18 @@ void MainWindow::copy_message()
 }
 
 
+QString MainWindow::DARType(int a)
+{
+    QSqlQuery sql_query;
+    sql_query.exec("select * from dar where Number= " + QString::number(a));
+    if (!sql_query.exec())
+    {
+        qDebug() << sql_query.lastError();
+    } else
+    {
+        sql_query.next();
+        QString detail = sql_query.value(0).toString();
+        qDebug() << QString("detail:%1").arg(detail);
+        return detail;
+    }
+}

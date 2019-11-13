@@ -23,7 +23,7 @@ class _4_Parametric_variable : public QDialog
 {
 Q_OBJECT
 public:
-    explicit _4_Parametric_variable(QWidget *parent = nullptr);
+    _4_Parametric_variable(QWidget *parent = nullptr);
 
     void analy_database(QTreeWidgetItem *,QString);
 
@@ -56,11 +56,14 @@ public:
 
 private:
     Ui::_4_Parametric_variableForm *ui;
-    QSqlDatabase database;
     bool flag = false;
 
+signals:
+    void send_write(QList<QString>);
 
 public slots:
+
+    void set();
 
     void add_item(QTreeWidgetItem *, QTreeWidgetItem *);
 
