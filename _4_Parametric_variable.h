@@ -65,6 +65,10 @@ public slots:
 
     void set();
 
+    void read();
+
+    void action();
+
     void add_item(QTreeWidgetItem *, QTreeWidgetItem *);
 
     void deal_box_att(QTreeWidgetItem *);
