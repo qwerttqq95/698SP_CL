@@ -8,7 +8,7 @@
 #include <fstream>
 #include <ui_Check.h>
 
-extern QString BuildMessage(QString apdu, const QString& SA, const QString& ctrl_zone);
+extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString re_rever_add();
 
@@ -61,6 +61,10 @@ void Check::send_archeive()
             QString str(line);
             str.replace("\n", "");
             qDebug() << "str" << str;
+            if (str == "")
+            {
+                continue;
+            }
             message = str.split("#");
             if (message[0].contains("比较"))
             {

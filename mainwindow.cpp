@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle("698SP v1.3");
+    setWindowTitle("698SP v1.4.0");
 
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("Database.db");
@@ -77,6 +77,9 @@ MainWindow::MainWindow(QWidget *parent) :
     Parametric_variable_point->widget()->showMaximized();
     connect(Parametric_variable, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
 
+    CollectionMonitoring = new CollectionMonitoringClass();
+    CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring,Qt::WindowMinimizeButtonHint);
+    CollectionMonitoring_point->widget()->showMaximized();
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
     for (auto &j : p)
@@ -118,8 +121,6 @@ MainWindow::MainWindow(QWidget *parent) :
                                             const QModelIndex)), this, SLOT(double_click_analysis(
                                                                                     const QModelIndex)));
     connect(ui->tableWidget, SIGNAL(itemSelectionChanged()), this, SLOT(copy_message()));
-
-
 }
 
 void MainWindow::function()
@@ -448,7 +449,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::about()
 {
-    QMessageBox::information(this, "关于", "698SP CLION V1.3 \n QT版本: 5.11.3", QMessageBox::Ok);
+    QMessageBox::information(this, "关于", "698SP CLION V1.4 \n QT版本: 5.11.3", QMessageBox::Ok);
 }
 
 void MainWindow::serial_config()

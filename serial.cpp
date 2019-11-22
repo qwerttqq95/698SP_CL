@@ -276,7 +276,7 @@ bool Serial::build_net(int com)
     listen(s, 1);
     SOCKADDR clientAddr;
     int nSize = sizeof(SOCKADDR);
-    int recvTimeout = 4000; 
+    int recvTimeout = 4000;
     setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (char *) &recvTimeout, sizeof(int));
     clientSock = ::accept(s, &clientAddr, &nSize);
     int is_head = 1;
@@ -286,7 +286,7 @@ bool Serial::build_net(int com)
         char buff[4000] = {0};
         int i;
         i = recv(clientSock, buff, 4000, 0);
-        if (i == -1)
+        if (i == -1 or i == 0)
         {
             if (IsSocketClosed(clientSock) and run_flag)
             {
@@ -296,14 +296,14 @@ bool Serial::build_net(int com)
             } else
                 continue;
         }
-        if (i == 0)
-        {
-//            qDebug() << "i=0";//终端下线
-            break;
-        }
+//        if (i == 0)
+//        {
+////            qDebug() << "i=0";//终端下线
+//            break;
+//        }
         char a[4] = {0};
         string output = string("");
-        for (int x = 0; x <i; x++)
+        for (int x = 0; x < i; x++)
         {
             sprintf(a, "%02X ", (BYTE) buff[x]);
             output = output + a;
@@ -325,14 +325,14 @@ bool Serial::build_net(int com)
 
             } else if (list[0] == "68")
             {
-                qDebug() << "need more"<<list;
+                qDebug() << "need more" << list;
                 list_backup = list;
                 is_head = 0;
             }
         } else
         {
-            qDebug() << "detach"<<list;
-            list = list_backup +  list ;
+            qDebug() << "detach" << list;
+            list = list_backup + list;
             is_head = 1;
             goto judge;
         }

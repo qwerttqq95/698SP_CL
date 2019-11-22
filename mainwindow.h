@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include "serial.h"
 #include "MeterArchives.h"
+#include "CollectionMonitoringClassObject.h"
 #include "Analysis.h"
 #include <QList>
 #include <QDebug>
@@ -77,6 +78,7 @@ public:
     QMdiSubWindow *Custom_point;
     QMdiSubWindow *MeterArchive_point;
     QMdiSubWindow *Parametric_variable_point;
+    QMdiSubWindow *CollectionMonitoring_point;
 
     QString DARType(int);
 
@@ -146,6 +148,7 @@ private:
     MeterArchives *MeterArchive;
     Check *check;
     Analysis *analy;
+    CollectionMonitoringClass *CollectionMonitoring;
     _4_Parametric_variable *Parametric_variable;
 
 signals:
