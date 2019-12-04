@@ -88,6 +88,12 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
 
+    QAction *hard_init;
+    hard_init = new QAction();
+    hard_init->setObjectName(QStringLiteral("hard_init"));
+    hard_init->setText("硬件复位");
+    ui->menu_5->addAction(hard_init);
+
     QAction *shijian_init;
     shijian_init = new QAction();
     shijian_init->setObjectName(QStringLiteral("shijian_init"));
@@ -144,8 +150,7 @@ void MainWindow::function()
                 qDebug() << temp2;
                 QList<QString> temp_list = temp2.split("#");
                 serial->send_write({BuildMessage(temp_list[1], revert_add, "43"), temp_list[0]});
-                QEventLoop
-                        eventloop;
+                QEventLoop eventloop;
                 QTimer::singleShot(1500, &eventloop, SLOT(quit()));
                 eventloop.exec();
             }

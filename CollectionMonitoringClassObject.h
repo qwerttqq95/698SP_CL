@@ -23,6 +23,9 @@ Q_OBJECT
 public:
     explicit CollectionMonitoringClass(QWidget *parent = nullptr);
 
+public slots:
+    void analysis();
+
 private:
     Ui::FormCOLLECTIONMONITORINGCLASSOBJECT *ui;
 };

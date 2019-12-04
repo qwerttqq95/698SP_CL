@@ -334,10 +334,7 @@ void _4_Parametric_variable::EditFileFilter(QTreeWidgetItem *item, int column)
     } else        //当双击的不是第二列的时候将flags中的可编辑属性去掉
     {
         item->setFlags(item->flags() & ~(Qt::ItemIsEditable));
-
     }
-
-
 }
 
 
@@ -574,8 +571,11 @@ void _4_Parametric_variable::action()
         int TypeId = sql_query.value(0).toInt();
         if (item->text(2) == "")
         {
-            QMessageBox::warning(nullptr, "Warming", "数据不能为空");
-            return;
+            if (item->text(3) != "NULL")
+            {
+                QMessageBox::warning(nullptr, "Warming", "数据不能为空");
+                return;
+            }
         }
         QString DataText = DealDataType(TypeId, sql_query.value(2).toInt(), item);
         if (DataText == NULL)
@@ -592,8 +592,11 @@ void _4_Parametric_variable::action()
             int TypeIdChild = sql_query2.value(0).toInt();
             if (itemchild->text(2) == "")
             {
-                QMessageBox::warning(nullptr, "Warming", "数据不能为空");
-                return;
+                if (itemchild->text(3) != "NULL")
+                {
+                    QMessageBox::warning(nullptr, "Warming", "数据不能为空");
+                    return;
+                }
             }
             DataText.append(DealDataType(TypeIdChild, sql_query2.value(2).toInt(), itemchild));
         }

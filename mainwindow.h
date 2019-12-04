@@ -97,7 +97,6 @@ public:
 
     QString revert_add;
 
-
     typedef struct
     {
         QString PIIDACD;
