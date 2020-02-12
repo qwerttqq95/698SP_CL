@@ -6,12 +6,9 @@
 #include <QScrollBar>
 #include <QtWidgets/QInputDialog>
 #include "XMLFile/tinyxml2.h"
-#include <QSize>
-#include <QEvent>
 #include <QKeyEvent>
 #include <QApplication>
 #include <QClipboard>
-
 
 using namespace std;
 
@@ -21,8 +18,7 @@ extern QString StringAddSpace(QString &input);
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
-        ui(new Ui::MainWindow)
-{
+        ui(new Ui::MainWindow) {
     ui->setupUi(this);
     serial = new Serial();
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
@@ -30,15 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle("698SP v1.4.0");
+    setWindowTitle("698主站 v20.02.12");
 
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("Database.db");
-    if (!database.open())
-    {
+    if (!database.open()) {
         qDebug() << "Error: Failed to connect database." << database.lastError();
     }
-
     connect(ui->actionA, SIGNAL(triggered()), this, SLOT(about())); //关于
     connect(ui->actionSd, SIGNAL(triggered()), this, SLOT(serial_config())); //打开参数设置
     connect(ui->actionAPDUzu, SIGNAL(triggered()), this, SLOT(custom()));
@@ -73,20 +67,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     Parametric_variable = new _4_Parametric_variable();
-    Parametric_variable_point = ui->mdiArea->addSubWindow(Parametric_variable,Qt::WindowMinimizeButtonHint);
+    Parametric_variable_point = ui->mdiArea->addSubWindow(Parametric_variable, Qt::WindowMinimizeButtonHint);
     Parametric_variable_point->widget()->showMaximized();
-    connect(Parametric_variable, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
+    connect(Parametric_variable, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
+            Qt::UniqueConnection);
 
     CollectionMonitoring = new CollectionMonitoringClass();
-    CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring,Qt::WindowMinimizeButtonHint);
+    CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring, Qt::WindowMinimizeButtonHint);
     CollectionMonitoring_point->widget()->showMaximized();
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
-    for (auto &j : p)
-    {
+    for (auto &j : p) {
         j->widget()->showMaximized();
     }
-
 
     QAction *hard_init;
     hard_init = new QAction();
@@ -101,23 +94,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menu_5->addAction(shijian_init);
 
     QList<QAction *> act = ui->menu_10->actions();
-    for (int i = 0, b = act.size(); i < b; i++)
-    {
+    for (int i = 0, b = act.size(); i < b; i++) {
         connect(act.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
     QList<QAction *> act2 = ui->menu_11->actions();
-    for (int i = 0, b = act2.size(); i < b; i++)
-    {
+    for (int i = 0, b = act2.size(); i < b; i++) {
         connect(act2.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
     QList<QAction *> act5 = ui->menu_5->actions();
-    for (int i = 0, b = act5.size(); i < b; i++)
-    {
+    for (int i = 0, b = act5.size(); i < b; i++) {
         connect(act5.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
     QList<QAction *> act8 = ui->menu_8->actions();
-    for (int i = 0, b = act8.size(); i < b; i++)
-    {
+    for (int i = 0, b = act8.size(); i < b; i++) {
         connect(act8.takeFirst(), SIGNAL(triggered()), this, SLOT(function()));
     }
     serial->show();
@@ -127,23 +116,20 @@ MainWindow::MainWindow(QWidget *parent) :
                                             const QModelIndex)), this, SLOT(double_click_analysis(
                                                                                     const QModelIndex)));
     connect(ui->tableWidget, SIGNAL(itemSelectionChanged()), this, SLOT(copy_message()));
+
+    add_change_event(ui->lineEdit->text());
 }
 
-void MainWindow::function()
-{
+void MainWindow::function() {
     QAction *f_action = (QAction *) sender();
     ifstream in;
     in.open(".\\Data\\Default", ios::in);
     string temp;
-    while (getline(in, temp))
-    {
+    while (getline(in, temp)) {
         QString temp2 = QString::fromStdString(temp);
-        if (temp2 == f_action->text())
-        {
-            while (getline(in, temp))
-            {
-                if (QString::fromStdString(temp) == "")
-                {
+        if (temp2 == f_action->text()) {
+            while (getline(in, temp)) {
+                if (QString::fromStdString(temp) == "") {
                     break;
                 }
                 temp2 = QString::fromStdString(temp);
@@ -159,40 +145,33 @@ void MainWindow::function()
 
     }
     in.close();
-
 }
 
-void MainWindow::custom_test()
-{
+void MainWindow::custom_test() {
     check = new Check();
     connect(check, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
     connect(check, SIGNAL(compare_signal(QString)), this, SLOT(compare(QString)));
     check->show();
 }
 
-void MainWindow::move_Cursor()
-{
+void MainWindow::move_Cursor() {
     ui->tableWidget->scrollToBottom();
 }
 
-void MainWindow::open_MeterArchives()
-{
+void MainWindow::open_MeterArchives() {
     ui->mdiArea->setActiveSubWindow(MeterArchive_point);
     QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
     p->widget()->showMaximized();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
+void MainWindow::closeEvent(QCloseEvent *event) {
     serial->close();
     close();
 }
 
-QString MainWindow::analysis(QString a)
-{
+QString MainWindow::analysis(QString a) {
     QStringList list = a.split(' ', QString::SkipEmptyParts);
-    while (true)
-    {
+    while (true) {
         if (list.size() < 10)
             return "";
         if (list[0] == "68")
@@ -204,14 +183,12 @@ QString MainWindow::analysis(QString a)
 //    int ctrl_zone = list[3].toInt(nullptr, 16); //控制域
     int SA_len = list[4].toInt(nullptr, 16) & 0xF;
     QString add = "";
-    for (int i = 0; i <= SA_len; i++)
-    {
+    for (int i = 0; i <= SA_len; i++) {
         add = list[5 + i] + add;
     }
     ui->lineEdit->setText(add);
     revert_add = "";
-    for (int i = 0; i <= SA_len; i++)
-    {
+    for (int i = 0; i <= SA_len; i++) {
         revert_add = revert_add + list[5 + i];
     }
     tinyxml2::XMLDocument doc;
@@ -226,17 +203,14 @@ QString MainWindow::analysis(QString a)
     first_child->SetText(content);
     doc.SaveFile("config.xml");
     int apdu_0 = 9 + SA_len;
-    switch (list[apdu_0].toInt(nullptr, 16))
-    {
-        case 0x01:
-        {
+    switch (list[apdu_0].toInt(nullptr, 16)) {
+        case 0x01: {
             LINK_REQUEST n;
             n.PIIDACD = list[apdu_0 + 1];
             n.LINK_REQUSET_TYPE = list[apdu_0 + 2];
             n.HEART_BEAT_INTERVAL = list[apdu_0 + 3] + list[apdu_0 + 4];
             n.REQUEST_TIMEDATE_TIME = "";
-            for (int i = 1; i < 11; i++)
-            {
+            for (int i = 1; i < 11; i++) {
                 n.REQUEST_TIMEDATE_TIME = n.REQUEST_TIMEDATE_TIME + list[apdu_0 + 4 + i];
             }
             char year[5];
@@ -254,21 +228,18 @@ QString MainWindow::analysis(QString a)
                     date_times = "";
             QList<QString> date_time;
             date_time = mouth_to_s.split(' ');
-            for (int i = 0; i < date_time.length(); i++)
-            {
+            for (int i = 0; i < date_time.length(); i++) {
                 char temp[3];
                 sprintf(temp, "%02X", date_time[i].toInt(nullptr, 10));
                 date_times = date_times + temp;
             }
             QString
                     APDU = "81" + n.PIIDACD + "80" + n.REQUEST_TIMEDATE_TIME + year + date_times + year + date_times;
-            if (n.LINK_REQUSET_TYPE == "00")
-            {
+            if (n.LINK_REQUSET_TYPE == "00") {
                 emit
                 serial->send_write({BuildMessage(APDU, revert_add, "01"), "登录响应"});
                 return "登录";
-            } else
-            {
+            } else {
                 emit
                 serial->send_write({BuildMessage(APDU, revert_add, "01"), "心跳响应"});
                 return "心跳";
@@ -277,23 +248,18 @@ QString MainWindow::analysis(QString a)
 
         }
 
-        case 0x85:
-        {
-            switch (list[apdu_0 + 1].toInt(nullptr, 16))
-            {
-                case 0x1:
-                {
+        case 0x85: {
+            switch (list[apdu_0 + 1].toInt(nullptr, 16)) {
+                case 0x1: {
                     GET_RESPOND_NORMAL n;
                     n.PIIDACD = list[apdu_0 + 2];
                     n.OAD = "";
-                    for (int i = 1; i < 5; i++)
-                    {
+                    for (int i = 1; i < 5; i++) {
                         n.OAD = n.OAD + list[apdu_0 + 2 + i];
                     }
                     n.GET_RESULT_TYPE = list[apdu_0 + 7];
                     n.DATA = list.mid(apdu_0 + 8, list.length() - apdu_0 - 11);
-                    if (n.OAD == "60000200")
-                    {
+                    if (n.OAD == "60000200") {
                         qDebug() << "收到表档案信息: " << n.DATA;
                         emit deal_with_meter(n.DATA);
                     }
@@ -301,8 +267,7 @@ QString MainWindow::analysis(QString a)
 //                    emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析
                 }
                     break;
-                case 0x5:
-                {
+                case 0x5: {
                     GetResponseNext n;
                     n.PIIDACD = list[apdu_0 + 2];
                     n.is_last_frame = list[apdu_0 + 3];
@@ -311,21 +276,18 @@ QString MainWindow::analysis(QString a)
                     n.GetResponseNextType = list[apdu_0 + 6];
                     n.SequenceOf_ResultNormal = list[apdu_0 + 7];
                     n.OAD = "";
-                    for (int i = 1; i < 5; i++)
-                    {
+                    for (int i = 1; i < 5; i++) {
                         n.OAD = n.OAD + list[apdu_0 + 7 + i];
                     }
                     n.GET_RESULT_TYPE = list[apdu_0 + 12];
                     n.DATA = list.mid(apdu_0 + 13, list.length() - apdu_0 - 11);
 
-                    if (n.OAD == "60000200")
-                    {
+                    if (n.OAD == "60000200") {
                         qDebug() << "收到多表档案信息";
                         emit deal_with_meter(n.DATA);
                     }
 
-                    if (n.is_last_frame == "00")
-                    {
+                    if (n.is_last_frame == "00") {
                         QString
                                 text = "0505" + n.PIIDACD + n.slicing_index + "00";
                         emit
@@ -333,8 +295,7 @@ QString MainWindow::analysis(QString a)
                         times++;
                         return QString().sprintf("收到分帧,第%d帧", times);
                     }
-                    if (n.is_last_frame == "01")
-                    {
+                    if (n.is_last_frame == "01") {
                         times = 0;
                         return "最后一帧";
                     }
@@ -346,44 +307,34 @@ QString MainWindow::analysis(QString a)
             }
         }
             break;
-        case 0x86:
-        {
-            switch (list[apdu_0 + 1].toInt(nullptr, 16))
-            {
-                case 0x1:
-                {
+        case 0x86: {
+            switch (list[apdu_0 + 1].toInt(nullptr, 16)) {
+                case 0x1: {
                     return DARType(list[apdu_0 + 7].toInt(nullptr, 16));
                 }
             }
         }
-        case 0x87:
-        {
-            switch (list[apdu_0 + 1].toInt(nullptr, 16))
-            {
-                case 0x1:
-                {
+        case 0x87: {
+            switch (list[apdu_0 + 1].toInt(nullptr, 16)) {
+                case 0x1: {
                     return DARType(list[apdu_0 + 7].toInt(nullptr, 16));
                 }
             }
         }
             break;
-        case 0x88:
-        {
-            switch (list[apdu_0 + 1].toInt(nullptr, 16))
-            {
-                case 0x1:
-                { //未处理完
+        case 0x88: {
+            switch (list[apdu_0 + 1].toInt(nullptr, 16)) {
+                case 0x1: { //未处理完
                     ReportNotificationList n;
                     n.PIIDACD = list[apdu_0 + 2];
                     n.SequenceOfLen = list[apdu_0 + 3];
                     n.OAD = "";
-                    for (int i = 1; i < 5; i++)
-                    {
+                    for (int i = 1; i < 5; i++) {
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
                     QString APDU = "0801" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    if (!ui->actionshangbao->isChecked())
-                    {
+//                    QString APDU = "080100"  + n.SequenceOfLen + n.OAD + "00";
+                    if (!ui->actionshangbao->isChecked()) {
                         serial->send_write({BuildMessage(APDU, revert_add, "03"), "8801上报响应"});
                         n.GetResultType = list[apdu_0 + 8];
                     }
@@ -395,13 +346,12 @@ QString MainWindow::analysis(QString a)
                     n.PIIDACD = list[apdu_0 + 2];
                     n.SequenceOfLen = list[apdu_0 + 3];
                     n.OAD = "";
-                    for (int i = 1; i < 5; i++)
-                    {
+                    for (int i = 1; i < 5; i++) {
                         n.OAD = n.OAD + list[apdu_0 + 3 + i];
                     }
                     QString APDU = "0802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
-                    if (!ui->actionshangbao->isChecked())
-                    {
+//                    QString APDU = "080200" + n.SequenceOfLen + n.OAD + "00";
+                    if (!ui->actionshangbao->isChecked()) {
                         serial->send_write({BuildMessage(APDU, revert_add, "03"), "8802上报响应"});
                         n.RCSD = list[apdu_0 + 8];
                     }
@@ -418,16 +368,12 @@ QString MainWindow::analysis(QString a)
     return "";
 }
 
-QString MainWindow::deal_data(QStringList a)
-{
-    switch (a[0].toInt(nullptr, 16))
-    {
-        case DATA_OCT_STRING:
-        {
+QString MainWindow::deal_data(QStringList a) {
+    switch (a[0].toInt(nullptr, 16)) {
+        case DATA_OCT_STRING: {
             QString
                     text = "";
-            for (int i = 0; i < a[1].toInt(nullptr, 16); i++)
-            {
+            for (int i = 0; i < a[1].toInt(nullptr, 16); i++) {
                 text = text + a[2 + i];
             }
             return text;
@@ -439,39 +385,33 @@ QString MainWindow::deal_data(QStringList a)
     return "";
 }
 
-void MainWindow::send_find_add()
-{
+void MainWindow::send_find_add() {
     QString
             add = "6817004345AAAAAAAAAAAA10DA5F0501034001020000900f16";
     emit
     serial->send_write({add, "读地址"});                   ////发送
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::about()
-{
-    QMessageBox::information(this, "关于", "698SP CLION V1.4 \n QT版本: 5.11.3", QMessageBox::Ok);
+void MainWindow::about() {
+    QMessageBox::information(this, "关于", "698主站  \n QT版本: 5.13.2", QMessageBox::Ok);
 }
 
-void MainWindow::serial_config()
-{
+void MainWindow::serial_config() {
     serial->show();
 }
 
 
-void MainWindow::custom()
-{
+void MainWindow::custom() {
     ui->mdiArea->setActiveSubWindow(Custom_point);
     QMdiSubWindow *p = ui->mdiArea->activeSubWindow();
     p->widget()->showMaximized();
 }
 
-void MainWindow::show_message_send(QList<QString> a)
-{
+void MainWindow::show_message_send(QList<QString> a) {
     time_t timep;
     time(&timep);
     char tmp[64];
@@ -485,20 +425,17 @@ void MainWindow::show_message_send(QList<QString> a)
     ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
 //    ui->tableWidget->item(current, 1)->setToolTip(StringAddSpace(a[0]));
 //    ui->tableWidget->item(current, 2)->setToolTip((a[1]));
-    if (a[1].contains("心跳") or a[1].contains("登录"))
-    {
-        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(0,139,139)));
-    }else
-    if (a[1].contains("上报")){
-        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(205,92,92)));
+    if (a[1].contains("心跳") or a[1].contains("登录")) {
+        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(0, 139, 139)));
+    } else if (a[1].contains("上报")) {
+        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(205, 92, 92)));
 
     }
     current += 1;
     move_Cursor();
 }
 
-void MainWindow::show_message_receive(QString a)
-{
+void MainWindow::show_message_receive(QString a) {
     time_t timep;
     time(&timep);
     char tmp[64];
@@ -512,21 +449,24 @@ void MainWindow::show_message_receive(QString a)
     ui->tableWidget->setItem(current, 2, new QTableWidgetItem(te));
 
     ui->tableWidget->setItem(current, 3, new QTableWidgetItem(x));
-    if (te.contains("心跳") or te.contains("登录"))
-    {
-        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(0,139,139)));
-    } else
-        if (te.contains("上报")){
-            ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(205,92,92)));
-        }
+    if (te.contains("心跳") or te.contains("登录")) {
+        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(0, 139, 139)));
+    } else if (te.contains("上报")) {
+        ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(205, 92, 92)));
+    }
 
     current += 1;
     move_Cursor();
 
 }
 
-void MainWindow::Communication_parameters()
-{
+void MainWindow::Communication_parameters() {
+    QAction *setadd;
+    setadd = ui->menu_12->addAction("设置终端地址");
+    setadd->setObjectName(QStringLiteral("setadd"));
+    setadd->setEnabled(true);
+    connect(setadd, SIGNAL(triggered()), this, SLOT(set_add()));
+
     QMenu *menu_comm;
     menu_comm = new QMenu(ui->menu_12);
     ui->menu_12->addAction(menu_comm->menuAction());
@@ -547,13 +487,82 @@ void MainWindow::Communication_parameters()
     eth_station_ip->setText("设置以太网主站IP");
     menu_comm->addAction(eth_station_ip);
     connect(eth_station_ip, SIGNAL(triggered()), this, SLOT(set_ip()));
+
+    QAction *terminal_ip;
+    terminal_ip = new QAction();
+    terminal_ip->setObjectName("terminal_ip");
+    terminal_ip->setText("设置终端IP");
+    menu_comm->addAction(terminal_ip);
+    connect(terminal_ip, SIGNAL(triggered()), this, SLOT(set_ip()));
 }
 
-void MainWindow::set_ip()
-{
+void MainWindow::set_add() {
+    bool ok;
+    QString text = QInputDialog::getText(this, "设置终端地址", "主站IP:", QLineEdit::Normal, "000000000001", &ok);
+    if (ok && text.remove(QRegExp("\\s")) != "" && text.length() == 12) {
+        QString message;
+        message = "060100400102000906" + text + "00";
+        qDebug() << "set_add message: " << message;
+        serial->send_write({BuildMessage(message, revert_add, "43"), "设置终端地址"});
+    } else {
+        if (ok) {
+            QMessageBox::warning(this, "警告", "输入内容有问题", QMessageBox::Ok);
+            set_add();
+        }
+    }
+}
+
+
+void MainWindow::set_ip() {
     QAction *f_action = (QAction *) sender();
     tinyxml2::XMLDocument doc;
     doc.LoadFile("config.xml");
+    if (f_action->text().contains("终端")) {
+        tinyxml2::XMLElement *root = doc.RootElement();
+        tinyxml2::XMLElement *first_child = root->FirstChildElement("ter_ip");
+        tinyxml2::XMLElement *child_child = first_child->FirstChildElement();
+        const char *content;
+        content = child_child->GetText();
+        QString item_text;
+        item_text = (QString) content;
+        QStringList item_text_list = item_text.split(';', QString::SkipEmptyParts);
+        bool ok;
+        QString text = QInputDialog::getItem(this, f_action->text(), "终端IP:", item_text_list, 0, true, &ok);
+        if (ok && !item_text_list.isEmpty()) {
+            int index = item_text_list.indexOf(text);
+            if (index == -1) {
+                qDebug() << "-1";
+                item_text_list.insert(0, text);
+            } else if (index > 0)
+                item_text_list.insert(0, item_text_list.takeAt(index));
+            if (item_text_list.length() > 10)
+                item_text_list.removeLast();
+            QString new_string = item_text_list.join(";");
+            QByteArray sr = new_string.toLocal8Bit();
+            int len = sr.length();
+            char *buf = new char[len + 2];
+            buf[len] = buf[len + 1] = 0;
+            strcpy(buf, sr.data());
+            cout << buf;
+            child_child->SetText(buf);
+//            QStringList list1 = text.split(':', QString::SkipEmptyParts);
+            QStringList list2 = text.split('.', QString::SkipEmptyParts);
+            if (list2.size() != 4)
+                QMessageBox::warning(this, "Warming", "IP格式错误");
+            QString text_ip = "";
+            for (int i = 0; i < 4; i++) {
+                char temp[3];
+                sprintf(temp, "%02X", list2[i].toInt());
+                text_ip = text_ip + temp;
+            }
+            QString message;
+            message = "06010045100400020616010904" + text_ip + "0904ffffff000904000000000a000a0000";
+            qDebug() << "message: " << message << f_action->text();
+            serial->send_write({BuildMessage(message, revert_add, "43"), f_action->text()});
+            doc.SaveFile("config.xml");
+        }
+        return;
+    }
     tinyxml2::XMLElement *root = doc.RootElement();
     tinyxml2::XMLElement *first_child = root->FirstChildElement("Eth");
     tinyxml2::XMLElement *child_child = first_child->FirstChildElement();
@@ -564,11 +573,9 @@ void MainWindow::set_ip()
     QStringList item_text_list = item_text.split(';', QString::SkipEmptyParts);
     bool ok;
     QString text = QInputDialog::getItem(this, f_action->text(), "主站IP:", item_text_list, 0, true, &ok);
-    if (ok && !item_text_list.isEmpty())
-    {
+    if (ok && !item_text_list.isEmpty()) {
         int index = item_text_list.indexOf(text);
-        if (index == -1)
-        {
+        if (index == -1) {
             qDebug() << "-1";
             item_text_list.insert(0, text);
         } else if (index > 0)
@@ -588,8 +595,7 @@ void MainWindow::set_ip()
         if (list2.size() != 4)
             QMessageBox::warning(this, "Warming", "IP格式错误");
         QString text_ip = "";
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             char temp[3];
             sprintf(temp, "%02X", list2[i].toInt());
             text_ip = text_ip + temp;
@@ -608,19 +614,16 @@ void MainWindow::set_ip()
 
 }
 
-void MainWindow::compare(QString recive)
-{
+void MainWindow::compare(QString recive) {
     QString last_message = ui->tableWidget->item(current - 1, 1)->text().replace(" ", "");
     show_message_receive("比对: " + recive);
-    if (last_message.contains(recive.replace(" ", "")))
-    {
+    if (last_message.contains(recive.replace(" ", ""))) {
         show_message_receive("比对结果一致");
     } else
         show_message_receive("比对结果不一致");
 }
 
-void MainWindow::open_attach()
-{
+void MainWindow::open_attach() {
     QAction *f_action = (QAction *) sender();
 //    qDebug() << "path" << f_action->text();
     QString current_path = QDir::currentPath().replace("/", "\\");
@@ -634,17 +637,14 @@ void MainWindow::open_attach()
 
 }
 
-void MainWindow::clear_view()
-{
+void MainWindow::clear_view() {
     while (current--)
         ui->tableWidget->removeRow(0);
     current += 1;
 }
 
-void MainWindow::add_change_event(QString a)
-{
-    if (a.size() == 12)
-    {
+void MainWindow::add_change_event(QString a) {
+    if (a.size() == 12) {
         tinyxml2::XMLDocument doc;
         doc.LoadFile("config.xml");
         tinyxml2::XMLElement *root = doc.RootElement();
@@ -655,8 +655,7 @@ void MainWindow::add_change_event(QString a)
         a = StringAddSpace(a);
         QString re_add = "";
         QList<QString> b = a.split(" ", QString::SplitBehavior::SkipEmptyParts);
-        for (int i = 0; i < b.size(); i++)
-        {
+        for (int i = 0; i < b.size(); i++) {
             re_add = b[i] + re_add;
         }
         tinyxml2::XMLElement *first_child2 = root->FirstChildElement("revert_add");
@@ -667,8 +666,7 @@ void MainWindow::add_change_event(QString a)
     }
 }
 
-void MainWindow::double_click_analysis(const QModelIndex &index)
-{
+void MainWindow::double_click_analysis(const QModelIndex &index) {
 //    if (QMouseEvent->button() == Qt::LeftButton)
     {
         auto m = index.row();
@@ -678,18 +676,15 @@ void MainWindow::double_click_analysis(const QModelIndex &index)
     }
 }
 
-void MainWindow::op_analy()
-{
+void MainWindow::op_analy() {
     analy = new Analysis();
     analy->show();
 }
 
-void MainWindow::copy_message()
-{
+void MainWindow::copy_message() {
     QList<QTableWidgetItem *> message_list = ui->tableWidget->selectedItems();
     QString copy_board = "";
-            foreach(QTableWidgetItem *item, message_list)
-        {
+            foreach(QTableWidgetItem *item, message_list) {
             copy_board.append(item->text() + '\n');
         }
     QClipboard *clipboard = QApplication::clipboard();
@@ -697,18 +692,16 @@ void MainWindow::copy_message()
 }
 
 
-QString MainWindow::DARType(int a)
-{
+QString MainWindow::DARType(int a) {
     QSqlQuery sql_query;
     sql_query.exec("select * from dar where Number= " + QString::number(a));
-    if (!sql_query.exec())
-    {
+    if (!sql_query.exec()) {
         qDebug() << sql_query.lastError();
-    } else
-    {
+    } else {
         sql_query.next();
         QString detail = sql_query.value(0).toString();
         qDebug() << QString("detail:%1").arg(detail);
         return detail;
     }
 }
+

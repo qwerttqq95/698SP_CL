@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Info>
     <port>20001</port>
-    <add>123456123456</add>
-    <revert_add>563412563412</revert_add>
+    <add>000000000001</add>
+    <revert_add>010000000000</revert_add>
     <Eth>
         <ip>192.168.16.253:20001;111.207.214.169:20001</ip>
     </Eth>
+    <ter_ip>
+        <ip>192.168.16.9;192.168.16.19</ip>
+    </ter_ip>
 </Info>

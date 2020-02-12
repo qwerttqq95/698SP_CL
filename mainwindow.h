@@ -166,6 +166,8 @@ public slots:
 
     void set_ip();
 
+    void set_add();
+
     void about();
 
     void serial_config();
