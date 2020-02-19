@@ -2,10 +2,8 @@
 ///自定义测试方案
 
 #include "Check.h"
-#include <QString>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
-#include <fstream>
 #include <ui_Check.h>
 
 extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);

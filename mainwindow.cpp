@@ -10,6 +10,8 @@
 #include <QApplication>
 #include <QClipboard>
 
+#define ver "698主站 v20.02.19"
+
 using namespace std;
 
 extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
@@ -26,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle("698主站 v20.02.12");
+    setWindowTitle(ver);
 
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("Database.db");
@@ -43,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(clear_view()));
     connect(ui->actionC, SIGNAL(triggered()), this, SLOT(op_analy()));
+    connect(ui->actiononline,SIGNAL(triggered()),this,SLOT(OnlineModel()));
+
     setWindowState(Qt::WindowMaximized);
     QAction *attach4520;
     attach4520 = new QAction();
@@ -703,5 +707,10 @@ QString MainWindow::DARType(int a) {
         qDebug() << QString("detail:%1").arg(detail);
         return detail;
     }
+}
+
+void MainWindow::OnlineModel() {
+    online = new Online();
+    online->show();
 }
 

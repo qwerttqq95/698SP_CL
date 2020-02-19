@@ -18,6 +18,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include "Online.h"
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -149,6 +150,7 @@ private:
     Analysis *analy;
     CollectionMonitoringClass *CollectionMonitoring;
     _4_Parametric_variable *Parametric_variable;
+    Online *online;
 
 signals:
 
@@ -195,6 +197,8 @@ public slots:
     void op_analy();
 
     void copy_message();
+
+    void OnlineModel();
 
 };
 
