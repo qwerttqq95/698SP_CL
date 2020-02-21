@@ -2,6 +2,8 @@
 // Created by admin on 2020/2/13.
 //
 #include <memory>
+#include <QtGui/QStandardItemModel>
+#include <QtWidgets/QTreeWidgetItem>
 #include "Online.h"
 #include "iostream"
 #include "QDebug"
@@ -13,7 +15,7 @@ Online::Online(QWidget *parent) :
         QDialog(parent),
         ui(new Ui::OnlineDialog) {
     ui->setupUi(this);
-    setWindowTitle(QString::fromLocal8Bit("自定义测试"));
+    setWindowTitle(QString::fromLocal8Bit("线上自定义测试项"));
     client = FTP();
     clientrun();
 }
@@ -75,6 +77,27 @@ void Online::login() {
     client.CD_command(dir);
     char x[4096];
     strcpy(x, client.recbuffer);
+    QString list = QString::fromLocal8Bit(x);
+    auto list_split = list.split("\r\n");
+    QStandardItemModel *model = new QStandardItemModel(0, 5);
+    model->setHeaderData(0, Qt::Horizontal, tr("Date"));
+    model->setHeaderData(1, Qt::Horizontal, tr("Modify"));
+    model->setHeaderData(2, Qt::Horizontal, tr("Att/Size"));
+    model->setHeaderData(3, Qt::Horizontal, tr("Name"));
+    ui->treeView->setModel(model);
+    int ti = 0;
+    for (const auto &xx :list_split) {
+        auto signal = xx.split(" ", QString::SplitBehavior::SkipEmptyParts);
+        if (!signal.isEmpty()) {
+            qDebug() << "list_split: " << signal;
+            model->setItem(ti, 0, new QStandardItem(signal[0]));
+            model->setItem(ti, 1, new QStandardItem(signal[1]));
+            model->setItem(ti, 2, new QStandardItem(signal[2]));
+            model->setItem(ti, 3, new QStandardItem(signal[3]));
+            ti++;
+        }
+
+    }
 
 }
 
