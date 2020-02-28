@@ -45,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionSdf, SIGNAL(triggered()), this, SLOT(custom_test()));
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(clear_view()));
     connect(ui->actionC, SIGNAL(triggered()), this, SLOT(op_analy()));
-    connect(ui->actiononline,SIGNAL(triggered()),this,SLOT(OnlineModel()));
+    connect(ui->actiononline, SIGNAL(triggered()), this, SLOT(OnlineModel()));
 
     setWindowState(Qt::WindowMaximized);
     QAction *attach4520;
@@ -55,6 +55,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menu_4->addAction(attach4520);
     connect(attach4520, SIGNAL(triggered()), this, SLOT(open_attach()));
 
+    QAction *update;
+    update = new QAction();
+    update->setObjectName(QStringLiteral("update"));
+    update->setText("检测更新");
+    ui->menu->addAction(update);
+    connect(update, SIGNAL(triggered()), this, SLOT(open_attach()));
 
     Custom = new Custom_APDU();
     Custom_point = ui->mdiArea->addSubWindow(Custom, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
@@ -67,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
-            show_meter_message(QList<QString>)));
+                                                                                 show_meter_message(QList<QString>)));
 
 
     Parametric_variable = new _4_Parametric_variable();
@@ -123,6 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     add_change_event(ui->lineEdit->text());
 }
+
 
 void MainWindow::function() {
     QAction *f_action = (QAction *) sender();
@@ -631,13 +638,17 @@ void MainWindow::open_attach() {
     QAction *f_action = (QAction *) sender();
 //    qDebug() << "path" << f_action->text();
     QString current_path = QDir::currentPath().replace("/", "\\");
-    QString path = current_path + "\\attach\\" + f_action->text();
-    QString runPath = current_path + "\\attach";
-//    qDebug() << "path" << path;
-//    qDebug() << "runPath" << runPath;
+    QString path;
+    if (f_action->text() == "检测更新") {
+        path = current_path + "\\attach\\" + "update";
+    } else
+        path = current_path + "\\attach\\" + f_action->text();
+    QString runPath = current_path + "\\attach\\";
+    qDebug() << "runPath" << runPath;
+    qDebug() << "path" << path;
     QProcess *process = new QProcess;
     process->setWorkingDirectory(runPath);
-    process->start("\"" + path + "\"");
+    process->startDetached("\"" + path + "\"");
 
 }
 
@@ -713,4 +724,6 @@ void MainWindow::OnlineModel() {
     online = new Online();
     online->show();
 }
+
+
 
