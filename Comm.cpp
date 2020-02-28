@@ -13,18 +13,15 @@
 
 using namespace std;
 
-QString binToDec(QString strBin)
-{  //二进制转十进制
+QString binToDec(QString strBin) {  //二进制转十进制
     QString decimal;
     int nDec = 0, nLen;
     int i, j, k;
     nLen = strBin.length();
-    for (i = 0; i < nLen; i++)
-    {
+    for (i = 0; i < nLen; i++) {
         if (strBin[nLen - i - 1] == "0")
             continue;
-        else
-        {
+        else {
             k = 1;
             for (j = 0; j < i; j++)
                 k = k * 2;
@@ -35,19 +32,14 @@ QString binToDec(QString strBin)
     return decimal;
 }
 
-void getDir(string path, vector<string> &files)
-{
+void getDir(string path, vector<string> &files) {
     long hFile = 0;
     struct _finddata_t fileinfo;
     string p;
-    if ((hFile = _findfirst(p.assign(path).append("/*").c_str(), &fileinfo)) != -1)
-    {
-        do
-        {
-            if ((fileinfo.attrib & _A_SUBDIR))
-            {
-                if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0)
-                {
+    if ((hFile = _findfirst(p.assign(path).append("/*").c_str(), &fileinfo)) != -1) {
+        do {
+            if ((fileinfo.attrib & _A_SUBDIR)) {
+                if (strcmp(fileinfo.name, ".") != 0 && strcmp(fileinfo.name, "..") != 0) {
                     files.push_back(p.assign(path).append("/").append(fileinfo.name));
                     getDir(p.assign(path).append("/").append(fileinfo.name), files);
                 }
@@ -59,56 +51,46 @@ void getDir(string path, vector<string> &files)
 
 int Stringlist2Hex(QString &str, BYTE *pOut);
 
-QString message_swap(const QString &a)
-{
+QString message_swap(const QString &a) {
     QList<QString> list;
-    for (int i = 0; i <= a.length() / 2; i += 2)
-    {
+    for (int i = 0; i <= a.length() / 2; i += 2) {
         list.append(a.mid(i, i + 2));
     }
     QString re = "";
-    for (int y = list.length() - 1; y >= 0; y--)
-    {
+    for (int y = list.length() - 1; y >= 0; y--) {
         re = re + list[y];
     }
     return re;
 }
 
-int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen)
-{
+int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen) {
     int i, j = 0;
     DWORD len;
     TCHAR x;
     for (i = 0, x = 0, len = 0;
          i < (int) str.length() && len < (int) nMaxLen;
-         i++)
-    {
-        if (j >= 2)
-        {
+         i++) {
+        if (j >= 2) {
             pOut[len++] = (BYTE) x;
             x = 0;
             j = 0;
         }
-        if (str[i] >= '0' && str[i] <= '9')
-        {
+        if (str[i] >= '0' && str[i] <= '9') {
             x <<= 4;
             x |= str[i] - '0';
             j++;
         } else if ((str[i] >= 'A' && str[i] <= 'F')
-                   || (str[i] >= 'a' && str[i] <= 'f'))
-        {
+                   || (str[i] >= 'a' && str[i] <= 'f')) {
             x <<= 4;
             x |= _toupper (str[i]) - 'A' + 10;
             j++;
-        } else if (j)
-        {
+        } else if (j) {
             pOut[len++] = (BYTE) x;
             x = 0;
             j = 0;
         }
     }
-    if (j)
-    {
+    if (j) {
         pOut[len++] = (BYTE) x;
         x = 0;
         j = 0;
@@ -155,19 +137,15 @@ const static WORD fcstab[256] = {
         0x7bc7, 0x6a4e, 0x58d5, 0x495c, 0x3de3, 0x2c6a, 0x1ef1, 0x0f78
 };
 
-unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len)
-{
-    while (len--)
-    {
+unsigned short pppfcs16(unsigned short fcs, unsigned char *p, unsigned int len) {
+    while (len--) {
         fcs = (fcs >> 8) ^ fcstab[(fcs ^ *p++) & 0xff];
     }
     return (fcs ^ 0xffff);
 }
 
-QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item)
-{
-    switch (NoDataType)
-    {
+QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item) {
+    switch (NoDataType) {
         default:
             return NULL;
         case 0://NULL
@@ -196,25 +174,23 @@ QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item)
         }
         case 9://octet-string
         {
-            if (item->text(2).contains("."))
-            {
+            if (item->text(2).contains(".")) {
                 QString content("");
                 QString lenth = "04";
-                        foreach(auto x, item->text(2).split("."))
-                    {
+                        foreach(auto x, item->text(2).split(".")) {
                         content.append(QString("%1").arg(x.toInt(), 2, 16, QLatin1Char('0')));
                     }
                 return QString("%1").arg(NoDataType, 2, 16, QLatin1Char('0')) + lenth + content;
+            } else if (item->text(2).contains(":")) {
+                return QString("0906"+item->text(2).remove(":"));
             }
         }
         case 10://visible-string
         {
             QString Data = item->text(2);
-            if (Data == "00")
-            {
+            if (Data == "00") {
                 return "0a00";
-            } else
-            {
+            } else {
                 QString content = item->text(2).toUtf8().toHex();
                 QString lenth = QString("%1").arg(content.length() / 2, 2, 16, QLatin1Char('0'));
                 return QString("%1").arg(NoDataType, 2, 16, QLatin1Char('0')) + lenth + content;
@@ -245,8 +221,7 @@ QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item)
             QString Day = QString("%1").arg(temp[2].toInt(), 2, 16, QLatin1Char('0'));
             QString re = "1c" + Year + Mouth + Day;
             QStringList times = item->text(2).split(" ")[1].split(":");
-                    foreach(auto x, times)
-                {
+                    foreach(auto x, times) {
                     re.append(QString("%1").arg(x.toInt(), 2, 16, QLatin1Char('0')));
                 }
             return re;
@@ -255,16 +230,14 @@ QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item)
 }
 
 
-QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone)
-{
+QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone) {
     qDebug() << "apdu:" << apdu;
     qDebug() << "SA:" << SA;
     qDebug() << "ctrl_zone:" << ctrl_zone;
     apdu.remove(' ');
 //    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
-    if (len == -1)
-    {
+    if (len == -1) {
         qDebug() << "BuildMessage 1 error";
         return "0";
     }
@@ -300,15 +273,12 @@ QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone)
 
 }
 
-int check(QString a)
-{
+int check(QString a) {
     QStringList list = a.split(' ', QString::SkipEmptyParts);
-    if (list.length() < 5)
-    {
+    if (list.length() < 5) {
         return 2;
     }
-    while (true)
-    {
+    while (true) {
         if (list[0] == "FE")
             list.removeFirst();
         else
@@ -316,25 +286,20 @@ int check(QString a)
     }
 
 //    qDebug()<<"shuchu"<<(list[2]+ list[1]).toInt(nullptr, 16);
-    if (list[0] == "68" and (list.length() >= ((list[2] + list[1]).toInt(nullptr, 16))))
-    {
+    if (list[0] == "68" and (list.length() >= ((list[2] + list[1]).toInt(nullptr, 16)))) {
         qDebug() << "check granted";
         return 1;
-    } else
-    {
-        if (list[0] == "68")
-        {
+    } else {
+        if (list[0] == "68") {
 //            qDebug() << "check denied but find 68 with start: " << list;
             return 2;
-        } else
-        {
+        } else {
             int temp = list.indexOf("68");
             if (temp == -1)
                 return 2;
             qDebug() << "temp " << temp;
             qDebug() << "list" << list;
-            while (temp)
-            {
+            while (temp) {
                 temp--;
                 list.removeFirst();
             }
@@ -348,8 +313,7 @@ int check(QString a)
     }
 }
 
-string DtoB(int d)
-{
+string DtoB(int d) {
     if (d / 2)
         DtoB(d / 2);
     char x[] = {0};
@@ -358,87 +322,71 @@ string DtoB(int d)
     return a;
 }
 
-string StringAddSpace(string &input)
-{
+string StringAddSpace(string &input) {
     string output = "";
-    for (int i = 0; i < input.length(); i += 2)
-    {
+    for (int i = 0; i < input.length(); i += 2) {
         output = output + input[i] + input[i + 1] + ' ';
     }
     return output;
 }
 
-QString StringAddSpace(QString &input)
-{
+QString StringAddSpace(QString &input) {
     QString output = "";
-    for (int i = 0; i < input.length(); i += 2)
-    {
+    for (int i = 0; i < input.length(); i += 2) {
         output = output + input[i] + input[i + 1] + ' ';
     }
     return output;
 }
 
-int Stringlist2Hex(QString &str, BYTE *pOut)
-{
+int Stringlist2Hex(QString &str, BYTE *pOut) {
     QList<QString> str_list;
     str_list = StringAddSpace(str).split(' ');
     int len = str_list.length();
-    for (int i = 0; i < len; i++)
-    {
+    for (int i = 0; i < len; i++) {
         int qwe = str_list[i].toInt(nullptr, 16);
         pOut[i] = (BYTE) qwe;
     }
     return 0;
 }
 
-int Stringlist2Hex_char(QString &str, char *pOut)
-{
+int Stringlist2Hex_char(QString &str, char *pOut) {
     QList<QString> str_list;
     str_list = StringAddSpace(str).split(' ');
     int len = str_list.length();
-    for (int i = 0; i < len; i++)
-    {
+    for (int i = 0; i < len; i++) {
         int qwe = str_list[i].toInt(nullptr, 16);
         pOut[i] = qwe;
     }
     return 0;
 }
 
-VALUE_LEFT Data_deal(QList<QString> a)
-{
+VALUE_LEFT Data_deal(QList<QString> a) {
     int qwe = (a.takeFirst()).toInt(nullptr, 16);
     VALUE_LEFT m;
-    switch (qwe)
-    {
-        case DATA_ARRAY:
-        {
+    switch (qwe) {
+        case DATA_ARRAY: {
             (a.takeFirst()).toInt(nullptr, 16);
             return Data_deal(a);
         }
-        case DATA_STRUCT :
-        {
+        case DATA_STRUCT : {
             (a.takeFirst()).toInt(nullptr, 16);
             return Data_deal(a);
         }
-        case DATA_OCT_STRING:
-        {
+        case DATA_OCT_STRING: {
             m.value = "";
             int b = (a.takeFirst()).toInt(nullptr, 16);
-            for (int i = 0; i < b; i++)
-            {
+            for (int i = 0; i < b; i++) {
                 m.value = m.value + a.takeFirst();
             }
             m.left = a;
             return m;
         }
-        case DATA_UNSIGNED:
-        {
+        case DATA_UNSIGNED: {
             m.value = a.takeFirst();
             m.left = a;
             return m;
         }
-        case DATA_LONG_UNSIGNED:
-        {
+        case DATA_LONG_UNSIGNED: {
             int nu = (a[0] + a[1]).toInt(nullptr, 16);
             m.value = QString::number(nu);
             a.removeFirst();
@@ -446,29 +394,24 @@ VALUE_LEFT Data_deal(QList<QString> a)
             m.left = a;
             return m;
         }
-        case DATA_ENUM:
-        {
+        case DATA_ENUM: {
             m.value = a.takeFirst();
             m.left = a;
             return m;
         }
-        case DATA_OAD:
-        {
+        case DATA_OAD: {
             m.value = "";
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 m.value = m.value + a.takeFirst();
             }
             m.left = a;
             return m;
         }
-        case DATA_TSA:
-        {
+        case DATA_TSA: {
             int len = (a.takeFirst()).toInt(nullptr, 16);
             QString tsa = "";
             a.removeFirst();
-            for (int i = 1; i < len; i++)
-            {
+            for (int i = 1; i < len; i++) {
                 tsa = tsa + a.takeFirst();
             }
             m.value = tsa;
@@ -481,8 +424,7 @@ VALUE_LEFT Data_deal(QList<QString> a)
     return m;
 }
 
-QString re_rever_add()
-{
+QString re_rever_add() {
     tinyxml2::XMLDocument doc;
     doc.LoadFile("config.xml");
     tinyxml2::XMLElement *root = doc.RootElement();

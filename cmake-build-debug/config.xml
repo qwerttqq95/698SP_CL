@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Info>
     <port>20001</port>
-    <add>111111111111</add>
-    <revert_add>111111111111</revert_add>
+    <add>000000000001</add>
+    <revert_add>010000000000</revert_add>
     <Eth>
         <ip>192.168.16.253:20001;111.207.214.169:20001</ip>
     </Eth>

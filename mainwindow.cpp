@@ -10,7 +10,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站 v20.02.19"
+#define ver "698主站 v20.02.28"
 
 using namespace std;
 

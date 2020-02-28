@@ -79,7 +79,7 @@ void Online::login() {
     strcpy(x, client.recbuffer);
     QString list = QString::fromLocal8Bit(x);
     auto list_split = list.split("\r\n");
-    QStandardItemModel *model = new QStandardItemModel(0, 5);
+    QStandardItemModel *model = new QStandardItemModel(0, 4);
     model->setHeaderData(0, Qt::Horizontal, tr("Date"));
     model->setHeaderData(1, Qt::Horizontal, tr("Modify"));
     model->setHeaderData(2, Qt::Horizontal, tr("Att/Size"));
