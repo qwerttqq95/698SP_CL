@@ -38,7 +38,21 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>综合分析</string>
+        <string>6012分析</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_3">
+       <property name="text">
+        <string>6014分析</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="text">
+        <string>601C分析</string>
        </property>
       </widget>
      </item>
@@ -64,6 +78,31 @@
      <column>
       <property name="text">
        <string>方案编号</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>采集类型(6014)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>CSD(6014)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>上报类型(601C)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>电能表集合</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>存储时标</string>
       </property>
      </column>
      <column>

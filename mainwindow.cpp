@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent) :
     CollectionMonitoring = new CollectionMonitoringClass();
     CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring, Qt::WindowMinimizeButtonHint);
     CollectionMonitoring_point->widget()->showMaximized();
+    connect(CollectionMonitoring, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
     for (auto &j : p) {
@@ -271,7 +272,7 @@ QString MainWindow::analysis(QString a) {
                     n.GET_RESULT_TYPE = list[apdu_0 + 7];
                     n.DATA = list.mid(apdu_0 + 8, list.length() - apdu_0 - 11);
                     if (n.OAD == "60000200") {
-                        qDebug() << "收到表档案信息: " << n.DATA;
+//                        qDebug() << "收到表档案信息: " << n.DATA;
                         emit deal_with_meter(n.DATA);
                     }
 
@@ -294,7 +295,7 @@ QString MainWindow::analysis(QString a) {
                     n.DATA = list.mid(apdu_0 + 13, list.length() - apdu_0 - 11);
 
                     if (n.OAD == "60000200") {
-                        qDebug() << "收到多表档案信息";
+//                        qDebug() << "收到多表档案信息";
                         emit deal_with_meter(n.DATA);
                     }
 
@@ -628,7 +629,7 @@ void MainWindow::set_ip() {
 void MainWindow::compare(QString recive) {
     QString last_message = ui->tableWidget->item(current - 1, 1)->text().replace(" ", "");
     show_message_receive("比对: " + recive);
-    if (last_message.contains(recive.replace(" ", ""))) {
+    if (last_message.contains(recive.replace(" ", ""),Qt::CaseInsensitive)) {
         show_message_receive("比对结果一致");
     } else
         show_message_receive("比对结果不一致");

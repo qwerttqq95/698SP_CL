@@ -12,19 +12,29 @@
 #include <QSqlQuery>
 #include "ui_CollectionMonitoringClassObject.h"
 
-namespace Ui
-{
+namespace Ui {
     class FormCOLLECTIONMONITORINGCLASSOBJECT;
 }
 
-class CollectionMonitoringClass : public QDialog
-{
+class CollectionMonitoringClass : public QDialog {
 Q_OBJECT
 public:
     explicit CollectionMonitoringClass(QWidget *parent = nullptr);
 
 public slots:
-    void analysis();
+
+    void sendmessage();
+
+    void analysis6012();
+
+    void analysis6014();
+
+    void analysis601C();
+
+signals:
+
+    void send_message(QList<QString>);
+
 
 private:
     Ui::FormCOLLECTIONMONITORINGCLASSOBJECT *ui;
