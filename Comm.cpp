@@ -182,7 +182,7 @@ QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item) {
                     }
                 return QString("%1").arg(NoDataType, 2, 16, QLatin1Char('0')) + lenth + content;
             } else if (item->text(2).contains(":")) {
-                return QString("0906"+item->text(2).remove(":"));
+                return QString("0906" + item->text(2).remove(":"));
             }
         }
         case 10://visible-string
@@ -434,3 +434,30 @@ QString re_rever_add() {
     QString add = QString::fromLocal8Bit(content);
     return add;
 }
+
+QString fre(const QString& text) {
+
+    QString t = text.mid(1,1);
+    int value = text.mid(2).toInt(nullptr,16);
+    switch (t.toInt()){
+        case 0:
+            return QString("%1%2").arg(QString::number(value),"秒");
+        case 1:
+            return QString("%1%2").arg(QString::number(value),"分");
+        case 2:
+            return QString("%1%2").arg(QString::number(value),"时");
+        case 3:
+            return QString("%1%2").arg(QString::number(value),"日");
+        case 4:
+            return QString("%1%2").arg(QString::number(value),"月");
+        case 5:
+            return QString("%1%2").arg(QString::number(value),"年");
+    }
+
+
+}
+
+QString time(const QString& text){
+
+}
+

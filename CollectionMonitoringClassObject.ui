@@ -13,133 +13,163 @@
   <property name="windowTitle">
    <string>采集监控类</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>6012分析</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>6014分析</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_2">
-       <property name="text">
-        <string>601C分析</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="QTreeWidget" name="treeWidget">
-     <column>
-      <property name="text">
-       <string>任务ID</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>执行频率</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>方案类型</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>方案编号</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>采集类型(6014)</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>CSD(6014)</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>上报类型(601C)</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>电能表集合</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>存储时标</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>开始时间</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>结束时间</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>延时</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>执行优先级</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>状态</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>任务运行类型</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>运行时段</string>
-      </property>
-     </column>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>分析</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>6012分析</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="text">
+              <string>6014分析</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="text">
+              <string>601C分析</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_4">
+             <property name="text">
+              <string>清空列表</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget">
+           <column>
+            <property name="text">
+             <string>任务ID</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>执行频率</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>方案类型</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>方案编号</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>采集类型(6014)</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>CSD(6014)</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>上报类型(601C)</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>电能表集合</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>存储时标</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>开始时间</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>结束时间</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>延时</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>优先级</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>状态</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>任务运行类型</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>运行时段</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>6012</string>
+      </attribute>
+     </widget>
     </widget>
    </item>
   </layout>

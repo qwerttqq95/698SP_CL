@@ -86,6 +86,7 @@ MainWindow::MainWindow(QWidget *parent) :
     CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring, Qt::WindowMinimizeButtonHint);
     CollectionMonitoring_point->widget()->showMaximized();
     connect(CollectionMonitoring, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
+    connect(this, SIGNAL(deal_6012(QList<QString>)), CollectionMonitoring, SLOT(analysis6012(QList<QString>)));
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
     for (auto &j : p) {
@@ -274,6 +275,11 @@ QString MainWindow::analysis(QString a) {
                     if (n.OAD == "60000200") {
 //                        qDebug() << "收到表档案信息: " << n.DATA;
                         emit deal_with_meter(n.DATA);
+                    } else{
+                        if (n.OAD=="60120200"){
+//                            qDebug() << "收到6012信息: " << n.DATA;
+                            emit deal_6012(n.DATA);
+                        }
                     }
 
 //                    emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析

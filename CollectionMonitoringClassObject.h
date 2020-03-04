@@ -21,15 +21,31 @@ Q_OBJECT
 public:
     explicit CollectionMonitoringClass(QWidget *parent = nullptr);
 
+    typedef struct{
+        int ID;
+        QString freq;
+        QString style;
+        int No;
+        QString start_time;
+        QString end_time;
+        QString delay;
+        QString prio;
+        QString stat;
+        QString run_style;
+        QString meter_times;
+    }analy_6012;
+
 public slots:
 
     void sendmessage();
 
-    void analysis6012();
+    void analysis6012(QList<QString>);
 
-    void analysis6014();
+    void analysis6014(QList<QString>);
 
-    void analysis601C();
+    void analysis601C(QList<QString>);
+    void clearlist();
+
 
 signals:
 
@@ -38,6 +54,7 @@ signals:
 
 private:
     Ui::FormCOLLECTIONMONITORINGCLASSOBJECT *ui;
+
 };
 
 

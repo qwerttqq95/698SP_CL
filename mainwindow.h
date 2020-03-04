@@ -158,6 +158,8 @@ signals:
 
     void deal_with_meter(QList<QString>);
 
+    void deal_6012(QList<QString>);
+
 public slots:
 
     void move_Cursor();
