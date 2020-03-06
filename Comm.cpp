@@ -254,6 +254,7 @@ QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone) 
     sprintf(full_len, "%.2s%.2s", len1, len2);
     QString text(full_len);
     QString Head = text + ctrl_zone + "0" + SA_sign + SA + "10";
+    qDebug()<<"maybe a problem!!!!"<<Head;
     BYTE text1[600] = {0};
     Stringlist2Hex(Head, text1);
     unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
@@ -435,29 +436,93 @@ QString re_rever_add() {
     return add;
 }
 
-QString fre(const QString& text) {
+QString fre(const QString &text) {
 
-    QString t = text.mid(1,1);
-    int value = text.mid(2).toInt(nullptr,16);
-    switch (t.toInt()){
+    QString t = text.mid(1, 1);
+    int value = text.mid(2).toInt(nullptr, 16);
+    switch (t.toInt()) {
         case 0:
-            return QString("%1%2").arg(QString::number(value),"秒");
+            return QString("%1%2").arg(QString::number(value), "秒");
         case 1:
-            return QString("%1%2").arg(QString::number(value),"分");
+            return QString("%1%2").arg(QString::number(value), "分");
         case 2:
-            return QString("%1%2").arg(QString::number(value),"时");
+            return QString("%1%2").arg(QString::number(value), "时");
         case 3:
-            return QString("%1%2").arg(QString::number(value),"日");
+            return QString("%1%2").arg(QString::number(value), "日");
         case 4:
-            return QString("%1%2").arg(QString::number(value),"月");
+            return QString("%1%2").arg(QString::number(value), "月");
         case 5:
-            return QString("%1%2").arg(QString::number(value),"年");
+            return QString("%1%2").arg(QString::number(value), "年");
+        default:
+            return "???";
+    }
+}
+
+QString time_deal(const QString &text) {
+    int year = text.mid(2, 4).toInt(nullptr, 16);
+    int mouth = text.mid(6, 2).toInt(nullptr, 16);
+    int day = text.mid(8, 2).toInt(nullptr, 16);
+    int hour = text.mid(10, 2).toInt(nullptr, 16);
+    int min = text.mid(12, 2).toInt(nullptr, 16);
+    int sec = text.mid(14, 2).toInt(nullptr, 16);
+
+    return QString::number(year) + "-" + QString::number(mouth) + "-" + QString::number(day) + " " +
+           QString::number(hour) + ":" +
+           QString::number(min) + ":" + QString::number(sec);
+}
+
+QString run_style(const QString &text) {
+    switch (text.toInt()) {
+        case 0:
+            return "前闭后开";
+        case 1:
+            return "前开后闭";
+        case 2:
+            return "前闭后闭";
+        case 3:
+            return "前开后开";
+        default:
+            return "???";
     }
 
-
 }
 
-QString time(const QString& text){
-
+QString mision_style(const QString &text) {
+    switch (text.toInt()) {
+        case 1:
+            return "普通采集方案";
+        case 2:
+            return "事件采集方案";
+        case 3:
+            return "透明方案";
+        case 4:
+            return "上报方案";
+        case 5:
+            return "脚本方案";
+        default:
+            return "???";
+    }
 }
 
+QString saved_time(const QString &text) {
+    switch (text.toInt(nullptr, 16)) {
+        case 0:
+            return "未定义";
+        case 1:
+            return "任务开始时间";
+        case 2:
+            return "相对于当日0点0分";
+        case 3:
+            return "相对于上日23点59分";
+        case 4:
+            return "相对于上日0点0分";
+        case 5:
+            return "相对于当月1日0点0分";
+        case 6:
+            return "数据冻结时标";
+        case 7:
+            return "相对于上月月末0点0分";
+        default:
+            return "???";
+    }
+}

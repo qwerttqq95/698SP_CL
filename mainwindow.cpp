@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
-                                                                                 show_meter_message(QList<QString>)));
+            show_meter_message(QList<QString>)));
 
 
     Parametric_variable = new _4_Parametric_variable();
@@ -86,7 +86,10 @@ MainWindow::MainWindow(QWidget *parent) :
     CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring, Qt::WindowMinimizeButtonHint);
     CollectionMonitoring_point->widget()->showMaximized();
     connect(CollectionMonitoring, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
-    connect(this, SIGNAL(deal_6012(QList<QString>)), CollectionMonitoring, SLOT(analysis6012(QList<QString>)));
+    connect(this, SIGNAL(deal_6012(QList<QString>)), CollectionMonitoring, SLOT(analysis6012(QList<QString>)),Qt::QueuedConnection);
+    connect(this, SIGNAL(deal_6014(QList<QString>)), CollectionMonitoring, SLOT(analysis6014(QList<QString>)),Qt::QueuedConnection);
+    connect(this, SIGNAL(deal_601C(QList<QString>)), CollectionMonitoring, SLOT(analysis601C(QList<QString>)),Qt::QueuedConnection);
+
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
     for (auto &j : p) {
@@ -275,10 +278,21 @@ QString MainWindow::analysis(QString a) {
                     if (n.OAD == "60000200") {
 //                        qDebug() << "收到表档案信息: " << n.DATA;
                         emit deal_with_meter(n.DATA);
-                    } else{
-                        if (n.OAD=="60120200"){
+                    } else {
+                        if (n.OAD == "60120200") {
 //                            qDebug() << "收到6012信息: " << n.DATA;
                             emit deal_6012(n.DATA);
+                        } else {
+                            if (n.OAD == "60140200") {
+                                qDebug() << "收到6014信息: " << n.DATA;
+                                emit deal_6014(n.DATA);
+                            } else {
+                                if (n.OAD == "601C0200") {
+                                    qDebug() << "收到601C信息: " << n.DATA;
+                                    emit deal_601C(n.DATA);
+                                }
+                            }
+
                         }
                     }
 
@@ -635,7 +649,7 @@ void MainWindow::set_ip() {
 void MainWindow::compare(QString recive) {
     QString last_message = ui->tableWidget->item(current - 1, 1)->text().replace(" ", "");
     show_message_receive("比对: " + recive);
-    if (last_message.contains(recive.replace(" ", ""),Qt::CaseInsensitive)) {
+    if (last_message.contains(recive.replace(" ", ""), Qt::CaseInsensitive)) {
         show_message_receive("比对结果一致");
     } else
         show_message_receive("比对结果不一致");

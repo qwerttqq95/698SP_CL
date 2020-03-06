@@ -159,6 +159,8 @@ signals:
     void deal_with_meter(QList<QString>);
 
     void deal_6012(QList<QString>);
+    void deal_6014(QList<QString>);
+    void deal_601C(QList<QString>);
 
 public slots:
 

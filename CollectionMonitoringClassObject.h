@@ -21,7 +21,7 @@ Q_OBJECT
 public:
     explicit CollectionMonitoringClass(QWidget *parent = nullptr);
 
-    typedef struct{
+    typedef struct {
         int ID;
         QString freq;
         QString style;
@@ -33,8 +33,25 @@ public:
         QString stat;
         QString run_style;
         QString meter_times;
-    }analy_6012;
+    } analy_6012;
 
+    typedef struct {
+        int No;
+        QString deep;
+        QString coll_style;
+        QString CSD;
+        int METERGATHER;
+        int SAVEDTIME;
+    } analy_6014;
+
+    typedef struct {
+        int No;
+        QString report_way;
+        QString timeout;
+        QString report_time;
+        QString report_times;
+        QString report_content;
+    } analy_601C;
 public slots:
 
     void sendmessage();
@@ -44,6 +61,7 @@ public slots:
     void analysis6014(QList<QString>);
 
     void analysis601C(QList<QString>);
+
     void clearlist();
 
 
