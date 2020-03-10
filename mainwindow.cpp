@@ -317,6 +317,15 @@ QString MainWindow::analysis(QString a) {
                     if (n.OAD == "60000200") {
 //                        qDebug() << "收到多表档案信息";
                         emit deal_with_meter(n.DATA);
+                    } else{
+                        if (n.OAD == "60120200") {
+
+                            emit deal_6012(n.DATA);
+                        }
+                        if (n.OAD == "60140200") {
+
+                            emit deal_6014(n.DATA);
+                        }
                     }
 
                     if (n.is_last_frame == "00") {

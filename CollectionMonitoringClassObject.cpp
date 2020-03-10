@@ -4,7 +4,7 @@
 
 #include "CollectionMonitoringClassObject.h"
 #include "QAction"
-
+#include "vector"
 
 extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
 
@@ -47,8 +47,7 @@ void CollectionMonitoringClass::analysis6012(QList<QString> list6012) {
     auto pos = list6012.begin();
     if (*pos == "01") {
         pos++;
-        int rowcount = 0;
-        qDebug() << "asd" << (*pos).toInt(nullptr, 16);
+        int rowcount = ui->tableWidget->rowCount();
         int const times = (*pos).toInt(nullptr, 16);
         for (int xx = 0; xx < times; xx++) {
             QApplication::processEvents();
@@ -111,16 +110,22 @@ void CollectionMonitoringClass::analysis6012(QList<QString> list6012) {
             ui->tableWidget->setItem(rowcount, 14, new QTableWidgetItem(run_style(n.run_style)));
             pos += 2;
             n.meter_times = "";
-
+            std::vector<QString> meter_times;
             int timess = (*pos).toInt(nullptr, 16);
             for (int j = 0; j < timess; ++j) {
                 for (int i = 0; i < 10; i++) {
                     pos++;
                     QApplication::processEvents();
-                    n.meter_times.append(*pos);
+                    meter_times.push_back(*pos);
                 }
             }
-            ui->tableWidget->setItem(rowcount, 15, new QTableWidgetItem(n.meter_times));
+            auto p = meter_times.begin() + 3;
+            auto st_hour = QString::number((*p).toInt(nullptr, 16));
+            auto st_min = QString::number((*(p + 2)).toInt(nullptr, 16));
+            auto en_hour = QString::number((*(p + 4)).toInt(nullptr, 16));
+            auto en_min = QString::number((*(p + 6)).toInt(nullptr, 16));
+            ui->tableWidget->setItem(rowcount, 15, new QTableWidgetItem(
+                    QString("%1:%2-%3:%4").arg(st_hour, st_min, en_hour, en_min)));//运行时段
             rowcount++;
             QApplication::processEvents();
         }
@@ -266,7 +271,7 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                             }
                             showtext.append(OAD_list);
                             ui->tableWidget->setItem(ncount, 4,
-                                                     new QTableWidgetItem(QString("按时间%1间隔采集 ").arg(fre(xx))));
+                                                     new QTableWidgetItem(QString("按时间(%1)间隔采集 ").arg(fre(xx))));
                             ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(showtext));
                             break;
                         }
@@ -367,6 +372,96 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
         int const times = (*pos).toInt(nullptr, 16);
         for (int xx = 0; xx < times; xx++) {
             QApplication::processEvents();
+            analy_601C n;
+            pos += 2;
+            n.No = (*pos).toInt(nullptr, 16);
+            pos += 2;
+            int shangbaotongdaoshuliang = (*pos).toInt(nullptr, 16);
+            QString tunle("");
+            for (int i = 0; i < shangbaotongdaoshuliang; ++i) {
+                pos += 1;
+                for (int j = 0; j < 4; ++j) {
+                    pos++;
+                    tunle.append(*pos);
+                }
+                tunle.append(" ");
+            }
+            pos++;
+            n.report_time = "";
+            for (int k = 0; k < 3; ++k) {
+                n.report_time.append(*pos);
+                pos++;
+            }
+            pos++;
+            n.report_times = *pos;
+            pos += 4;
+            if (*pos == "00")//上报
+            {
+
+            } else {
+                pos += 4;
+                QString mainOAD("");
+                for (int i = 0; i < 4; ++i) {
+                    mainOAD.append(*pos);
+                    pos++;
+                }
+                pos++;
+                QString secOAD("");
+                int timess = (*pos).toInt(nullptr, 16);
+                for (int j = 0; j < timess; ++j) {
+                    pos++;
+                    QString stat = *pos;
+                    if (stat == "00") {//一般属性描述符
+                        for (int i = 0; i < 4; ++i) {
+                            pos++;
+                            secOAD.append(*pos);
+                        }
+                        secOAD.append("\n");
+                    } else {
+                        QString ROAD("");
+                        for (int i = 0; i < 4; ++i) {
+                            pos++;
+                            ROAD.append(*pos);
+                        }
+                        pos++;
+                        int timesss = (*pos).toInt(nullptr, 16);
+                        QString content("");
+                        pos++;
+                        for (int k = 0; k < timesss; ++k) {
+                            for (int i = 0; i < 4; ++i) {
+                                content.append(*pos);
+                                pos++;
+                            }
+                            content.append("\n");
+
+                        }
+                        pos++;
+
+                    }
+
+
+                    int RSDstyle = (*pos).toInt(nullptr, 16);
+                    switch (RSDstyle) {
+                        case 10: {
+                            pos++;
+                            QString BeTime = *pos;
+                            pos++;
+                        }
+                            break;
+                    }
+                    int preTimes = (*pos).toInt();
+                    pos++;
+                    QString MSstyle = *pos;
+                    pos++;
+                    int len = (*pos).toInt(nullptr,16);
+
+                    for (int l = 0; l < len; ++l) {
+
+                    }
+
+                }
+            }
+
 
         }
     }
