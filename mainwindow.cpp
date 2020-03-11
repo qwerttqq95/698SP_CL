@@ -284,11 +284,11 @@ QString MainWindow::analysis(QString a) {
                             emit deal_6012(n.DATA);
                         } else {
                             if (n.OAD == "60140200") {
-                                qDebug() << "收到6014信息: " << n.DATA;
+//                                qDebug() << "收到6014信息: " << n.DATA;
                                 emit deal_6014(n.DATA);
                             } else {
                                 if (n.OAD == "601C0200") {
-                                    qDebug() << "收到601C信息: " << n.DATA;
+//                                    qDebug() << "收到601C信息: " << n.DATA;
                                     emit deal_601C(n.DATA);
                                 }
                             }

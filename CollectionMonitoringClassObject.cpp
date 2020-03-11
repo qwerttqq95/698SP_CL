@@ -38,7 +38,7 @@ CollectionMonitoringClass::CollectionMonitoringClass(QWidget *parent) : QDialog(
         ui->tableWidget->horizontalHeader()->setSectionResizeMode(i, QHeaderView::ResizeToContents);
 
     }
-    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+//    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 }
 
 void CollectionMonitoringClass::analysis6012(QList<QString> list6012) {
@@ -151,7 +151,8 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
             int ncount = -1;
             for (int l = 0; l < ui->tableWidget->rowCount(); ++l) {
                 if (ui->tableWidget->item(l, 3)->text() == QString::number(n.No))
-                    ncount = l;
+                    if (ui->tableWidget->item(l,2)->text() != "事件采集方案")
+                        ncount = l;
             }
             if (ncount == -1) {
                 qDebug() << "match failed";
@@ -187,6 +188,7 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                             showtext.append(OAD_list);
                             ui->tableWidget->setItem(ncount, 4, new QTableWidgetItem("采集当前数据"));
                             ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(showtext));
+                            ui->tableWidget->item(ncount,5)->setToolTip(showtext);
 
                         } else {
                             for (int j = 0; j < 4; ++j) {
@@ -197,6 +199,7 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                         }
                         ui->tableWidget->setItem(ncount, 4, new QTableWidgetItem("采集当前数据"));
                         ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(OAD));
+                        ui->tableWidget->item(ncount,5)->setToolTip(OAD);
                     }
                 }   // 采集当前数据
                     break;
@@ -233,6 +236,7 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                             showtext.append(OAD_list);
                             ui->tableWidget->setItem(ncount, 4, new QTableWidgetItem("按冻结时标采集"));
                             ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(showtext));
+                            ui->tableWidget->item(ncount,5)->setToolTip(showtext);
                             break;
                         }
 
@@ -273,6 +277,8 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                             ui->tableWidget->setItem(ncount, 4,
                                                      new QTableWidgetItem(QString("按时间(%1)间隔采集 ").arg(fre(xx))));
                             ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(showtext));
+                            ui->tableWidget->item(ncount,5)->setToolTip(showtext);
+
                             break;
                         }
 
@@ -320,6 +326,8 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                             }
                             showtext.append(OAD_list);
                             ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(showtext));
+                            ui->tableWidget->item(ncount,5)->setToolTip(showtext);
+
                         }
 
                     }
@@ -373,10 +381,22 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
         for (int xx = 0; xx < times; xx++) {
             QApplication::processEvents();
             analy_601C n;
-            pos += 2;
+            pos += 4;
             n.No = (*pos).toInt(nullptr, 16);
+            qDebug() << "No: " << n.No;
+            int ncount = -1;
+            for (int l = 0; l < ui->tableWidget->rowCount(); ++l) {
+                if (ui->tableWidget->item(l, 3)->text() == QString::number(n.No))
+
+                        ncount = l;
+            }
+            if (ncount == -1) {
+                qDebug() << "match failed";
+                return;
+            }
             pos += 2;
             int shangbaotongdaoshuliang = (*pos).toInt(nullptr, 16);
+            qDebug() << "shangbaotongdaoshuliang " << shangbaotongdaoshuliang;
             QString tunle("");
             for (int i = 0; i < shangbaotongdaoshuliang; ++i) {
                 pos += 1;
@@ -386,31 +406,38 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
                 }
                 tunle.append(" ");
             }
+            qDebug() << "tunle " << tunle;
             pos++;
             n.report_time = "";
+            pos++;
             for (int k = 0; k < 3; ++k) {
                 n.report_time.append(*pos);
                 pos++;
             }
+            qDebug() << "report_time " << n.report_time;
             pos++;
             n.report_times = *pos;
             pos += 4;
+            qDebug() << "pos += 4; " << *pos;
             if (*pos == "00")//上报
             {
 
             } else {
                 pos += 4;
                 QString mainOAD("");
-                for (int i = 0; i < 4; ++i) {
+                for (int i = 0; i < 4; i++) {
                     mainOAD.append(*pos);
                     pos++;
                 }
+                qDebug() << "mainOAD " << mainOAD;
                 pos++;
                 QString secOAD("");
                 int timess = (*pos).toInt(nullptr, 16);
+                qDebug() << "timess" << timess;
                 for (int j = 0; j < timess; ++j) {
                     pos++;
                     QString stat = *pos;
+//                    qDebug() << "stat " << stat;
                     if (stat == "00") {//一般属性描述符
                         for (int i = 0; i < 4; ++i) {
                             pos++;
@@ -423,43 +450,105 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
                             pos++;
                             ROAD.append(*pos);
                         }
+                        ROAD.append("\n");
+                        qDebug() << "ROAD " << ROAD;
                         pos++;
                         int timesss = (*pos).toInt(nullptr, 16);
-                        QString content("");
+                        qDebug() << "timesss " << timesss;
+                        QString content("       ");
                         pos++;
                         for (int k = 0; k < timesss; ++k) {
                             for (int i = 0; i < 4; ++i) {
                                 content.append(*pos);
                                 pos++;
                             }
-                            content.append("\n");
+                            content.append("\n       ");
+                        }
+                        qDebug() << "content " << content;
+                        pos++;
+                        ROAD.append(content);
+                        secOAD.append(ROAD);
+                    }
+                }qDebug() << "secOAD " << secOAD;
+                ui->tableWidget->setItem(ncount, 6, new QTableWidgetItem(secOAD));
+                ui->tableWidget->item(ncount,6)->setToolTip(secOAD);
 
+
+                if ((*pos) == "00")
+                    pos+=2;
+                int RSDstyle = (*pos).toInt(nullptr, 16);
+                qDebug() << "RSDstyle " << RSDstyle;
+                switch (RSDstyle) {
+                    case 6: {
+                        QString str_time("");
+                        for (int i = 0; i < 7; ++i) {
+                            pos++;
+                            str_time.append(*pos);
+                        }
+                        QString end_time("");
+                        for (int i = 0; i < 7; ++i) {
+                            pos++;
+                            end_time.append(*pos);
+                        }
+                        QString time_gap("");
+                        pos++;
+                        for (int i = 0; i < 2; ++i) {
+                            pos++;
+                            time_gap.append(*pos);
                         }
                         pos++;
-
                     }
-
-
-                    int RSDstyle = (*pos).toInt(nullptr, 16);
-                    switch (RSDstyle) {
-                        case 10: {
+                        break;
+                    case 7: {
+                        QString str_time("");
+                        for (int i = 0; i < 7; ++i) {
                             pos++;
-                            QString BeTime = *pos;
-                            pos++;
+                            str_time.append(*pos);
                         }
-                            break;
+                        QString end_time("");
+                        for (int i = 0; i < 7; ++i) {
+                            pos++;
+                            end_time.append(*pos);
+                        }
+                        QString time_gap("");
+                        pos++;
+                        for (int i = 0; i < 2; ++i) {
+                            pos++;
+                            time_gap.append(*pos);
+                        }
+                        pos++;
                     }
-                    int preTimes = (*pos).toInt();
-                    pos++;
-                    QString MSstyle = *pos;
-                    pos++;
-                    int len = (*pos).toInt(nullptr,16);
-
-                    for (int l = 0; l < len; ++l) {
-
+                        break;
+                    case 10: {
+                        pos++;
+                        QString BeTime = *pos;
                     }
-
+                        break;
                 }
+                int preTimes = (*pos).toInt();//上N次
+                qDebug() << "preTimes " << preTimes;
+                pos++;
+
+                QString MSstyle = *pos;
+                qDebug() << "MSstyle " << MSstyle;
+                switch (MSstyle.toInt()) {
+                    case 2: {
+                        pos++;
+                        int len = (*pos).toInt(nullptr, 16);
+                        qDebug() << "len " << len;
+                        QString content("");
+                        for (int l = 0; l < len; ++l) {
+                            pos++;
+                            int dec = (*pos).toInt(nullptr,16);
+                            content.append(QString::number(dec) + " ");
+                        }
+                        qDebug() << "content " << content;
+                        ui->tableWidget->setItem(ncount, 7, new QTableWidgetItem("一组用户类型: " + content));
+                    }
+                        break;//一组用户类型
+                }
+
+
             }
 
 
