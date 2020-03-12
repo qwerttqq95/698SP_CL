@@ -10,7 +10,8 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站 v20.03.11"
+
+#define ver "698主站 v20.03.12"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
     setWindowTitle(ver);
-
+    logging = new SaveLog();
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("Database.db");
     if (!database.open()) {
@@ -86,9 +87,12 @@ MainWindow::MainWindow(QWidget *parent) :
     CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring, Qt::WindowMinimizeButtonHint);
     CollectionMonitoring_point->widget()->showMaximized();
     connect(CollectionMonitoring, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
-    connect(this, SIGNAL(deal_6012(QList<QString>)), CollectionMonitoring, SLOT(analysis6012(QList<QString>)),Qt::QueuedConnection);
-    connect(this, SIGNAL(deal_6014(QList<QString>)), CollectionMonitoring, SLOT(analysis6014(QList<QString>)),Qt::QueuedConnection);
-    connect(this, SIGNAL(deal_601C(QList<QString>)), CollectionMonitoring, SLOT(analysis601C(QList<QString>)),Qt::QueuedConnection);
+    connect(this, SIGNAL(deal_6012(QList<QString>)), CollectionMonitoring, SLOT(analysis6012(QList<QString>)),
+            Qt::QueuedConnection);
+    connect(this, SIGNAL(deal_6014(QList<QString>)), CollectionMonitoring, SLOT(analysis6014(QList<QString>)),
+            Qt::QueuedConnection);
+    connect(this, SIGNAL(deal_601C(QList<QString>)), CollectionMonitoring, SLOT(analysis601C(QList<QString>)),
+            Qt::QueuedConnection);
 
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
@@ -317,7 +321,7 @@ QString MainWindow::analysis(QString a) {
                     if (n.OAD == "60000200") {
 //                        qDebug() << "收到多表档案信息";
                         emit deal_with_meter(n.DATA);
-                    } else{
+                    } else {
                         if (n.OAD == "60120200") {
 
                             emit deal_6012(n.DATA);
@@ -325,6 +329,10 @@ QString MainWindow::analysis(QString a) {
                         if (n.OAD == "60140200") {
 
                             emit deal_6014(n.DATA);
+                        }
+                        if (n.OAD == "601C0200") {
+
+                            emit deal_601C(n.DATA);
                         }
                     }
 
@@ -474,6 +482,7 @@ void MainWindow::show_message_send(QList<QString> a) {
     }
     current += 1;
     move_Cursor();
+    logging->write(x + " 发送: " + StringAddSpace(a[0]));
 }
 
 void MainWindow::show_message_receive(QString a) {
@@ -495,10 +504,9 @@ void MainWindow::show_message_receive(QString a) {
     } else if (te.contains("上报")) {
         ui->tableWidget->item(current, 2)->setForeground(QBrush(QColor(205, 92, 92)));
     }
-
     current += 1;
     move_Cursor();
-
+    logging->write(x + " 收到: " + a);
 }
 
 void MainWindow::Communication_parameters() {

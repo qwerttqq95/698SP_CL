@@ -89,8 +89,8 @@ public:
         verticalLayout->addLayout(horizontalLayout);
 
         tableWidget = new QTableWidget(tab);
-        if (tableWidget->columnCount() < 16)
-            tableWidget->setColumnCount(16);
+        if (tableWidget->columnCount() < 17)
+            tableWidget->setColumnCount(17);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -123,6 +123,8 @@ public:
         tableWidget->setHorizontalHeaderItem(14, __qtablewidgetitem14);
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(15, __qtablewidgetitem15);
+        QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(16, __qtablewidgetitem16);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
 
         verticalLayout->addWidget(tableWidget);
@@ -185,8 +187,10 @@ public:
         ___qtablewidgetitem14->setText(QCoreApplication::translate("Form", "\344\273\273\345\212\241\350\277\220\350\241\214\347\261\273\345\236\213", nullptr));
         QTableWidgetItem *___qtablewidgetitem15 = tableWidget->horizontalHeaderItem(15);
         ___qtablewidgetitem15->setText(QCoreApplication::translate("Form", "\350\277\220\350\241\214\346\227\266\346\256\265", nullptr));
+        QTableWidgetItem *___qtablewidgetitem16 = tableWidget->horizontalHeaderItem(16);
+        ___qtablewidgetitem16->setText(QCoreApplication::translate("Form", "\345\255\230\345\202\250\346\267\261\345\272\246", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("Form", "\345\210\206\346\236\220", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("Form", "Tab 2", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("Form", "6012", nullptr));
     } // retranslateUi
 
 };

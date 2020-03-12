@@ -19,6 +19,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include "Online.h"
+#include "SaveLog.h"
 
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
@@ -142,6 +143,7 @@ public:
         QString GetResultType;
     } ReportNotificationList;
 private:
+    SaveLog *logging;
     Ui::MainWindow *ui;
     Serial *serial;
     Custom_APDU *Custom;

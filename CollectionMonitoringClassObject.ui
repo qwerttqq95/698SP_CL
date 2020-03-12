@@ -159,6 +159,11 @@
              <string>运行时段</string>
             </property>
            </column>
+           <column>
+            <property name="text">
+             <string>存储深度</string>
+            </property>
+           </column>
           </widget>
          </item>
         </layout>
