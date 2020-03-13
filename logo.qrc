@@ -1,5 +1,9 @@
 <RCC>
-    <qresource prefix="main">
+    <qresource prefix="/main">
         <file>ooopic_1565853136.ico</file>
+        <file>ico/Computer.ico</file>
+        <file>ico/Customize.ico</file>
+        <file>ico/Dashboard.ico</file>
+        <file>ico/Document.ico</file>
     </qresource>
 </RCC>

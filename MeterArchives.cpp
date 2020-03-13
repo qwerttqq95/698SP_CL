@@ -303,7 +303,7 @@ void MeterArchives::send()
             qDebug() << "message 9:" << message;
             n.Rated_Electric_current = ui->tableWidget->item(i, 11)->text();
             char e[5];
-            sprintf(e, "%04x", n.Rated_Voltage.toInt(nullptr, 10));
+            sprintf(e, "%04x", n.Rated_Electric_current.toInt(nullptr, 10));
             message.append("12" + (QString) e + "0204");
             n.collect_TSA = ui->tableWidget->item(i, 12)->text();
             message.append("550705000000000000");
