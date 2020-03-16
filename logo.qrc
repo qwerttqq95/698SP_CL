@@ -5,5 +5,7 @@
         <file>ico/Customize.ico</file>
         <file>ico/Dashboard.ico</file>
         <file>ico/Document.ico</file>
+        <file>ico/Desktop.ico</file>
+        <file>ico/Sites.ico</file>
     </qresource>
 </RCC>

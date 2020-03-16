@@ -10,7 +10,6 @@
 #include <QApplication>
 #include <QClipboard>
 
-
 #define ver "698主站 v20.03.12"
 
 using namespace std;
@@ -66,14 +65,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Custom = new Custom_APDU();
     Custom_point = ui->mdiArea->addSubWindow(Custom, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
-    Custom_point->setWindowIcon(QIcon(":/main/Dashboard.ico"));
+    Custom_point->setWindowIcon(QIcon(":/main/ico/Sites.ico"));
+
     connect(Custom, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
 
 
     MeterArchive = new MeterArchives();
     MeterArchive_point = ui->mdiArea->addSubWindow(MeterArchive,
                                                    Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
-    MeterArchive_point->setWindowIcon(QIcon("./ico/Dashboard.ico"));
+    MeterArchive_point->setWindowIcon(QIcon(":/main/ico/Dashboard.ico"));
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
@@ -82,14 +82,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     Parametric_variable = new _4_Parametric_variable();
     Parametric_variable_point = ui->mdiArea->addSubWindow(Parametric_variable, Qt::WindowMinimizeButtonHint);
-    Parametric_variable_point->setWindowIcon(QIcon("./ico/Customize.ico"));
+    Parametric_variable_point->setWindowIcon(QIcon(":/main/ico/Customize.ico"));
     Parametric_variable_point->widget()->showMaximized();
     connect(Parametric_variable, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
 
     CollectionMonitoring = new CollectionMonitoringClass();
     CollectionMonitoring_point = ui->mdiArea->addSubWindow(CollectionMonitoring, Qt::WindowMinimizeButtonHint);
-    CollectionMonitoring_point->setWindowIcon(QIcon("./ico/Computer.ico"));
+    CollectionMonitoring_point->setWindowIcon(QIcon(":/main/ico/Computer.ico"));
     CollectionMonitoring_point->widget()->showMaximized();
     connect(CollectionMonitoring, SIGNAL(send_message(QList<QString>)), serial, SLOT(write(QList<QString>)));
     connect(this, SIGNAL(deal_6012(QList<QString>)), CollectionMonitoring, SLOT(analysis6012(QList<QString>)),
