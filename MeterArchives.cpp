@@ -247,6 +247,9 @@ void MeterArchives::send()
     QList<QString> text;
     QString
             message;
+    qDebug()<<ui->tableWidget->rowCount();
+    if (ui->tableWidget->rowCount() ==0)
+        return;
     for (int i = 0; i <= ui->tableWidget->rowCount() - 1; i++)
     {
         if (ui->tableWidget->item(i, 0)->checkState() == Qt::Checked)
