@@ -1,10 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#define WIN32_LEAN_AND_MEAN
+#include "serial.h"
 #include "Custom_APDU.h"
 #include <QMainWindow>
-#include "serial.h"
-#include "MeterArchives.h"
 #include "CollectionMonitoringClassObject.h"
 #include "Analysis.h"
 #include <QList>
@@ -20,7 +19,7 @@
 #include <QSqlQuery>
 #include "Online.h"
 #include "SaveLog.h"
-
+#include "MeterArchives.h"
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
 #define DATA_STRUCT                    2

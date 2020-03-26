@@ -10,7 +10,11 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_PREFIX_PATH D:/Qt5.13x86/5.13.2/mingw73_64)
+#set(CMAKE_PREFIX_PATH D:/Qt5.13x86/Tools/mingw730_32)
+#set(CMAKE_PREFIX_PATH D:/Qt/5.11.3/mingw53_32)
+
 find_package(Qt5Widgets)
+
 find_package(Qt5Core)
 find_package(Qt5Gui)
 find_package(Qt5Sql)
@@ -31,6 +35,6 @@ add_subdirectory(BasicExcel)
 add_subdirectory(XMLFile)
 add_subdirectory(ONLINE)
 
-target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML ONLINE_)
+target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML ONLINE_ )
 
 qt5_use_modules(698SP_CL Core Widgets Gui Sql)

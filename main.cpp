@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include <QMetaType>
-#include <QTextCodec>
 #include <QtWidgets/QStyleFactory>
 
 int main(int argc, char *argv[])

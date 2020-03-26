@@ -1,8 +1,12 @@
+
+#define WIN32_LEAN_AND_MEAN
+#include <winsock2.h>
 #ifndef INC_698SP_CL_SERIAL_H
 #define INC_698SP_CL_SERIAL_H
 #include <QDialog>
-#include <winsock2.h>
+
 #include <windows.h>
+
 
 #include <process.h>
 #include "tchar.h"
@@ -17,6 +21,7 @@
 
 #include <stdio.h>
 #include <QString>
+
 
 namespace Ui {
     class Dialog;

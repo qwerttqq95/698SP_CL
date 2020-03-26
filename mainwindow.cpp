@@ -10,7 +10,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站 v20.03.23"
+#define ver "698主站 x64 v20.03.26"
 
 using namespace std;
 
@@ -452,7 +452,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::about() {
-    QMessageBox::information(this, "关于", "698主站  \n QT版本: 5.13.2", QMessageBox::Ok);
+    QMessageBox::information(this, "关于", "698主站64位 CMake \n QT版本: 5.13.2", QMessageBox::Ok);
 }
 
 void MainWindow::serial_config() {

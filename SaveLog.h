@@ -4,7 +4,6 @@
 
 #ifndef INC_698SP_CL_SAVELOG_H
 #define INC_698SP_CL_SAVELOG_H
-
 #include "windows.h"
 #include "string"
 #include <direct.h>
