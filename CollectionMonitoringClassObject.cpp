@@ -149,6 +149,7 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
             pos += 4;
             analy_6014 n;
             n.No = (*pos).toInt(nullptr, 16);
+            qDebug() << "mission ID " + QString::number(n.No);
             int ncount = -1;
             for (int l = 0; l < ui->tableWidget->rowCount(); ++l) {
                 if (ui->tableWidget->item(l, 3)->text() == QString::number(n.No))
@@ -159,9 +160,10 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                 qDebug() << "match failed";
                 return;
             }
-            int deep = (*(pos + 2) + *(pos + 3)).toInt(nullptr,16);
-            ui->tableWidget->setItem(ncount,16,new QTableWidgetItem(QString::number(deep)));
+            int deep = (*(pos + 2) + *(pos + 3)).toInt(nullptr, 16);
+            ui->tableWidget->setItem(ncount, 16, new QTableWidgetItem(QString::number(deep)));
             pos += 7;
+            qDebug()<<"pos += 7"<<*(pos-1)<<(*pos)<<*(pos+1);
             switch ((*pos).toInt()) {
                 case 0: {
                     pos += 3;
@@ -212,7 +214,6 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                 }
                     break;
                 case 2: {
-
                     pos += 3;
                     const int timess = (*pos).toInt(nullptr, 16);
                     QString showtext("");
@@ -339,8 +340,12 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                     break;
             }
             pos += 2;
-            qDebug() << "ncount :" << ncount;
+            qDebug() << "ncount :" << *(pos-1)<<(*pos)<<*(pos+1);
             switch ((*pos).toInt()) {
+                default: {
+                    qDebug() << "ERROR ON 300+";
+                }
+                    break;
                 case 0: {
                     ui->tableWidget->setItem(ncount, 7, new QTableWidgetItem("无电表"));
                     pos += 2;
@@ -363,6 +368,26 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
 
                     }
                     ui->tableWidget->setItem(ncount, 7, new QTableWidgetItem("一组用户类型:" + mest));
+                    pos++;
+                    pos++;
+                    ui->tableWidget->setItem(ncount, 8, new QTableWidgetItem(saved_time(*pos)));
+                }
+                    break;
+                case 4: {
+                    qDebug() << "一组配置序号";
+                    pos++;
+                    int len = (*pos).toInt(nullptr, 16);
+                    QString mest("");
+                    QString left;
+                    QString right;
+                    for (int i = 0; i < len; ++i) {
+                        pos++;
+                        left = *pos;
+                        pos++;
+                        right = *pos;
+                        mest.append(" " + QString::number((left + right).toInt(nullptr, 16)));
+                    }
+                    ui->tableWidget->setItem(ncount, 7, new QTableWidgetItem("一组配置序号:" + mest));
                     pos++;
                     pos++;
                     ui->tableWidget->setItem(ncount, 8, new QTableWidgetItem(saved_time(*pos)));

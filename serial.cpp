@@ -16,7 +16,7 @@ extern int String2Hex(string &str, BYTE *pOut, DWORD *pLenOut, DWORD nMaxLen);
 
 extern string StringAddSpace(string &input);
 
-extern string StringAddSpace(QString &input);
+extern QString StringAddSpace(QString &input);
 
 extern int check(QString);
 
