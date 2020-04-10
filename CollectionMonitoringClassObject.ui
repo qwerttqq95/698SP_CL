@@ -549,13 +549,6 @@
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox">
-             <property name="text">
-              <string>202A0200</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
          <item row="3" column="1" colspan="2">
@@ -585,6 +578,9 @@
                  <width>50</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="text">
+                <string>1</string>
                </property>
               </widget>
              </item>
@@ -688,6 +684,9 @@
                  <width>50</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="text">
+                <string>1</string>
                </property>
               </widget>
              </item>

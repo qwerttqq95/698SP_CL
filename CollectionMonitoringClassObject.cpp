@@ -8,8 +8,6 @@
 
 #pragma execution_character_set("utf-8")
 
-extern void swap(unsigned char *str, int len);
-
 extern auto BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl_zone) -> QString;
 
 extern QString time_deal(const QString &);
@@ -44,6 +42,9 @@ QString ReTimeHex(QString time) {
 
 QString ReCollect(int x) {
     switch (x) {
+        default: {
+            qDebug() << "ERROR 46";
+        }
         case 0: {
 
         }
@@ -78,6 +79,7 @@ CollectionMonitoringClass::CollectionMonitoringClass(QWidget *parent) : QDialog(
     }
 //    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     Tab_2_init();
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 void CollectionMonitoringClass::analysis6012(QList<QString> list6012) {
@@ -198,7 +200,6 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                         read->setText("读取");
                         ui->tableWidget->setCellWidget(l, 17, (QWidget *) read);
                         connect(read, SIGNAL(clicked()), this, SLOT(ClickedRead()));
-//todo
                     }
 
             }
@@ -211,6 +212,10 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
             pos += 7;
             qDebug() << "pos += 7" << *(pos - 1) << (*pos) << *(pos + 1);
             switch ((*pos).toInt()) {
+                default: {
+                    qDebug() << "ERROR 215";
+                    return;
+                }
                 case 0: {
                     pos += 3;
                     const int timess = (*pos).toInt(nullptr, 16);
@@ -389,7 +394,7 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
             qDebug() << "ncount :" << *(pos - 1) << (*pos) << *(pos + 1);
             switch ((*pos).toInt()) {
                 default: {
-                    qDebug() << "ERROR ON 300+";
+                    qDebug() << "ERROR ON 3986";
                 }
                     break;
                 case 0: {
@@ -857,7 +862,6 @@ void CollectionMonitoringClass::method_10() {
 }
 
 
-
 void CollectionMonitoringClass::getData() {
     QString APDU = "05030060120300";
     if (ui->radioButton->isChecked() or ui->radioButton_2->isChecked()) {//方法4/5
@@ -867,11 +871,34 @@ void CollectionMonitoringClass::getData() {
             APDU.append("05");
         auto time = ui->dateTimeEdit->text();
         APDU.append(ReTimeHex(time));
+    } else {
+        if (ui->radioButton_4->isChecked() or ui->radioButton_3->isChecked() or ui->radioButton_6->isChecked()) {
+            if (ui->radioButton_4->isChecked())
+                APDU.append("06");
+            if (ui->radioButton_3->isChecked())
+                APDU.append("07");
+            if (ui->radioButton_6->isChecked())
+                APDU.append("08");
+            auto time = ui->dateTimeEdit->text();
+            auto time2 = ui->dateTimeEdit_2->text();
+            APDU.append(ReTimeHex(time));
+            APDU.append(ReTimeHex(time2));
+            APDU.append(QString().sprintf("%02d", ui->comboBox->currentIndex()) +
+                        QString().sprintf("%04x", ui->lineEdit->text().toInt()));
+        } else {
+            if (ui->radioButton_5->isChecked()) {//9
+                APDU.append("09"+QString().sprintf("%02x",ui->lineEdit_3->text().toInt()));
+            } else {//10
+                APDU.append("0a"+QString().sprintf("%02x",ui->lineEdit_3->text().toInt()));
+            }
+        }
     }
 
     switch (ui->comboBox_2->currentIndex()) {  //MS
-        case 0:
+        case 0: {
+            qDebug() << "ERROR 878";
             return;
+        }
         case 1: {//全部用户地址
             APDU.append("01");
         }
@@ -926,6 +953,10 @@ void CollectionMonitoringClass::getData() {
     }
 
     switch (ui->comboBox_3->currentIndex()) {  //采集类型
+        default: {
+            qDebug() << "ERROR 935";
+            return;
+        }
         case 0: { //实时
             auto OAD = ui->comboBox_4->currentText().split(",", QString::SkipEmptyParts);
             auto count = QString().sprintf("%02x", OAD.length());
@@ -939,41 +970,42 @@ void CollectionMonitoringClass::getData() {
         case 1: { //曲线
             auto OAD = ui->comboBox_4->currentText().split(",", QString::SkipEmptyParts);
             auto count = QString().sprintf("%02x", OAD.length());
-            APDU.append("010150020200");
+            APDU.append("020150020200");
             APDU.append(count);
             for (int i = 0; i < OAD.length(); ++i) {
                 APDU.append(OAD[i]);
             }
-            APDU.append("00");
+            APDU.append("00202a020000");
         }
             break;
         case 2: { //日冻结
             auto OAD = ui->comboBox_4->currentText().split(",", QString::SkipEmptyParts);
             auto count = QString().sprintf("%02x", OAD.length());
-            APDU.append("010150040200");
+            APDU.append("020150040200");
             APDU.append(count);
             for (int i = 0; i < OAD.length(); ++i) {
                 APDU.append(OAD[i]);
             }
-            APDU.append("00");
+            APDU.append("00202a020000");
         }
             break;
 
         case 3: { //月冻结
             auto OAD = ui->comboBox_4->currentText().split(",", QString::SkipEmptyParts);
             auto count = QString().sprintf("%02x", OAD.length());
-            APDU.append("010150060200");
+            APDU.append("020150060200");
             APDU.append(count);
             for (int i = 0; i < OAD.length(); ++i) {
                 APDU.append(OAD[i]);
             }
-            APDU.append("00");
+            APDU.append("00202a020000");
         }
             break;
     }
     qDebug() << "APDU:" << APDU;
-    QString add = re_rever_add();
-    emit send_message({BuildMessage(APDU, add, "43"), ""});
+    if (APDU == "")
+        return;
+    emit send_message({BuildMessage(APDU, re_rever_add(), "43"), ""});
 }
 
 

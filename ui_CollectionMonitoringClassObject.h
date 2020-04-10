@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDateTimeEdit>
 #include <QtWidgets/QGridLayout>
@@ -73,7 +72,6 @@ public:
     QComboBox *comboBox_2;
     QLineEdit *lineEdit_2;
     QSpacerItem *horizontalSpacer_6;
-    QCheckBox *checkBox;
     QHBoxLayout *horizontalLayout_6;
     QHBoxLayout *horizontalLayout_4;
     QLabel *label_3;
@@ -363,11 +361,6 @@ public:
 
         horizontalLayout_5->addItem(horizontalSpacer_6);
 
-        checkBox = new QCheckBox(tab_2);
-        checkBox->setObjectName(QString::fromUtf8("checkBox"));
-
-        horizontalLayout_5->addWidget(checkBox);
-
 
         gridLayout->addLayout(horizontalLayout_5, 2, 1, 1, 1);
 
@@ -541,8 +534,8 @@ public:
         comboBox_2->setItemText(3, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\344\270\200\347\273\204\347\224\250\346\210\267\345\234\260\345\235\200", nullptr));
         comboBox_2->setItemText(4, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\344\270\200\347\273\204\347\224\250\346\210\267\345\272\217\345\217\267", nullptr));
 
-        checkBox->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "202A0200", nullptr));
         label_3->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\346\227\266\351\227\264\351\227\264\351\232\224:", nullptr));
+        lineEdit->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "1", nullptr));
         comboBox->setItemText(0, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\347\247\222", nullptr));
         comboBox->setItemText(1, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\345\210\206", nullptr));
         comboBox->setItemText(2, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\346\227\266", nullptr));
@@ -551,6 +544,7 @@ public:
         comboBox->setItemText(5, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\345\271\264", nullptr));
 
         label_5->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\344\270\212N\346\254\241:", nullptr));
+        lineEdit_3->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "1", nullptr));
         pushButton_5->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\350\257\273\345\217\226", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\346\225\260\346\215\256\350\247\243\346\236\220", nullptr));
     } // retranslateUi

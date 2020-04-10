@@ -10,7 +10,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站 x64 v20.04.01"
+#define ver "698主站 x64 v20.04.10"
 
 using namespace std;
 
@@ -311,6 +311,10 @@ QString MainWindow::analysis(QString a) {
                     }
 
 //                    emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析
+                }
+                    break;
+                case 0x3:{
+//todo
                 }
                     break;
                 case 0x5: {

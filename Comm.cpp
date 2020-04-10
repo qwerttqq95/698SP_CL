@@ -56,16 +56,6 @@
 
 using namespace std;
 
-void swap(unsigned char *str, int len){
-    char c;
-    int i;
-    for ( i = 0; i < len / 2; i++) {
-        c = str[len - 1 - i];
-        str[len - 1 - i] = str[i];
-        str[i] = c;
-    }
-}
-
 
 QString binToDec(QString strBin) {  //二进制转十进制
     QString decimal;
