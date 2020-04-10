@@ -5,7 +5,7 @@
 
 extern QString DealDataType(int NoDataType, int len, QTreeWidgetItem *item);
 
-extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
+extern QString BuildMessage( const QString &apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString re_rever_add();
 
@@ -460,7 +460,7 @@ void _4_Parametric_variable::set()
         }
         QString APDU = "060100" + OI + att + DataText + "00";
         qDebug() << "APDU: " << APDU;
-        emit send_write({BuildMessage(APDU, re_rever_add(), "43"), "设置" + OI});
+        emit send_write({BuildMessage(APDU.remove(" "), re_rever_add(), "43"), "设置" + OI});
     } else
     {
         QString APDU = "060200" + QString("%1").arg(current_check.length(), 2, 16, QLatin1Char('0'));
@@ -503,7 +503,7 @@ void _4_Parametric_variable::set()
 
         }
         qDebug() << "APDU: " << APDU;
-        emit send_write({BuildMessage(APDU + "00", re_rever_add(), "43"), "设置"});
+        emit send_write({BuildMessage(APDU.remove(" ") + "00", re_rever_add(), "43"), "设置"});
 
     }
 }
@@ -529,7 +529,7 @@ void _4_Parametric_variable::read()
         QString att = QString("%1").arg(item->text(1).toInt(), 2, 16, QLatin1Char('0')) + "00";
         QString APDU = "050100" + OI + att + "00";
         qDebug() << "APDU: " << APDU;
-        emit send_write({BuildMessage(APDU, re_rever_add(), "43"), "读取" + OI});
+        emit send_write({BuildMessage(APDU.remove(" "), re_rever_add(), "43"), "读取" + OI});
     } else
     {
         QString APDU = "050200" + QString("%1").arg(current_check.length(), 2, 16, QLatin1Char('0'));
@@ -542,7 +542,7 @@ void _4_Parametric_variable::read()
             APDU.append(OI + att);
         }
         qDebug() << "APDU: " << APDU;
-        emit send_write({BuildMessage(APDU + "00", re_rever_add(), "43"), "读取"});
+        emit send_write({BuildMessage(APDU.remove(" ") + "00", re_rever_add(), "43"), "读取"});
     }
 }
 
@@ -602,7 +602,7 @@ void _4_Parametric_variable::action()
         }
         QString APDU = "070100" + OI + att + DataText + "00";
         qDebug() << "APDU: " << APDU;
-        emit send_write({BuildMessage(APDU, re_rever_add(), "43"), "操作" + OI});
+        emit send_write({BuildMessage(APDU.remove(" "), re_rever_add(), "43"), "操作" + OI});
     } else
     {
         QString APDU = "070200" + QString("%1").arg(current_check.length(), 2, 16, QLatin1Char('0'));
@@ -650,7 +650,7 @@ void _4_Parametric_variable::action()
             APDU.append(OI + att + DataText);
         }
         qDebug() << "APDU: " << APDU;
-        emit send_write({BuildMessage(APDU + "00", re_rever_add(), "43"), "操作"});
+        emit send_write({BuildMessage(APDU.remove(" ") + "00", re_rever_add(), "43"), "操作"});
     }
 }
 

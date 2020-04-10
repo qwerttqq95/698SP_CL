@@ -7,7 +7,7 @@
 #include <typeinfo.h>
 #include <XMLFile/tinyxml2.h>
 
-extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
+extern QString BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl_zone);
 
 extern VALUE_LEFT Data_deal(QList<QString> a);
 
@@ -333,7 +333,7 @@ void MeterArchives::send()
         QString
                 send_message = "07010060007f00" + text.takeFirst() + "00";
 //        qDebug()<<"send_message"<<send_message;
-        emit send_write({BuildMessage(send_message, add, "43"), ""});//2
+        emit send_write({BuildMessage(send_message.remove(" "), add, "43"), ""});//2
 
     } else
     {
@@ -350,7 +350,7 @@ void MeterArchives::send()
             char qw[3];
             sprintf(qw, "%02x", j - 1);
             send_message = "0701006000800001" + (QString) qw + send_message + "00";
-            emit send_write({BuildMessage(send_message, add, "43"), ""});//2
+            emit send_write({BuildMessage(send_message.remove(" "), add, "43"), ""});//2
             send_message = "";
             QEventLoop eventloop;
             QTimer::singleShot(3500, &eventloop, SLOT(quit()));

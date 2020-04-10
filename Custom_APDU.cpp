@@ -4,7 +4,7 @@
 #include <QString>
 #include <XMLFile/tinyxml2.h>
 
-extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
+extern QString BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString re_rever_add();
 
@@ -26,7 +26,7 @@ void Custom_APDU::send() {
     if (a[0] != '6') {
         QString add = re_rever_add();
         qDebug() << "发送add" << add;
-        re_message = BuildMessage(a, add, "43");
+        re_message = BuildMessage(a.remove(" "), add, "43");
     } else
         re_message = a;
 

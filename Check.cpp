@@ -6,7 +6,7 @@
 #include <QtWidgets/QMessageBox>
 #include <ui_Check.h>
 
-extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
+extern QString BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString re_rever_add();
 
@@ -78,7 +78,7 @@ void Check::send_archeive()
                 } else
                 {
                     QString add = re_rever_add();
-                    emit send_message({BuildMessage(message[1], add, "43"), message[0]});
+                    emit send_message({BuildMessage(message[1].remove(" "), add, "43"), message[0]});
                     QEventLoop eventloop;
                     QTimer::singleShot(3000, &eventloop, SLOT(quit()));
                     eventloop.exec();

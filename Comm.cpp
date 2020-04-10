@@ -5,6 +5,7 @@
 #include <MeterArchives.h>
 //#include <mainwindow.h>
 #define WIN32_LEAN_AND_MEAN
+
 #include <windows.h>
 #include <vector>
 #include <XMLFile/tinyxml2.h>
@@ -54,6 +55,17 @@
 #define DATA_RCSD                        96
 
 using namespace std;
+
+void swap(unsigned char *str, int len){
+    char c;
+    int i;
+    for ( i = 0; i < len / 2; i++) {
+        c = str[len - 1 - i];
+        str[len - 1 - i] = str[i];
+        str[i] = c;
+    }
+}
+
 
 QString binToDec(QString strBin) {  //二进制转十进制
     QString decimal;
@@ -272,34 +284,34 @@ QString DealDataType(const int NoDataType, int len, QTreeWidgetItem *item) {
 }
 
 
-QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone) {
+QString BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl_zone) {
     qDebug() << "apdu:" << apdu;
     qDebug() << "SA:" << SA;
     qDebug() << "ctrl_zone:" << ctrl_zone;
-    apdu.remove(' ');
 //    qDebug() << "apdu" << apdu;
     int len = SA.length() / 2 - 1;
-    if (len == -1) {
+    if (len == -1 or len == 0) {
         qDebug() << "BuildMessage 1 error";
         return "0";
     }
     QString SA_sign = QString("%1").arg(len);
-    int apdu_len = apdu.length() / 2;
-    int Total_length = 10 + len + apdu_len;
+    int apdulen = apdu.length() / 2;
+    int Total_length = 10 + len + apdulen;
     int lenth1 = Total_length & 0x00ff;
     int lenth2 = Total_length >> 8;
     char len1[3] = {'0', '0'};
     char len2[3] = {'0', '0'};
     sprintf(len1, "%02X", lenth1);
     sprintf(len2, "%02X", lenth2);
-    char full_len[4];
+    char full_len[5];
     sprintf(full_len, "%.2s%.2s", len1, len2);
     QString text(full_len);
     QString Head = text + ctrl_zone + "0" + SA_sign + SA + "10";
-    qDebug()<<"maybe a problem!!!!"<<Head;
+    qDebug() << "maybe a problem!!!!" << Head;
     BYTE text1[600] = {0};
     Stringlist2Hex(Head, text1);
     unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
+//    unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, );
     char hcs[5];
     sprintf(hcs, "%04X", TempLen);
     QString HCS = message_swap((QString) hcs);
@@ -378,12 +390,13 @@ QString StringAddSpace(QString &input) {
     for (int i = 0; i < input.length(); i += 2) {
         output = output + input[i] + input[i + 1] + ' ';
     }
+    qDebug() << "output: " << output;
     return output;
 }
 
 int Stringlist2Hex(QString &str, BYTE *pOut) {
     QList<QString> str_list;
-    str_list = StringAddSpace(str).split(' ');
+    str_list = (StringAddSpace(str)).split(' ');
     int len = str_list.length();
     for (int i = 0; i < len; i++) {
         int qwe = str_list[i].toInt(nullptr, 16);
@@ -542,7 +555,7 @@ QString mision_style(const QString &text) {
         case 5:
             return "脚本方案";
         default:
-            return "???";
+            return "???方案";
     }
 }
 

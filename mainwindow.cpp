@@ -14,7 +14,7 @@
 
 using namespace std;
 
-extern QString BuildMessage(QString apdu, const QString &SA, const QString &ctrl_zone);
+extern QString BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl_zone);
 
 extern QString StringAddSpace(QString &input);
 
@@ -161,7 +161,7 @@ void MainWindow::function() {
                 temp2 = QString::fromStdString(temp);
                 qDebug() << temp2;
                 QList<QString> temp_list = temp2.split("#");
-                serial->send_write({BuildMessage(temp_list[1], revert_add, "43"), temp_list[0]});
+                serial->send_write({BuildMessage(temp_list[1].remove(" "), revert_add, "43"), temp_list[0]});
                 QEventLoop eventloop;
                 QTimer::singleShot(1500, &eventloop, SLOT(quit()));
                 eventloop.exec();
@@ -221,11 +221,15 @@ QString MainWindow::analysis(QString a) {
     doc.LoadFile("config.xml");
     tinyxml2::XMLElement *root = doc.RootElement();
     tinyxml2::XMLElement *first_child1 = root->FirstChildElement("add");
-    const char *content2 = add.toLocal8Bit();
+    qDebug()<<"add: "<<add;
+    QByteArray ba2;
+    ba2.append(add);     //也可以 ba2 = s2.toLatin1();
+    const char *content2 = ba2.data();
     first_child1->SetText(content2);
-
     tinyxml2::XMLElement *first_child = root->FirstChildElement("revert_add");
-    const char *content = revert_add.toLocal8Bit();
+    QByteArray ba3;
+    ba3.append(revert_add);
+    const char *content = ba3.data();
     first_child->SetText(content);
     doc.SaveFile("config.xml");
     int apdu_0 = 9 + SA_len;
@@ -263,11 +267,11 @@ QString MainWindow::analysis(QString a) {
                     APDU = "81" + n.PIIDACD + "80" + n.REQUEST_TIMEDATE_TIME + year + date_times + year + date_times;
             if (n.LINK_REQUSET_TYPE == "00") {
                 emit
-                serial->send_write({BuildMessage(APDU, revert_add, "01"), "登录响应"});
+                serial->send_write({BuildMessage(APDU.remove(" "), revert_add, "01"), "登录响应"});
                 return "登录";
             } else {
                 emit
-                serial->send_write({BuildMessage(APDU, revert_add, "01"), "心跳响应"});
+                serial->send_write({BuildMessage(APDU.remove(" "), revert_add, "01"), "心跳响应"});
                 return "心跳";
             }
 
@@ -346,7 +350,7 @@ QString MainWindow::analysis(QString a) {
                         QString
                                 text = "0505" + n.PIIDACD + n.slicing_index + "00";
                         emit
-                        serial->send_write({BuildMessage(text, revert_add, "43"), ""});
+                        serial->send_write({BuildMessage(text.remove(" "), revert_add, "43"), ""});
                         times++;
                         return QString().sprintf("收到分帧,第%d帧", times);
                     }
@@ -390,7 +394,7 @@ QString MainWindow::analysis(QString a) {
                     QString APDU = "0801" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
 //                    QString APDU = "080100"  + n.SequenceOfLen + n.OAD + "00";
                     if (!ui->actionshangbao->isChecked()) {
-                        serial->send_write({BuildMessage(APDU, revert_add, "03"), "8801上报响应"});
+                        serial->send_write({BuildMessage(APDU.remove(" "), revert_add, "03"), "8801上报响应"});
                         n.GetResultType = list[apdu_0 + 8];
                     }
                     return "上报消息";
@@ -407,7 +411,7 @@ QString MainWindow::analysis(QString a) {
                     QString APDU = "0802" + n.PIIDACD + n.SequenceOfLen + n.OAD + "00";
 //                    QString APDU = "080200" + n.SequenceOfLen + n.OAD + "00";
                     if (!ui->actionshangbao->isChecked()) {
-                        serial->send_write({BuildMessage(APDU, revert_add, "03"), "8802上报响应"});
+                        serial->send_write({BuildMessage(APDU.remove(" "), revert_add, "03"), "8802上报响应"});
                         n.RCSD = list[apdu_0 + 8];
                     }
                     return "上报消息";
@@ -568,7 +572,7 @@ void MainWindow::set_add() {
         QString message;
         message = "060100400102000906" + text + "00";
         qDebug() << "set_add message: " << message;
-        serial->send_write({BuildMessage(message, revert_add, "43"), "设置终端地址"});
+        serial->send_write({BuildMessage(message.remove(" "), revert_add, "43"), "设置终端地址"});
     } else {
         if (ok) {
             QMessageBox::warning(this, "警告", "输入内容有问题", QMessageBox::Ok);
@@ -623,7 +627,7 @@ void MainWindow::set_ip() {
             QString message;
             message = "06010045100400020616010904" + text_ip + "0904ffffff000904000000000a000a0000";
             qDebug() << "message: " << message << f_action->text();
-            serial->send_write({BuildMessage(message, revert_add, "43"), f_action->text()});
+            serial->send_write({BuildMessage(message.remove(" "), revert_add, "43"), f_action->text()});
             doc.SaveFile("config.xml");
         }
         return;
@@ -673,7 +677,7 @@ void MainWindow::set_ip() {
         else
             message = "06010045100300010102020904" + text_ip + "12" + temp2;
         qDebug() << "message: " << message << f_action->text();
-        serial->send_write({BuildMessage(message, revert_add, "43"), f_action->text()});
+        serial->send_write({BuildMessage(message.remove(" "), revert_add, "43"), f_action->text()});
         doc.SaveFile("config.xml");
     }
 

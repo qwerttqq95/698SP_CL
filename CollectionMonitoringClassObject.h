@@ -16,10 +16,13 @@ namespace Ui {
     class FormCOLLECTIONMONITORINGCLASSOBJECT;
 }
 
+
 class CollectionMonitoringClass : public QDialog {
 Q_OBJECT
 public:
     explicit CollectionMonitoringClass(QWidget *parent = nullptr);
+
+    void Tab_2_init();
 
     typedef struct {
         int ID;
@@ -64,6 +67,23 @@ public slots:
 
     void clearlist();
 
+    void method_4();
+
+    void method_5();
+
+    void method_6();
+
+    void method_7();
+
+    void method_8();
+
+    void method_9();
+
+    void method_10();
+
+    void getData();
+
+    void ClickedRead();
 
 signals:
 
