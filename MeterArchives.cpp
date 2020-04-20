@@ -328,6 +328,8 @@ void MeterArchives::send()
     }
 
     QString add = re_rever_add();
+    if (text.length() == 0)
+        return;
     if (text.length() == 1)
     {
         QString

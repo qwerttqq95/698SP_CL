@@ -139,10 +139,13 @@ void CollectionMonitoringClass::analysis6012(QList<QString> list6012) {
             ui->tableWidget->setItem(rowcount, 12, new QTableWidgetItem(n.prio));
             pos += 2;
             n.stat = *pos;
-            if (n.stat == "01")
+            if (n.stat == "01") {
                 ui->tableWidget->setItem(rowcount, 13, new QTableWidgetItem("启用"));
-            else
+                ui->tableWidget->item(rowcount, 13)->setForeground(QBrush(QColor(0, 255, 0)));
+            } else {
                 ui->tableWidget->setItem(rowcount, 13, new QTableWidgetItem("禁用"));
+                ui->tableWidget->item(rowcount, 13)->setForeground(QBrush(QColor(255, 0, 0)));
+            }
             pos += 10;
             n.run_style = *pos;
             ui->tableWidget->setItem(rowcount, 14, new QTableWidgetItem(run_style(n.run_style)));
@@ -260,8 +263,48 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
                 }   // 采集当前数据
                     break;
                 case 1: {
-                    qDebug() << "上N次暂不支持";
-                    return;
+                    pos += 2;
+                    ui->tableWidget->setItem(ncount, 4, new QTableWidgetItem(QString("采集上%1次").arg((*pos).toInt(nullptr,16))));
+                    QString showtext("");
+                    QString OAD("");
+                    pos+=2;
+                    const int timess = (*pos).toInt(nullptr, 16);
+                    for (int i = 0; i < timess; i++) {
+                        pos += 2;
+                        if (*pos == "01") {
+                            QString ROAD("");
+                            for (int j = 0; j < 4; ++j) {
+                                pos++;
+                                ROAD.append(*pos);
+                            }
+                            showtext.append(ROAD + ":");
+                            qDebug()<<"showtext"<<showtext;
+                            pos++;
+                            int const timesss = (*pos).toInt(nullptr, 16);
+                            QString OAD_list("");
+                            for (int k = 0; k < timesss; ++k) {
+                                OAD="";
+                                for (int j = 0; j < 4; ++j) {
+                                    pos++;
+                                    OAD.append(*pos);
+                                }
+                                OAD_list.append("\n        " + OAD);
+                            }
+
+                            showtext.append(OAD_list);
+                            qDebug()<<"showtext"<<showtext;
+
+                        } else {
+                            for (int j = 0; j < 4; ++j) {
+                                pos++;
+                                OAD.append(*pos);
+                            }
+                            OAD.append('\n');
+                        }
+
+                    }
+                    ui->tableWidget->setItem(ncount, 5, new QTableWidgetItem(showtext));
+                    ui->tableWidget->item(ncount, 5)->setToolTip(showtext);
                 }
                     break;
                 case 2: {
@@ -465,9 +508,12 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
             qDebug() << "No: " << n.No;
             int ncount = -1;
             for (int l = 0; l < ui->tableWidget->rowCount(); ++l) {
-                if (ui->tableWidget->item(l, 3)->text() == QString::number(n.No))
-
+                qDebug() << ui->tableWidget->item(l, 2)->text();
+                if (ui->tableWidget->item(l, 3)->text() == QString::number(n.No) and
+                    ui->tableWidget->item(l, 2)->text().contains("上报")) {
                     ncount = l;
+                    break;
+                }
             }
             if (ncount == -1) {
                 qDebug() << "match failed";
@@ -887,9 +933,9 @@ void CollectionMonitoringClass::getData() {
                         QString().sprintf("%04x", ui->lineEdit->text().toInt()));
         } else {
             if (ui->radioButton_5->isChecked()) {//9
-                APDU.append("09"+QString().sprintf("%02x",ui->lineEdit_3->text().toInt()));
+                APDU.append("09" + QString().sprintf("%02x", ui->lineEdit_3->text().toInt()));
             } else {//10
-                APDU.append("0a"+QString().sprintf("%02x",ui->lineEdit_3->text().toInt()));
+                APDU.append("0a" + QString().sprintf("%02x", ui->lineEdit_3->text().toInt()));
             }
         }
     }

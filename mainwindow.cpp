@@ -10,7 +10,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站 x64 v20.04.10"
+#define ver "698主站 x64 v20.04.20"
 
 using namespace std;
 
@@ -359,8 +359,9 @@ QString MainWindow::analysis(QString a) {
                         return QString().sprintf("收到分帧,第%d帧", times);
                     }
                     if (n.is_last_frame == "01") {
+                        const QString last = QString().sprintf("最后一帧,共%d帧",times+1);
                         times = 0;
-                        return "最后一帧";
+                        return last;
                     }
                 }
                     break;
