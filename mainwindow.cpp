@@ -10,7 +10,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站 x64 v20.04.20"
+#define ver "698主站测试版 x64 "
 
 using namespace std;
 
@@ -18,17 +18,20 @@ extern QString BuildMessage(const QString &apdu, const QString &SA, const QStrin
 
 extern QString StringAddSpace(QString &input);
 
+extern string ReTime();
+
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow) {
     ui->setupUi(this);
     serial = new Serial();
+
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle(ver);
+    setWindowTitle(ver + QString::fromStdString(ReTime()));
     logging = new SaveLog();
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("Database.db");
@@ -221,7 +224,7 @@ QString MainWindow::analysis(QString a) {
     doc.LoadFile("config.xml");
     tinyxml2::XMLElement *root = doc.RootElement();
     tinyxml2::XMLElement *first_child1 = root->FirstChildElement("add");
-    qDebug()<<"add: "<<add;
+    qDebug() << "add: " << add;
     QByteArray ba2;
     ba2.append(add);     //也可以 ba2 = s2.toLatin1();
     const char *content2 = ba2.data();
@@ -313,8 +316,8 @@ QString MainWindow::analysis(QString a) {
 //                    emit send_analysis(n.OAD + " : " + deal_data(n.DATA));//解析
                 }
                     break;
-                case 0x3:{
-//todo
+                case 0x3: {
+//todo 数据分析
                 }
                     break;
                 case 0x5: {
@@ -359,7 +362,7 @@ QString MainWindow::analysis(QString a) {
                         return QString().sprintf("收到分帧,第%d帧", times);
                     }
                     if (n.is_last_frame == "01") {
-                        const QString last = QString().sprintf("最后一帧,共%d帧",times+1);
+                        const QString last = QString().sprintf("最后一帧,共%d帧", times + 1);
                         times = 0;
                         return last;
                     }
@@ -461,7 +464,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::about() {
-    QMessageBox::information(this, "关于", "698主站64位 CMake \n QT版本: 5.13.2", QMessageBox::Ok);
+    QMessageBox::information(this, "关于", "698主站64位 CMake \n  QT版本: 5.13.2\n    " + QString::fromStdString(ReTime()),
+                             QMessageBox::Ok);
 }
 
 void MainWindow::serial_config() {
@@ -497,7 +501,7 @@ void MainWindow::show_message_send(QList<QString> a) {
     }
     current += 1;
     move_Cursor();
-    logging->write(x +" "+a[1].replace("\n", "") +" \n发送: " + StringAddSpace(a[0])+"\n");
+    logging->write(x + " " + a[1].replace("\n", "") + " \n发送: " + StringAddSpace(a[0]) + "\n");
 }
 
 void MainWindow::show_message_receive(QString a) {
@@ -511,7 +515,7 @@ void MainWindow::show_message_receive(QString a) {
     QString te = analysis(a);
     QStringList list = a.split(' ', QString::SkipEmptyParts);
     while (true) {
-        if (list.begin()==list.end())
+        if (list.begin() == list.end())
             return;
         if (list[0] == "68")
             break;
@@ -531,7 +535,7 @@ void MainWindow::show_message_receive(QString a) {
     }
     current += 1;
     move_Cursor();
-    logging->write(x +" "+te+ " \n收到: " + a+"\n");
+    logging->write(x + " " + te + " \n收到: " + a + "\n");
 }
 
 void MainWindow::Communication_parameters() {

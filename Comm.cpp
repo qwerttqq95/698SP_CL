@@ -3,6 +3,7 @@
 #include <QtCore/QStringList>
 #include <QDebug>
 #include <MeterArchives.h>
+#include "time.h"
 //#include <mainwindow.h>
 #define WIN32_LEAN_AND_MEAN
 
@@ -55,7 +56,13 @@
 #define DATA_RCSD                        96
 
 using namespace std;
-
+string ReTime(){
+    time_t timep;
+    time (&timep);
+    char tmp[64];
+    strftime(tmp, sizeof(tmp), "%Y-%m-%d",localtime(&timep) );
+    return tmp;
+}
 
 QString binToDec(QString strBin) {  //二进制转十进制
     QString decimal;
@@ -297,7 +304,7 @@ QString BuildMessage(const QString &apdu, const QString &SA, const QString &ctrl
     sprintf(full_len, "%.2s%.2s", len1, len2);
     QString text(full_len);
     QString Head = text + ctrl_zone + "0" + SA_sign + SA + "10";
-    qDebug() << "maybe a problem!!!!" << Head;
+//    qDebug() << "maybe a problem!!!!" << Head;
     BYTE text1[600] = {0};
     Stringlist2Hex(Head, text1);
     unsigned short TempLen = pppfcs16(PPPINITFCS16, text1, (unsigned) Head.length() / 2);
@@ -380,7 +387,7 @@ QString StringAddSpace(QString &input) {
     for (int i = 0; i < input.length(); i += 2) {
         output = output + input[i] + input[i + 1] + ' ';
     }
-    qDebug() << "output: " << output;
+//    qDebug() << "output: " << output;
     return output;
 }
 
