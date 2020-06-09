@@ -7,5 +7,6 @@
         <file>ico/Document.ico</file>
         <file>ico/Desktop.ico</file>
         <file>ico/Sites.ico</file>
+        <file>ico/Smart Folder.ico</file>
     </qresource>
 </RCC>

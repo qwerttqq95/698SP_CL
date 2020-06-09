@@ -5,12 +5,11 @@
 #include <iostream>
 #include <QScrollBar>
 #include <QtWidgets/QInputDialog>
-#include "XMLFile/tinyxml2.h"
 #include <QKeyEvent>
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站测试版 x64 "
+#define ver "698主站测试版 x64 20.06.09"
 
 using namespace std;
 
@@ -18,7 +17,10 @@ extern QString BuildMessage(const QString &apdu, const QString &SA, const QStrin
 
 extern QString StringAddSpace(QString &input);
 
-extern string ReTime();
+#ifndef globe_flag
+#define globe_flag
+int globe_flag_6012;
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -31,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
     ui->tableWidget->setToolTipDuration(50);
-    setWindowTitle(ver + QString::fromStdString(ReTime()));
+    setWindowTitle(ver);
     logging = new SaveLog();
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("Database.db");
@@ -49,8 +51,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(clear_view()));
     connect(ui->actionC, SIGNAL(triggered()), this, SLOT(op_analy()));
     ui->actiononline->setEnabled(false);
-    connect(ui->actiononline, SIGNAL(triggered()), this, SLOT(OnlineModel()));
+//    connect(ui->actiononline, SIGNAL(triggered()), this, SLOT(OnlineModel()));
 
+    this->SpecialFunctions();
     setWindowState(Qt::WindowMaximized);
     QAction *attach4520;
     attach4520 = new QAction();
@@ -101,7 +104,6 @@ MainWindow::MainWindow(QWidget *parent) :
             Qt::QueuedConnection);
     connect(this, SIGNAL(deal_601C(QList<QString>)), CollectionMonitoring, SLOT(analysis601C(QList<QString>)),
             Qt::QueuedConnection);
-
 
     QList<QMdiSubWindow *> p = ui->mdiArea->subWindowList();
     for (auto &j : p) {
@@ -296,6 +298,7 @@ QString MainWindow::analysis(QString a) {
 //                        qDebug() << "收到表档案信息: " << n.DATA;
                         emit deal_with_meter(n.DATA);
                     } else {
+                        globe_flag_6012 = 0;
                         if (n.OAD == "60120200") {
 //                            qDebug() << "收到6012信息: " << n.DATA;
                             emit deal_6012(n.DATA);
@@ -334,11 +337,11 @@ QString MainWindow::analysis(QString a) {
                     }
                     n.GET_RESULT_TYPE = list[apdu_0 + 12];
                     n.DATA = list.mid(apdu_0 + 13, list.length() - apdu_0 - 11);
-
                     if (n.OAD == "60000200") {
 //                        qDebug() << "收到多表档案信息";
                         emit deal_with_meter(n.DATA);
                     } else {
+                        globe_flag_6012 = 1;
                         if (n.OAD == "60120200") {
 
                             emit deal_6012(n.DATA);
@@ -364,6 +367,7 @@ QString MainWindow::analysis(QString a) {
                     if (n.is_last_frame == "01") {
                         const QString last = QString().sprintf("最后一帧,共%d帧", times + 1);
                         times = 0;
+                        globe_flag_6012 = 0;
                         return last;
                     }
                 }
@@ -464,7 +468,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::about() {
-    QMessageBox::information(this, "关于", "698主站64位 CMake \n  QT版本: 5.13.2\n    " + QString::fromStdString(ReTime()),
+    QMessageBox::information(this, "关于", QString::fromStdString(ver) + " \nCMake\nQT版本: 5.13.2\n",
                              QMessageBox::Ok);
 }
 
@@ -787,9 +791,14 @@ QString MainWindow::DARType(int a) {
     }
 }
 
-void MainWindow::OnlineModel() {
-    online = new Online();
-    online->show();
+void MainWindow::SpecialFunctions() {
+    specialfunc = new SpecialFuncs();
+    SpecialFunc_point = ui->mdiArea->addSubWindow(specialfunc,
+                                                  Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+    SpecialFunc_point->setWindowIcon(QIcon(":/main/ico/Smart Folder.ico"));
+    SpecialFunc_point->widget()->showMaximized();
+    connect(specialfunc, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)), Qt::UniqueConnection);
+
 }
 
 

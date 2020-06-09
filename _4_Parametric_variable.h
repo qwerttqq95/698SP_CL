@@ -14,6 +14,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+
 namespace Ui
 {
     class _4_Parametric_variableForm;

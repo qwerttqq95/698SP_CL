@@ -1,9 +1,7 @@
 #include "serial.h"
 #include "ui_serial.h"
-#include "Qt"
 #include <thread>
 #include <QtWidgets/QMessageBox>
-#include <QList>
 #include <QDebug>
 
 using namespace std;

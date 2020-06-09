@@ -1,12 +1,13 @@
 
-#define WIN32_LEAN_AND_MEAN
+#ifndef SOCK
+#define SOCK
 #include <winsock2.h>
+#endif
 #ifndef INC_698SP_CL_SERIAL_H
 #define INC_698SP_CL_SERIAL_H
 #include <QDialog>
 
 #include <windows.h>
-
 
 #include <process.h>
 #include "tchar.h"

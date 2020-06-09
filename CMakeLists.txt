@@ -24,7 +24,7 @@ set(QRC_FILES)
 set(QRC_SOURCE_FILES logo.qrc)
 qt5_add_resources(QRC_FILES ${QRC_SOURCE_FILES})
 file(GLOB SourceFiles logo.rc)
-
+link_directories(lib)
 #set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 #set(CMAKE_EXE_LINKER_FLAGS -Wl,-subsystem,windows)
 #set(CMAKE_EXE_LINKER_FLAGS -mwindows)
@@ -35,6 +35,6 @@ add_subdirectory(BasicExcel)
 add_subdirectory(XMLFile)
 add_subdirectory(ONLINE)
 
-target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML ONLINE_ )
+target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML ONLINE_ libFor645.dll)
 
 qt5_use_modules(698SP_CL Core Widgets Gui Sql)

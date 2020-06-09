@@ -12,6 +12,9 @@
 #include <QSqlQuery>
 #include "ui_CollectionMonitoringClassObject.h"
 
+extern int globe_flag_6012;
+
+
 namespace Ui {
     class FormCOLLECTIONMONITORINGCLASSOBJECT;
 }

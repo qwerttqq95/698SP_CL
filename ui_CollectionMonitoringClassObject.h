@@ -44,6 +44,7 @@ public:
     QPushButton *pushButton_4;
     QTableWidget *tableWidget;
     QWidget *tab_2;
+    QVBoxLayout *verticalLayout_6;
     QVBoxLayout *verticalLayout_3;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_4;
@@ -71,6 +72,7 @@ public:
     QLabel *label_4;
     QComboBox *comboBox_2;
     QLineEdit *lineEdit_2;
+    QLabel *label_8;
     QSpacerItem *horizontalSpacer_6;
     QHBoxLayout *horizontalLayout_6;
     QHBoxLayout *horizontalLayout_4;
@@ -82,13 +84,13 @@ public:
     QLineEdit *lineEdit_3;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *pushButton_5;
-    QTableWidget *tableWidget_2;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QWidget *FormCOLLECTIONMONITORINGCLASSOBJECT)
     {
         if (FormCOLLECTIONMONITORINGCLASSOBJECT->objectName().isEmpty())
             FormCOLLECTIONMONITORINGCLASSOBJECT->setObjectName(QString::fromUtf8("FormCOLLECTIONMONITORINGCLASSOBJECT"));
-        FormCOLLECTIONMONITORINGCLASSOBJECT->resize(622, 501);
+        FormCOLLECTIONMONITORINGCLASSOBJECT->resize(622, 490);
         verticalLayout_5 = new QVBoxLayout(FormCOLLECTIONMONITORINGCLASSOBJECT);
         verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
         tabWidget = new QTabWidget(FormCOLLECTIONMONITORINGCLASSOBJECT);
@@ -182,7 +184,9 @@ public:
         tabWidget->addTab(tab, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        verticalLayout_3 = new QVBoxLayout(tab_2);
+        verticalLayout_6 = new QVBoxLayout(tab_2);
+        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
         gridLayout = new QGridLayout();
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -357,6 +361,11 @@ public:
 
         horizontalLayout_5->addWidget(lineEdit_2);
 
+        label_8 = new QLabel(tab_2);
+        label_8->setObjectName(QString::fromUtf8("label_8"));
+
+        horizontalLayout_5->addWidget(label_8);
+
         horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout_5->addItem(horizontalSpacer_6);
@@ -436,18 +445,12 @@ public:
 
         verticalLayout_3->addLayout(gridLayout);
 
-        tableWidget_2 = new QTableWidget(tab_2);
-        tableWidget_2->setObjectName(QString::fromUtf8("tableWidget_2"));
-        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(tableWidget_2->sizePolicy().hasHeightForWidth());
-        tableWidget_2->setSizePolicy(sizePolicy3);
-        tableWidget_2->setMinimumSize(QSize(0, 200));
-        tableWidget_2->setSizeIncrement(QSize(0, 148));
-        tableWidget_2->setBaseSize(QSize(0, 129));
 
-        verticalLayout_3->addWidget(tableWidget_2);
+        verticalLayout_6->addLayout(verticalLayout_3);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_6->addItem(verticalSpacer);
 
         tabWidget->addTab(tab_2, QString());
 
@@ -534,6 +537,7 @@ public:
         comboBox_2->setItemText(3, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\344\270\200\347\273\204\347\224\250\346\210\267\345\234\260\345\235\200", nullptr));
         comboBox_2->setItemText(4, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\344\270\200\347\273\204\347\224\250\346\210\267\345\272\217\345\217\267", nullptr));
 
+        label_8->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "*\345\244\232\351\241\271\347\224\250\",\"\345\210\206\345\274\200", nullptr));
         label_3->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\346\227\266\351\227\264\351\227\264\351\232\224:", nullptr));
         lineEdit->setText(QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "1", nullptr));
         comboBox->setItemText(0, QCoreApplication::translate("FormCOLLECTIONMONITORINGCLASSOBJECT", "\347\247\222", nullptr));

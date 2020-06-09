@@ -1,6 +1,5 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-#define WIN32_LEAN_AND_MEAN
 #include "serial.h"
 #include "Custom_APDU.h"
 #include <QMainWindow>
@@ -17,9 +16,11 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include "Online.h"
 #include "SaveLog.h"
 #include "MeterArchives.h"
+#include "SpecialFunc.h"
+
+
 #define DATA_NULL                        0
 #define DATA_ARRAY                        1
 #define DATA_STRUCT                    2
@@ -80,6 +81,7 @@ public:
     QMdiSubWindow *MeterArchive_point;
     QMdiSubWindow *Parametric_variable_point;
     QMdiSubWindow *CollectionMonitoring_point;
+    QMdiSubWindow *SpecialFunc_point;
 
     QString DARType(int);
 
@@ -93,6 +95,8 @@ public:
     void Communication_parameters();
 
     QString deal_data(QStringList);
+
+    void SpecialFunctions();
 
     ~MainWindow() override;
 
@@ -151,8 +155,7 @@ private:
     Analysis *analy;
     CollectionMonitoringClass *CollectionMonitoring;
     _4_Parametric_variable *Parametric_variable;
-    Online *online;
-
+    SpecialFuncs *specialfunc;
 signals:
 
     void send_analysis(QString);
@@ -203,7 +206,7 @@ public slots:
 
     void copy_message();
 
-    void OnlineModel();
+//    void OnlineModel();
 
 };
 

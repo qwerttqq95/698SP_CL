@@ -177,8 +177,11 @@ void CollectionMonitoringClass::analysis6012(QList<QString> list6012) {
         ui->tableWidget->item(j, 1)->setTextAlignment(Qt::AlignCenter);
         ui->tableWidget->item(j, 3)->setTextAlignment(Qt::AlignCenter);
     }
-    ui->pushButton_3->setEnabled(true);
-    ui->pushButton_2->setEnabled(true);
+    if (globe_flag_6012==0){
+        ui->pushButton->setEnabled(true);
+        ui->pushButton_3->setEnabled(true);
+        ui->pushButton_2->setEnabled(true);
+    }
 }
 
 void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
@@ -492,6 +495,11 @@ void CollectionMonitoringClass::analysis6014(QList<QString> list6014) {
 
         }
     }
+    if (globe_flag_6012==0){
+        ui->pushButton->setEnabled(true);
+        ui->pushButton_3->setEnabled(true);
+        ui->pushButton_2->setEnabled(true);
+    }
 }
 
 void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
@@ -721,9 +729,18 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
 
         }
     }
+    if (globe_flag_6012==0){
+        ui->pushButton->setEnabled(true);
+        ui->pushButton_3->setEnabled(true);
+        ui->pushButton_2->setEnabled(true);
+    }
 }
 
 void CollectionMonitoringClass::sendmessage() {
+    globe_flag_6012 = 1;
+    ui->pushButton_3->setDisabled(true);
+    ui->pushButton_2->setDisabled(true);
+    ui->pushButton->setDisabled(true);
     QAction *action = (QAction *) sender();
     QString add = re_rever_add();
     qDebug() << action->objectName();
@@ -969,17 +986,18 @@ void CollectionMonitoringClass::getData() {
             auto count = QString().sprintf("%02x", meter_sp.count());
             APDU.append(count);
             for (int i = 0; i < meter_sp.count(); ++i) {
-                auto x = StringAddSpace(meter_sp[i]).split(" ");
-                for (int j = 0; j < x.length() / 2; ++j) {
-                    auto c = x[j];
-                    x[j] = x[x.length() - 1 - j];
-                    x[x.length() - 1 - j] = c;
-                }
-                QString text("");
-                for (int k = 0; k < x.length(); ++k) {
-                    text.append(x[k]);
-                }
-                APDU.append("0705" + text);
+//                auto x = StringAddSpace(meter_sp[i]).split(" ");
+//                for (int j = 0; j < x.length() / 2; ++j) {
+//                    auto c = x[j];
+//                    x[j] = x[x.length() - 1 - j];
+//                    x[x.length() - 1 - j] = c;
+//                }
+//                QString text("");
+//                for (int k = 0; k < x.length(); ++k) {
+//                    text.append(x[k]);
+//                }
+
+                APDU.append("0705" + meter_sp[i]);
             }
         }
             break;

@@ -7,7 +7,7 @@
 //#include <mainwindow.h>
 #define WIN32_LEAN_AND_MEAN
 
-#include <windows.h>
+//#include <windows.h>
 #include <vector>
 #include <XMLFile/tinyxml2.h>
 #include <QtWidgets/QTreeWidgetItem>
