@@ -452,6 +452,7 @@ void MeterArchives::output()
         pCell->SetString(ui->tableWidget->item(i, nCol)->text().toStdString().c_str());
     }
     excelTermInfo.SaveAs(filename.toStdString().c_str());
+    QMessageBox::information(this, "提示", "导出完成");
 }
 
 

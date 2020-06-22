@@ -704,6 +704,8 @@ void CollectionMonitoringClass::analysis601C(QList<QString> list601C) {
                         return;
                     }
                     case 1: {
+                        qDebug() << "全部用户地址 ";
+                        ui->tableWidget->setItem(ncount, 7, new QTableWidgetItem("全部用户地址"));
 
                     }
                         break;

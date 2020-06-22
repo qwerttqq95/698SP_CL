@@ -9,7 +9,7 @@
 #include <QApplication>
 #include <QClipboard>
 
-#define ver "698主站测试版 x64 20.06.09"
+#define ver "698主站测试版 x64 20.06.22"
 
 using namespace std;
 
@@ -21,6 +21,7 @@ extern QString StringAddSpace(QString &input);
 #define globe_flag
 int globe_flag_6012;
 #endif
+#define LOG() qDebug()<< '[' << __FILE__ << ":"  << __LINE__ << "] "
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -226,7 +227,8 @@ QString MainWindow::analysis(QString a) {
     doc.LoadFile("config.xml");
     tinyxml2::XMLElement *root = doc.RootElement();
     tinyxml2::XMLElement *first_child1 = root->FirstChildElement("add");
-    qDebug() << "add: " << add;
+//    qDebug() << "add: " << add;
+    LOG()<< "add: " << add;
     QByteArray ba2;
     ba2.append(add);     //也可以 ba2 = s2.toLatin1();
     const char *content2 = ba2.data();
