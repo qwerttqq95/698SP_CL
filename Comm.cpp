@@ -5,7 +5,7 @@
 #include <MeterArchives.h>
 #include "time.h"
 //#include <mainwindow.h>
-#define WIN32_LEAN_AND_MEAN
+//#define WIN32_LEAN_AND_MEAN
 
 //#include <windows.h>
 #include <vector>
@@ -577,4 +577,34 @@ QString saved_time(const QString &text) {
         default:
             return "???";
     }
+}
+
+bool GetExcelValue(YExcel::BasicExcelCell *pCell, QString &str)
+{
+    QString strTemp;
+    str = QString(pCell->GetString());
+    str.replace(" ", "");
+    if (str == "")
+    {
+        int num;
+        num = pCell->GetInteger();
+        str = QString::number(num, 10);
+    }
+    return true;
+}
+
+QString dealTime(const QString& x){
+    auto sp = x.split("_");
+    auto date_ = sp[0].split("-");
+    auto time_ = sp[1].split(":");
+
+    auto year = QString().sprintf("%04x", date_[0].toInt());
+    auto mouth = QString().sprintf("%02x", date_[1].toInt());
+    auto day = QString().sprintf("%02x", date_[2].toInt());
+
+    auto hour = QString().sprintf("%02x", time_[0].toInt());
+    auto min = QString().sprintf("%02x", time_[1].toInt());
+    auto sec = QString().sprintf("%02x", time_[2].toInt());
+    return year + mouth + day + hour + min + sec;
+
 }

@@ -35,6 +35,6 @@ add_subdirectory(BasicExcel)
 add_subdirectory(XMLFile)
 #add_subdirectory(ONLINE)
 
-target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML  libFor645.dll)
+target_link_libraries(698SP_CL ws2_32 Qt5::Widgets BasicExcel_ XML)
 
 qt5_use_modules(698SP_CL Core Widgets Gui Sql)

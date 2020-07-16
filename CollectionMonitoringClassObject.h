@@ -10,7 +10,10 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QtWidgets/QTextEdit>
 #include "ui_CollectionMonitoringClassObject.h"
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
 
 extern int globe_flag_6012;
 
@@ -26,6 +29,8 @@ public:
     explicit CollectionMonitoringClass(QWidget *parent = nullptr);
 
     void Tab_2_init();
+
+    void Tab_3_init();
 
     typedef struct {
         int ID;
@@ -88,15 +93,24 @@ public slots:
 
     void ClickedRead();
 
+    void tab_3_add();
+    void tab_3_del();
+    void tab_3_clear();
+    void tab_3_input();
+    void tab_3_output();
+    void tab_3_generate();
+    void tab_3_generate_xml();
+    bool tab_3_compose6012(QStringList*);
+
 signals:
 
     void send_message(QList<QString>);
 
-
 private:
     Ui::FormCOLLECTIONMONITORINGCLASSOBJECT *ui;
-
+    QTableWidget *compose6012;
 };
+
 
 
 #endif //INC_698SP_CL_COLLECTIONMONITORINGCLASSOBJECT_H

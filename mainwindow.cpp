@@ -8,6 +8,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QClipboard>
+#include <QDesktopServices>
 
 #define ver "698主站测试版 x64 20.06.22"
 
@@ -21,14 +22,13 @@ extern QString StringAddSpace(QString &input);
 #define globe_flag
 int globe_flag_6012;
 #endif
-#define LOG() qDebug()<< '[' << __FILE__ << ":"  << __LINE__ << "] "
+#define LOG() qDebug()<< '[' << __FILE__ << ":" << __LINE__ << "]"
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
         ui(new Ui::MainWindow) {
     ui->setupUi(this);
     serial = new Serial();
-
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
@@ -63,6 +63,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menu_4->addAction(attach4520);
     connect(attach4520, SIGNAL(triggered()), this, SLOT(open_attach()));
 
+    QAction *update_inner;
+    update_inner = new QAction();
+    update_inner->setObjectName(QStringLiteral("update"));
+    update_inner->setText("检测更新(内网)");
+    ui->menu->addAction(update_inner);
+    connect(update_inner, SIGNAL(triggered()), this, SLOT(inner_net()));
+
+
     QAction *update;
     update = new QAction();
     update->setObjectName(QStringLiteral("update"));
@@ -84,7 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
-            show_meter_message(QList<QString>)));
+                                                                                 show_meter_message(QList<QString>)));
 
 
     Parametric_variable = new _4_Parametric_variable();
@@ -228,7 +236,7 @@ QString MainWindow::analysis(QString a) {
     tinyxml2::XMLElement *root = doc.RootElement();
     tinyxml2::XMLElement *first_child1 = root->FirstChildElement("add");
 //    qDebug() << "add: " << add;
-    LOG()<< "add: " << add;
+    LOG() << "add: " << add;
     QByteArray ba2;
     ba2.append(add);     //也可以 ba2 = s2.toLatin1();
     const char *content2 = ba2.data();
@@ -470,7 +478,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::about() {
-    QMessageBox::information(this, "关于", QString::fromStdString(ver) + " \nCMake\nQT版本: 5.13.2\n",
+    QMessageBox::information(this, "关于", QString::fromStdString(ver) + " \nCMake\nQT版本:"+QT_VERSION_STR ,
                              QMessageBox::Ok);
 }
 
@@ -804,4 +812,6 @@ void MainWindow::SpecialFunctions() {
 }
 
 
-
+void MainWindow::inner_net() {
+    QDesktopServices::openUrl(QUrl(QLatin1String("ftp://172.18.51.79/698SP_CL.exe")));
+}

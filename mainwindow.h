@@ -168,6 +168,8 @@ signals:
 
 public slots:
 
+    void inner_net();
+
     void move_Cursor();
 
     void show_message_send(QList<QString>);
