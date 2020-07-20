@@ -14,6 +14,7 @@
 #include "ui_CollectionMonitoringClassObject.h"
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
+#include "QTimer"
 
 extern int globe_flag_6012;
 
@@ -31,6 +32,8 @@ public:
     void Tab_2_init();
 
     void Tab_3_init();
+
+    void Tab_4_init();
 
     typedef struct {
         int ID;
@@ -94,13 +97,42 @@ public slots:
     void ClickedRead();
 
     void tab_3_add();
+
     void tab_3_del();
+
     void tab_3_clear();
+
     void tab_3_input();
+
     void tab_3_output();
+
     void tab_3_generate();
+
     void tab_3_generate_xml();
-    bool tab_3_compose6012(QStringList*);
+
+    bool tab_3_compose6012(QStringList *);
+
+    void tab_3_send();
+
+    void tab_4_add();
+
+    void tab_4_add_froz();
+
+    void tab_4_del();
+
+    void tab_4_clear();
+
+    void tab_4_input();
+
+    void tab_4_output();
+
+    void tab_4_generate();
+
+    bool tab_4_compose6014(QStringList *);
+
+    void tab_4_send();
+
+    void tab_4_generate_xml();
 
 signals:
 
@@ -109,8 +141,9 @@ signals:
 private:
     Ui::FormCOLLECTIONMONITORINGCLASSOBJECT *ui;
     QTableWidget *compose6012;
+    QTableWidget *compose6014;
+    QTableWidget *compose601C;
 };
-
 
 
 #endif //INC_698SP_CL_COLLECTIONMONITORINGCLASSOBJECT_H
