@@ -1700,7 +1700,7 @@ void CollectionMonitoringClass::tab_4_generate_xml() {
     layout->addWidget(textPlain);
             foreach(QString a, lists) {
             auto id = (QString(a.at(24)) + QString(a.at(25))).toInt(nullptr, 16);
-            textPlain->append("<ACT6012  TASKID=\"" + QString::number(id) + "\" APDU=\"" + StringAddSpace(a) + "\" />");
+            textPlain->append("<ACT6014  TASKID=\"" + QString::number(id) + "\" APDU=\"" + StringAddSpace(a) + "\" />");
         }
     dia->exec();
 }

@@ -10,7 +10,7 @@
 #include <QClipboard>
 #include <QDesktopServices>
 
-#define ver "698主站测试版 x64 20.06.22"
+#define ver "698主站测试版 x64 20.09.29"
 
 using namespace std;
 
@@ -78,6 +78,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menu->addAction(update);
     connect(update, SIGNAL(triggered()), this, SLOT(open_attach()));
 
+    QAction *toButton;
+    toButton = new QAction();
+    toButton->setObjectName("toButton");
+    toButton->setText("消息窗口滑块置底");
+    toButton->setCheckable(1);
+    toButton->setChecked(1);
+    ui->menuOpen->addAction(toButton);
+
+
     Custom = new Custom_APDU();
     Custom_point = ui->mdiArea->addSubWindow(Custom, Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
     Custom_point->setWindowIcon(QIcon(":/main/ico/Sites.ico"));
@@ -92,7 +101,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(MeterArchive, SIGNAL(send_write(QList<QString>)), serial, SLOT(write(QList<QString>)),
             Qt::UniqueConnection);
     connect(this, SIGNAL(deal_with_meter(QList<QString>)), MeterArchive, SLOT(
-                                                                                 show_meter_message(QList<QString>)));
+            show_meter_message(QList<QString>)));
 
 
     Parametric_variable = new _4_Parametric_variable();
@@ -195,7 +204,16 @@ void MainWindow::custom_test() {
 }
 
 void MainWindow::move_Cursor() {
-    ui->tableWidget->scrollToBottom();
+    auto x = ui->menuOpen->actions();
+foreach(auto q,x){
+   if ( q->objectName() == "toButton"){
+       if (q->isChecked()){
+           ui->tableWidget->scrollToBottom();
+       }
+   }
+}
+
+
 }
 
 void MainWindow::open_MeterArchives() {
@@ -478,7 +496,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::about() {
-    QMessageBox::information(this, "关于", QString::fromStdString(ver) + " \nCMake\nQT版本:"+QT_VERSION_STR ,
+    QMessageBox::information(this, "关于", QString::fromStdString(ver) + " \nCMake\nQT版本:" + QT_VERSION_STR,
                              QMessageBox::Ok);
 }
 
